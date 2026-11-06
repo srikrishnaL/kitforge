@@ -61,9 +61,8 @@ Hard rules
      daily/<YYYY-MM-DD>-<id>), push, and open a PR to main titled
      "<id>: <one-line problem it solves>". Assign srikrishnaL.
    - Wait for CI. Fix failures (at most 3 attempts).
-   - Release policy: MERGE_AND_RELEASE=<yes|no>
-     If yes and CI is green: squash-merge, then tag <id>-v0.1.0 on main and push the tag so the
-     release workflow publishes it. If no: leave the PR open for Sri's review.
+   - Leave the PR open for Sri's review. This environment cannot push tags, so Sri publishes by
+     creating a GitHub release with tag <published name>-v<version>; say so in the report.
 
 5. Report in 5 lines or fewer: what shipped (PR link), why (top evidence link and score),
    what was fixed, and anything Sri needs to do.

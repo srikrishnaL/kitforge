@@ -61,8 +61,10 @@ def test_stdout_junk_is_reported_not_fatal(fake_cmd):
 
 
 def test_crash_reports_stderr(fake_cmd):
-    with MCPClient.stdio(fake_cmd, env={"FAKE_CRASH": "1"}) as c:
-        with pytest.raises(MCPTransportError) as e:
+    # The server exits right after answering initialize, so the failure can surface while
+    # sending notifications/initialized or on the next request, depending on timing.
+    with pytest.raises(MCPTransportError) as e:
+        with MCPClient.stdio(fake_cmd, env={"FAKE_CRASH": "1"}) as c:
             c.list_tools()
     msg = str(e.value)
     assert "database not configured" in msg

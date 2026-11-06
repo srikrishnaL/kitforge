@@ -1,0 +1,574 @@
+{
+  "generated": "2026-11-06T04:06:55Z",
+  "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
+  "ideas": [
+    {
+      "id": "trips",
+      "title": "trips: split a GPS track into stays and trips",
+      "status": "idea",
+      "score": 86,
+      "demand": 0.995,
+      "gap": 0.7,
+      "open_requests": 15289,
+      "top_requests": [
+        {
+          "title": "[Important, please read] Replies from Aircoookie",
+          "url": "https://github.com/wled/WLED/issues/1315",
+          "reactions": 298
+        },
+        {
+          "title": "[FEATURE] Support Azure DevOps repositories in Claude Code on the web (Cloud Sessions)",
+          "url": "https://github.com/anthropics/claude-code/issues/54054",
+          "reactions": 65
+        },
+        {
+          "title": "AliasVault v1.0 roadmap",
+          "url": "https://github.com/aliasvault/aliasvault/issues/731",
+          "reactions": 49
+        },
+        {
+          "title": "Enhanced DynamoDB annotations are incompatible with Lombok",
+          "url": "https://github.com/aws/aws-sdk-java-v2/issues/1932",
+          "reactions": 47
+        },
+        {
+          "title": "Allow to control the Camera 3D in \"Preview\" mode",
+          "url": "https://github.com/godotengine/godot-proposals/issues/3297",
+          "reactions": 26
+        }
+      ],
+      "best_existing": {
+        "repo": "zhang35/StayPointDetection",
+        "url": "https://github.com/zhang35/StayPointDetection",
+        "stars": 21,
+        "months_since_push": 73.7
+      },
+      "existing_projects": 13,
+      "queries": {
+        "requests": "\"stay point\" in:title,body is:issue",
+        "existing": "stay point detection"
+      }
+    },
+    {
+      "id": "geoprivacy",
+      "title": "Make location tracks safe to share",
+      "status": "idea",
+      "score": 79,
+      "demand": 0.622,
+      "gap": 1.0,
+      "open_requests": 457,
+      "top_requests": [
+        {
+          "title": "privacy: Add camera and location indicator",
+          "url": "https://github.com/Alexays/Waybar/issues/2705",
+          "reactions": 27
+        },
+        {
+          "title": "[OSX] brave location is off, Brave not showing in Security & Privacy > Location Services",
+          "url": "https://github.com/brave/brave-browser/issues/11413",
+          "reactions": 5
+        },
+        {
+          "title": "Android Apps: Location in Privacy Policy",
+          "url": "https://github.com/nisrulz/app-privacy-policy-generator/issues/130",
+          "reactions": 5
+        },
+        {
+          "title": "[ios] User's location doesn\u2019t update when privacy settings change",
+          "url": "https://github.com/mapbox/mapbox-gl-native/issues/12600",
+          "reactions": 4
+        },
+        {
+          "title": "Ability to turn on Location in Privacy (like GNOME)",
+          "url": "https://github.com/linuxmint/cinnamon-control-center/issues/140",
+          "reactions": 4
+        }
+      ],
+      "best_existing": {
+        "repo": "jonathan-demlie/privacy-policy",
+        "url": "https://github.com/jonathan-demlie/privacy-policy",
+        "stars": 0,
+        "months_since_push": 70.6
+      },
+      "existing_projects": 1,
+      "queries": {
+        "requests": "\"location privacy\" in:title is:issue",
+        "existing": "location privacy anonymization gps"
+      }
+    },
+    {
+      "id": "mcptest-js",
+      "title": "mcptest for vitest and Jest",
+      "status": "idea",
+      "score": 69,
+      "demand": 0.777,
+      "gap": 0.591,
+      "open_requests": 6376,
+      "top_requests": [
+        {
+          "title": "\u2602\ufe0f Plan for 2026 Q3 (Jul - Sep)",
+          "url": "https://github.com/voidzero-dev/vite-plus/issues/2405",
+          "reactions": 31
+        },
+        {
+          "title": "GitHub Copilot LLMs disappear from agent list",
+          "url": "https://github.com/zed-industries/zed/issues/47567",
+          "reactions": 9
+        },
+        {
+          "title": "NX Console 18.74.5 hangs forever in Cursor 2",
+          "url": "https://github.com/nrwl/nx-console/issues/2858",
+          "reactions": 9
+        },
+        {
+          "title": "MCP server for test results and coverage",
+          "url": "https://github.com/vitest-dev/vitest/issues/8411",
+          "reactions": 6
+        },
+        {
+          "title": "Unordered and partial query parameter matching",
+          "url": "https://github.com/modelcontextprotocol/typescript-sdk/issues/149",
+          "reactions": 6
+        }
+      ],
+      "best_existing": {
+        "repo": "blackwell-systems/mcp-assert",
+        "url": "https://github.com/blackwell-systems/mcp-assert",
+        "stars": 26,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 30,
+      "queries": {
+        "requests": "\"mcp server\" vitest in:title,body is:issue",
+        "existing": "mcp server vitest testing"
+      }
+    },
+    {
+      "id": "elevation",
+      "title": "elevation: honest elevation gain from noisy GPS",
+      "status": "idea",
+      "score": 62,
+      "demand": 0.468,
+      "gap": 0.8,
+      "open_requests": 313,
+      "top_requests": [
+        {
+          "title": "Feature request: elevation gain",
+          "url": "https://github.com/jonasoreland/runnerup/issues/1167",
+          "reactions": 5
+        },
+        {
+          "title": "elevation gain/loss without barometer (i.e., from GPS)",
+          "url": "https://github.com/OpenTracksApp/OpenTracks/issues/619",
+          "reactions": 4
+        },
+        {
+          "title": "Filter out artificial elevation gain/loss",
+          "url": "https://github.com/graphhopper/graphhopper/issues/2028",
+          "reactions": 3
+        },
+        {
+          "title": "[Feature Request]: add effort distance (km) metric based on elevation gain",
+          "url": "https://github.com/gpxstudio/gpx.studio/issues/381",
+          "reactions": 2
+        },
+        {
+          "title": "Elevation gain information to the horizontal graph",
+          "url": "https://github.com/timklge/karoo-routegraph/issues/18",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "CF20852/Hike-Elevation-Gain-System",
+        "url": "https://github.com/CF20852/Hike-Elevation-Gain-System",
+        "stars": 4,
+        "months_since_push": 100.1
+      },
+      "existing_projects": 7,
+      "queries": {
+        "requests": "\"elevation gain\" in:title is:issue",
+        "existing": "elevation gain gps"
+      }
+    },
+    {
+      "id": "atlantis-mcp",
+      "title": "MCP server for Atlantis (Terraform pull request automation)",
+      "status": "idea",
+      "score": 60,
+      "demand": 0.267,
+      "gap": 1.0,
+      "open_requests": 1,
+      "top_requests": [
+        {
+          "title": "feat: optional MCP (Model Context Protocol) server for AI assistant integration",
+          "url": "https://github.com/runatlantis/atlantis/issues/6530",
+          "reactions": 13
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "repo:runatlantis/atlantis mcp in:title is:issue",
+        "existing": "atlantis terraform mcp in:name,description"
+      }
+    },
+    {
+      "id": "trajsim",
+      "title": "Trajectory similarity (Frechet, DTW, Hausdorff) for tracks",
+      "status": "idea",
+      "score": 56,
+      "demand": 0.433,
+      "gap": 0.714,
+      "open_requests": 497,
+      "top_requests": [
+        {
+          "title": "SGLang Diffusion \u5916\u90e8\u5f71\u54cd\u529b\u8c03\u7814\uff1akernel\u3001feature \u4e0e\u5e73\u53f0\u91c7\u7528\u60c5\u51b5",
+          "url": "https://github.com/BBuf/how-to-optim-algorithm-in-cuda/issues/14",
+          "reactions": 2
+        },
+        {
+          "title": "Cartan A\u2089 Structure in the Class-Mean Gram Matrix of Trained Neural Network Features",
+          "url": "https://github.com/deepseek-launch-community/XuanJi-ISA/issues/154",
+          "reactions": 1
+        },
+        {
+          "title": "feat: Semantic Tension Hooks for Claude Code CLI",
+          "url": "https://github.com/rjmurillo/ai-agents/issues/1191",
+          "reactions": 1
+        },
+        {
+          "title": "Need resume page.",
+          "url": "https://github.com/moi-taiga/c-est-moi/issues/13",
+          "reactions": 1
+        },
+        {
+          "title": "Design Agent Test Jigs and Harness Testing System",
+          "url": "https://github.com/nisavid/agentworks/issues/61",
+          "reactions": 1
+        }
+      ],
+      "best_existing": {
+        "repo": "MemoryMmy/OCJ_srajectory_similarity",
+        "url": "https://github.com/MemoryMmy/OCJ_srajectory_similarity",
+        "stars": 9,
+        "months_since_push": 97.7
+      },
+      "existing_projects": 8,
+      "queries": {
+        "requests": "\"trajectory similarity\" in:title,body is:issue",
+        "existing": "trajectory similarity frechet"
+      }
+    },
+    {
+      "id": "harsh-events",
+      "title": "Detect harsh braking, acceleration and cornering from GPS alone",
+      "status": "idea",
+      "score": 54,
+      "demand": 0.235,
+      "gap": 0.914,
+      "open_requests": 75,
+      "top_requests": [
+        {
+          "title": "Harsh braking detection threshold",
+          "url": "https://github.com/austineaero/driving-behaviour-intelligence/issues/6",
+          "reactions": 0
+        },
+        {
+          "title": "feat: Real-time GPS telematics device integration for fleet vehicle tracking",
+          "url": "https://github.com/AmineArheche/location-prjt/issues/105",
+          "reactions": 0
+        },
+        {
+          "title": "S18.5 Driving behaviour alerts",
+          "url": "https://github.com/sebastien15/Jali/issues/130",
+          "reactions": 0
+        },
+        {
+          "title": "Avoid-overtaking-on-the-right mechanism causes too harsh braking",
+          "url": "https://github.com/eclipse-sumo/sumo/issues/4747",
+          "reactions": 0
+        },
+        {
+          "title": "Intercity coach mode (FlixBus style)",
+          "url": "https://github.com/SuperQuentin/UnitSportSwitzerland/issues/74",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "Simonemenicucci/UBI_pricing_calculator",
+        "url": "https://github.com/Simonemenicucci/UBI_pricing_calculator",
+        "stars": 1,
+        "months_since_push": 12.5
+      },
+      "existing_projects": 7,
+      "queries": {
+        "requests": "\"harsh braking\" in:title,body is:issue",
+        "existing": "telematics harsh braking"
+      }
+    },
+    {
+      "id": "mcp-oauth-helper",
+      "title": "Drop-in OAuth 2.1 (PKCE, discovery) for HTTP MCP servers",
+      "status": "idea",
+      "score": 53,
+      "demand": 0.857,
+      "gap": 0.132,
+      "open_requests": 2263,
+      "top_requests": [
+        {
+          "title": "Claude Code cannot connect to GitHub's remote MCP server using OAuth authentication",
+          "url": "https://github.com/anthropics/claude-code/issues/3433",
+          "reactions": 154
+        },
+        {
+          "title": "Codex does not auto-refresh routed MCP OAuth tokens even when a refresh token is stored",
+          "url": "https://github.com/openai/codex/issues/17265",
+          "reactions": 69
+        },
+        {
+          "title": "[BUG] MCP OAuth: Claude doesn't auto-refresh access tokens, daily \"Connection expired\" despite valid refresh token",
+          "url": "https://github.com/anthropics/claude-code/issues/65036",
+          "reactions": 50
+        },
+        {
+          "title": "codex mcp login appears to require dynamic client registration for private OAuth MCP servers; cannot use pre-registered client identity",
+          "url": "https://github.com/openai/codex/issues/19154",
+          "reactions": 36
+        },
+        {
+          "title": "[Bug]: RFC 8414 \u00a73.3 issuer mismatch on authv2 blocks strict MCP OAuth clients (IssuerMismatchError)",
+          "url": "https://github.com/atlassian/atlassian-mcp-server/issues/205",
+          "reactions": 35
+        }
+      ],
+      "best_existing": {
+        "repo": "apify/mcpc",
+        "url": "https://github.com/apify/mcpc",
+        "stars": 1089,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 201,
+      "queries": {
+        "requests": "mcp oauth in:title is:issue is:open",
+        "existing": "mcp oauth proxy"
+      }
+    },
+    {
+      "id": "mcptest",
+      "title": "mcptest: automated tests and lint for MCP servers",
+      "status": "shipped",
+      "score": 52,
+      "demand": 0.588,
+      "gap": 0.44,
+      "open_requests": 2263,
+      "top_requests": [
+        {
+          "title": "MCP server for test results and coverage",
+          "url": "https://github.com/vitest-dev/vitest/issues/8411",
+          "reactions": 6
+        },
+        {
+          "title": "[FEATURE]: Add MCP server setup and connection testing to Desktop",
+          "url": "https://github.com/anomalyco/opencode/issues/40335",
+          "reactions": 5
+        },
+        {
+          "title": "Unable to Use Postman MCP Server for API Testing",
+          "url": "https://github.com/delano/postman-mcp-server/issues/10",
+          "reactions": 3
+        },
+        {
+          "title": "[FEATURE] ability for claude ITSELF to restart MCP servers to allow testing",
+          "url": "https://github.com/anthropics/claude-code/issues/21129",
+          "reactions": 3
+        },
+        {
+          "title": "CI test runner connects then breaks MCP server",
+          "url": "https://github.com/CoplayDev/unity-mcp/issues/1010",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "PawelKozy/mcp-breach-to-fix-labs",
+        "url": "https://github.com/PawelKozy/mcp-breach-to-fix-labs",
+        "stars": 90,
+        "months_since_push": 11.1
+      },
+      "existing_projects": 73,
+      "queries": {
+        "requests": "\"mcp server\" test in:title is:issue",
+        "existing": "mcp server testing pytest"
+      }
+    },
+    {
+      "id": "appflowy-mcp",
+      "title": "MCP server for AppFlowy",
+      "status": "idea",
+      "score": 51,
+      "demand": 0.366,
+      "gap": 0.692,
+      "open_requests": 2,
+      "top_requests": [
+        {
+          "title": "[FR] MCP server",
+          "url": "https://github.com/AppFlowy-IO/AppFlowy/issues/8043",
+          "reactions": 33
+        },
+        {
+          "title": "[FR] MCP how can i get access_token for access api",
+          "url": "https://github.com/AppFlowy-IO/AppFlowy/issues/8776",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "weironz/appflowy_mcp",
+        "url": "https://github.com/weironz/appflowy_mcp",
+        "stars": 11,
+        "months_since_push": 0.5
+      },
+      "existing_projects": 16,
+      "queries": {
+        "requests": "repo:AppFlowy-IO/AppFlowy mcp in:title is:issue",
+        "existing": "appflowy mcp in:name"
+      }
+    },
+    {
+      "id": "mcp-lazy-gateway",
+      "title": "MCP gateway that loads servers only when a tool is first used",
+      "status": "idea",
+      "score": 50,
+      "demand": 0.568,
+      "gap": 0.411,
+      "open_requests": 18,
+      "top_requests": [
+        {
+          "title": "Feature Request: Lazy Loading for MCP Servers and Tools (95% context reduction possible)",
+          "url": "https://github.com/anthropics/claude-code/issues/7336",
+          "reactions": 109
+        },
+        {
+          "title": "Optional / Lazy Loading of MCP Servers",
+          "url": "https://github.com/openai/codex/issues/2335",
+          "reactions": 46
+        },
+        {
+          "title": "Lazy-load MCP servers on first tool invocation",
+          "url": "https://github.com/github/copilot-cli/issues/2901",
+          "reactions": 21
+        },
+        {
+          "title": "[Enhancement]: Option to lazy-load all MCP servers in chat (global tool-search mode)",
+          "url": "https://github.com/LibreChat-AI/LibreChat/issues/14105",
+          "reactions": 6
+        },
+        {
+          "title": "Feature: Lazy-load skills and MCP servers (name-only stubs until invoked)",
+          "url": "https://github.com/anthropics/claude-code/issues/21545",
+          "reactions": 5
+        }
+      ],
+      "best_existing": {
+        "repo": "voicetreelab/lazy-mcp",
+        "url": "https://github.com/voicetreelab/lazy-mcp",
+        "stars": 114,
+        "months_since_push": 9.9
+      },
+      "existing_projects": 17,
+      "queries": {
+        "requests": "mcp lazy load servers in:title is:issue",
+        "existing": "mcp lazy load proxy"
+      }
+    },
+    {
+      "id": "dependency-track-mcp",
+      "title": "MCP server for OWASP Dependency-Track",
+      "status": "idea",
+      "score": 47,
+      "demand": 0.284,
+      "gap": 0.7,
+      "open_requests": 1,
+      "top_requests": [
+        {
+          "title": "MCP Server for Dependency Track",
+          "url": "https://github.com/DependencyTrack/dependency-track/issues/5791",
+          "reactions": 16
+        }
+      ],
+      "best_existing": {
+        "repo": "cjo4m06/mcp-shrimp-task-manager",
+        "url": "https://github.com/cjo4m06/mcp-shrimp-task-manager",
+        "stars": 2149,
+        "months_since_push": 14.5
+      },
+      "existing_projects": 25,
+      "queries": {
+        "requests": "repo:DependencyTrack/dependency-track mcp in:title is:issue",
+        "existing": "dependency-track mcp in:name,description"
+      }
+    },
+    {
+      "id": "linkding-mcp",
+      "title": "MCP server for linkding bookmarks",
+      "status": "idea",
+      "score": 45,
+      "demand": 0.289,
+      "gap": 0.656,
+      "open_requests": 1,
+      "top_requests": [
+        {
+          "title": "[Feature Request] Official MCP server",
+          "url": "https://github.com/sissbruecker/linkding/issues/1362",
+          "reactions": 17
+        }
+      ],
+      "best_existing": {
+        "repo": "chickenzord/linkding-mcp",
+        "url": "https://github.com/chickenzord/linkding-mcp",
+        "stars": 15,
+        "months_since_push": 5.4
+      },
+      "existing_projects": 9,
+      "queries": {
+        "requests": "repo:sissbruecker/linkding mcp in:title is:issue",
+        "existing": "linkding mcp in:name"
+      }
+    },
+    {
+      "id": "bruno-mcp",
+      "title": "MCP server for the Bruno API client",
+      "status": "idea",
+      "score": 44,
+      "demand": 0.365,
+      "gap": 0.528,
+      "open_requests": 3,
+      "top_requests": [
+        {
+          "title": "MCP Server Integration",
+          "url": "https://github.com/usebruno/bruno/issues/4806",
+          "reactions": 27
+        },
+        {
+          "title": "MCP Server UI",
+          "url": "https://github.com/usebruno/bruno/issues/5085",
+          "reactions": 9
+        },
+        {
+          "title": "Custom MCP Server Integration",
+          "url": "https://github.com/usebruno/bruno/issues/9219",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "hungthai1401/bruno-mcp",
+        "url": "https://github.com/hungthai1401/bruno-mcp",
+        "stars": 44,
+        "months_since_push": 0.4
+      },
+      "existing_projects": 32,
+      "queries": {
+        "requests": "repo:usebruno/bruno mcp in:title is:issue",
+        "existing": "bruno mcp in:name"
+      }
+    }
+  ]
+}

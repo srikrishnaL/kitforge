@@ -1,0 +1,149 @@
+[
+  {
+    "id": "mcptest",
+    "title": "mcptest: automated tests and lint for MCP servers",
+    "kind": "python",
+    "problem": "MCP server authors test by hand in the Inspector; nothing runs tool calls, schema snapshots and description checks in CI.",
+    "request_query": "\"mcp server\" test in:title is:issue",
+    "repo_query": "mcp server testing pytest",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/primefaces/primeng/issues?q=mcp+zod+schema"
+    ]
+  },
+  {
+    "id": "bruno-mcp",
+    "title": "MCP server for the Bruno API client",
+    "kind": "mcp-server",
+    "problem": "Agents can't run or edit Bruno API collections.",
+    "request_query": "repo:usebruno/bruno mcp in:title is:issue",
+    "repo_query": "bruno mcp in:name",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "appflowy-mcp",
+    "title": "MCP server for AppFlowy",
+    "kind": "mcp-server",
+    "problem": "No solid way to read and write AppFlowy docs and databases from Claude, Cursor or other agents.",
+    "request_query": "repo:AppFlowy-IO/AppFlowy mcp in:title is:issue",
+    "repo_query": "appflowy mcp in:name",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "dependency-track-mcp",
+    "title": "MCP server for OWASP Dependency-Track",
+    "kind": "mcp-server",
+    "problem": "Security teams want to ask an agent which projects use a vulnerable component.",
+    "request_query": "repo:DependencyTrack/dependency-track mcp in:title is:issue",
+    "repo_query": "dependency-track mcp in:name,description",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "linkding-mcp",
+    "title": "MCP server for linkding bookmarks",
+    "kind": "mcp-server",
+    "problem": "Search and save self-hosted bookmarks from an agent.",
+    "request_query": "repo:sissbruecker/linkding mcp in:title is:issue",
+    "repo_query": "linkding mcp in:name",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "atlantis-mcp",
+    "title": "MCP server for Atlantis (Terraform pull request automation)",
+    "kind": "mcp-server",
+    "problem": "Agents can't read Atlantis plans, locks and apply status.",
+    "request_query": "repo:runatlantis/atlantis mcp in:title is:issue",
+    "repo_query": "atlantis terraform mcp in:name,description",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "mcp-lazy-gateway",
+    "title": "MCP gateway that loads servers only when a tool is first used",
+    "kind": "python",
+    "problem": "Many configured MCP servers flood the context window and slow start-up.",
+    "request_query": "mcp lazy load servers in:title is:issue",
+    "repo_query": "mcp lazy load proxy",
+    "status": "idea",
+    "evidence": [
+      "https://github.com/github/copilot-cli/issues?q=lazy-load+mcp"
+    ]
+  },
+  {
+    "id": "mcp-oauth-helper",
+    "title": "Drop-in OAuth 2.1 (PKCE, discovery) for HTTP MCP servers",
+    "kind": "python",
+    "problem": "Server authors struggle to add the OAuth flow MCP clients expect.",
+    "request_query": "mcp oauth in:title is:issue is:open",
+    "repo_query": "mcp oauth proxy",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "mcptest-js",
+    "title": "mcptest for vitest and Jest",
+    "kind": "node",
+    "problem": "Most MCP servers are TypeScript; they need the same tests in their own test runner.",
+    "request_query": "\"mcp server\" vitest in:title,body is:issue",
+    "repo_query": "mcp server vitest testing",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "trips",
+    "title": "trips: split a GPS track into stays and trips",
+    "kind": "python",
+    "problem": "Turning raw location pings into places visited and journeys between them.",
+    "request_query": "\"stay point\" in:title,body is:issue",
+    "repo_query": "stay point detection",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "elevation",
+    "title": "elevation: honest elevation gain from noisy GPS",
+    "kind": "python",
+    "problem": "Elevation gain from GPS tracks is badly overstated; apps disagree by 20 percent or more.",
+    "request_query": "\"elevation gain\" in:title is:issue",
+    "repo_query": "elevation gain gps",
+    "status": "idea",
+    "evidence": [
+      "https://forums.garmin.com/apps-software/mobile-apps-web/f/garmin-connect-web/213915/garmin-connect-courses-elevation-gain-grossly-overestimated/1083139",
+      "https://trainerroad.com/forum/t/why-is-tr-elevation-gain-different-than-whats-on-garmin-garmin-connect-strava/22373"
+    ]
+  },
+  {
+    "id": "trajsim",
+    "title": "Trajectory similarity (Frechet, DTW, Hausdorff) for tracks",
+    "kind": "python",
+    "problem": "Compare or deduplicate routes; the known library is unmaintained.",
+    "request_query": "\"trajectory similarity\" in:title,body is:issue",
+    "repo_query": "trajectory similarity frechet",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "geoprivacy",
+    "title": "Make location tracks safe to share",
+    "kind": "python",
+    "problem": "Hide home and work endpoints and add calibrated noise before sharing tracks.",
+    "request_query": "\"location privacy\" in:title is:issue",
+    "repo_query": "location privacy anonymization gps",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "harsh-events",
+    "title": "Detect harsh braking, acceleration and cornering from GPS alone",
+    "kind": "python",
+    "problem": "Telematics without an OBD device.",
+    "request_query": "\"harsh braking\" in:title,body is:issue",
+    "repo_query": "telematics harsh braking",
+    "status": "idea",
+    "evidence": []
+  }
+]

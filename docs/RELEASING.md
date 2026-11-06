@@ -12,7 +12,7 @@ Per release:
 
 1. Bump `version` in the package's `pyproject.toml` or `package.json` and add a CHANGELOG entry.
 2. Merge to `main`.
-3. Tag and push: `git tag mcptest-v0.1.0 && git push origin mcptest-v0.1.0`.
+3. Tag and push: create a GitHub release with a new tag `<PyPI or npm name>-v<version>`, e.g. `pytest-mcp-server-v0.1.0`.
 
 The `Release` workflow refuses to publish if the tag and the package version differ or the tests
 fail, and it creates a GitHub release with the built files.

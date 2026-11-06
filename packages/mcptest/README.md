@@ -16,8 +16,11 @@ the build when a change would break the agents and clients that depend on it.
   upgrade on your side never breaks your tests.
 
 ```bash
-pip install mcptest
+pip install pytest-mcp-server
 ```
+
+The package is published on PyPI as `pytest-mcp-server`; the command and the Python import are
+both `mcptest`.
 
 Python 3.9+. Works with servers written in any language.
 
@@ -177,7 +180,7 @@ MCPTransportError: server closed stdout (exit code 3)
 ## In CI
 
 ```yaml
-- run: pip install mcptest
+- run: pip install pytest-mcp-server
 - run: mcptest lint --fail-on warning -- python -m my_server
 - run: mcptest diff mcp-tools.json -- python -m my_server
 ```

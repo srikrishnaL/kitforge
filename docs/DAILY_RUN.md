@@ -43,6 +43,9 @@ Hard rules
      (package.json, Node 20+, vitest). MCP servers in the language their users' ecosystem uses.
    - The published name must be free on PyPI or npm (check https://pypi.org/pypi/<name>/json
      and https://registry.npmjs.org/<name>) and easy to find by searching for the problem.
+     PyPI also rejects names "too similar" to existing ones: check the name with every "-", "_"
+     and "." removed and with dashes inserted between words (mcptest was rejected because
+     mcp-test exists). Set the name in pyproject.toml/package.json; the folder may differ.
    - Few or no dependencies. No network calls in tests; fake the external API.
    - Tests for real edge cases. MCP servers must pass `mcptest lint --fail-on warning`.
    - README: the problem in two sentences, install, a copy-paste example, limits, and a

@@ -1,6 +1,7 @@
 name: Release
 
-# Push a tag named <package>-v<version>, e.g. mcptest-v0.1.0, to publish that package.
+# Push a tag named <published name>-v<version>, e.g. pytest-mcp-server-v0.1.0, to publish that
+# package. The name may be the folder under packages/ or the name in pyproject.toml/package.json.
 on:
   push:
     tags: ["*-v*"]
@@ -20,7 +21,15 @@ jobs:
           pkg="${tag%-v*}"
           ver="${tag##*-v}"
           dir="packages/$pkg"
-          [ -d "$dir" ] || { echo "no package folder $dir"; exit 1; }
+          if [ ! -d "$dir" ]; then
+            dir=""
+            for d in packages/*/; do
+              d="${d%/}"
+              if [ -f "$d/pyproject.toml" ] && grep -Eq "^name = \"$pkg\"" "$d/pyproject.toml"; then dir="$d"; fi
+              if [ -f "$d/package.json" ] && [ "$(node -p "require('./$d/package.json').name" 2>/dev/null)" = "$pkg" ]; then dir="$d"; fi
+            done
+          fi
+          [ -n "$dir" ] && [ -d "$dir" ] || { echo "no package named $pkg under packages/"; exit 1; }
           echo "pkg=$pkg" >> "$GITHUB_OUTPUT"
           echo "ver=$ver" >> "$GITHUB_OUTPUT"
           echo "dir=$dir" >> "$GITHUB_OUTPUT"

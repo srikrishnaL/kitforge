@@ -2,7 +2,8 @@
 
 ## 0.1.0 (2026-11-06)
 
-First release.
+First release. Published on PyPI as `pytest-mcp-server` (the name `mcptest` was refused as too
+similar to `mcp-test`); the command and import are `mcptest`.
 
 - Dependency-free MCP client for stdio and Streamable HTTP: handshake, paginated tool,
   resource and prompt listing, tool calls, server ping replies, and clear errors that include

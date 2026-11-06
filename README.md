@@ -10,7 +10,7 @@ gap where the only existing project is unmaintained. The demand evidence for eac
 
 | Package | What it does | Install | Status |
 | --- | --- | --- | --- |
-| [mcptest](packages/mcptest/) | Automated tests, linting and breaking-change checks for MCP servers (pytest plugin + CLI) | `pip install mcptest` | 0.1.0 |
+| [mcptest](packages/mcptest/) | Automated tests, linting and breaking-change checks for MCP servers (pytest plugin + CLI) | `pip install pytest-mcp-server` | 0.1.0 |
 
 ## How packages are chosen
 
@@ -37,7 +37,7 @@ docs/                how releases and the daily run work
 
 ## Releasing
 
-Push a tag `<package>-v<version>`, for example `mcptest-v0.1.0`. The release workflow checks the
+Push a tag `<package>-v<version>`, for example `pytest-mcp-server-v0.1.0`. The release workflow checks the
 version matches, runs the tests, and publishes to PyPI or npm. See [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Contributing

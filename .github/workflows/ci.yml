@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Test every Python package
+        run: |
+          set -e
+          python -m pip install --upgrade pip
+          for dir in packages/*/; do
+            [ -f "$dir/pyproject.toml" ] || continue
+            echo "::group::$dir"
+            python -m venv "/tmp/venv-$(basename "$dir")"
+            . "/tmp/venv-$(basename "$dir")/bin/activate"
+            pip install -q -e "$dir[test]"
+            pytest -q "$dir"
+            deactivate
+            echo "::endgroup::"
+          done
+
+  python-sdk-interop:
+    # Run mcptest against servers built with the official MCP Python SDK.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -e "packages/mcptest[test]" mcp
+      - run: pytest -q packages/mcptest/tests/test_sdk_interop.py
+
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test every Node package
+        run: |
+          set -e
+          found=0
+          for dir in packages/*/; do
+            [ -f "$dir/package.json" ] || continue
+            found=1
+            echo "::group::$dir"
+            (cd "$dir" && npm install --no-audit --no-fund && npm test)
+            echo "::endgroup::"
+          done
+          [ "$found" = 1 ] || echo "no Node packages yet"
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Build and check every Python package
+        run: |
+          pip install -q build twine
+          for dir in packages/*/; do
+            [ -f "$dir/pyproject.toml" ] || continue
+            python -m build "$dir" --outdir "dist/$(basename "$dir")"
+            twine check "dist/$(basename "$dir")"/*
+          done

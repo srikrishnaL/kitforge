@@ -1,0 +1,75 @@
+name: Release
+
+# Push a tag named <package>-v<version>, e.g. mcptest-v0.1.0, to publish that package.
+on:
+  push:
+    tags: ["*-v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Work out package and version from the tag
+        id: tag
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          pkg="${tag%-v*}"
+          ver="${tag##*-v}"
+          dir="packages/$pkg"
+          [ -d "$dir" ] || { echo "no package folder $dir"; exit 1; }
+          echo "pkg=$pkg" >> "$GITHUB_OUTPUT"
+          echo "ver=$ver" >> "$GITHUB_OUTPUT"
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          if [ -f "$dir/pyproject.toml" ]; then echo "kind=python" >> "$GITHUB_OUTPUT"; fi
+          if [ -f "$dir/package.json" ]; then echo "kind=node" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/setup-python@v5
+        if: steps.tag.outputs.kind == 'python'
+        with:
+          python-version: "3.13"
+      - name: Test, check version, build (Python)
+        if: steps.tag.outputs.kind == 'python'
+        run: |
+          set -e
+          dir="${{ steps.tag.outputs.dir }}"
+          want="${{ steps.tag.outputs.ver }}"
+          have=$(python -c "import tomllib;print(tomllib.load(open('$dir/pyproject.toml','rb'))['project']['version'])")
+          [ "$have" = "$want" ] || { echo "tag says $want but pyproject.toml says $have"; exit 1; }
+          pip install -q build twine -e "$dir[test]"
+          pytest -q "$dir"
+          python -m build "$dir" --outdir dist
+          twine check dist/*
+      - name: Publish to PyPI
+        if: steps.tag.outputs.kind == 'python'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        if: steps.tag.outputs.kind == 'node'
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+      - name: Test, check version, publish (Node)
+        if: steps.tag.outputs.kind == 'node'
+        working-directory: ${{ steps.tag.outputs.dir }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -e
+          have=$(node -p "require('./package.json').version")
+          [ "$have" = "${{ steps.tag.outputs.ver }}" ] || { echo "version mismatch: $have"; exit 1; }
+          npm install --no-audit --no-fund
+          npm test
+          npm publish --access public
+
+      - name: GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.tag.outputs.pkg }} ${{ steps.tag.outputs.ver }}
+          body: "See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/${{ steps.tag.outputs.dir }}/CHANGELOG.md)."
+          files: dist/*

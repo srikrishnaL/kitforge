@@ -54,7 +54,8 @@ Hard rules
 
 4. Ship.
    - Run the package's tests and build it locally. All must pass.
-   - Commit on a new branch daily/<YYYY-MM-DD>-<id>, push, and open a PR to main titled
+   - Commit on the branch this session was told to use (otherwise a new branch
+     daily/<YYYY-MM-DD>-<id>), push, and open a PR to main titled
      "<id>: <one-line problem it solves>". Assign srikrishnaL.
    - Wait for CI. Fix failures (at most 3 attempts).
    - Release policy: MERGE_AND_RELEASE=<yes|no>

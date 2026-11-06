@@ -182,6 +182,24 @@ MCPTransportError: server closed stdout (exit code 3)
 - run: mcptest diff mcp-tools.json -- python -m my_server
 ```
 
+## Tested against real servers
+
+Checked on 2026-11-06 with mcptest 0.1.0: connect, list tools, call a tool, snapshot twice.
+
+| Server | Transport | Tools | Tool call | Lint findings |
+| --- | --- | --- | --- | --- |
+| @modelcontextprotocol/server-everything | stdio, Streamable HTTP | 14 | ok | 1 warning |
+| @modelcontextprotocol/server-filesystem | stdio | 14 | ok | 18 warnings |
+| @modelcontextprotocol/server-memory | stdio | 9 | ok | 4 warnings |
+| @modelcontextprotocol/server-sequential-thinking | stdio | 1 | ok | 1 warning |
+| @playwright/mcp | stdio, Streamable HTTP | 25 | returned as a tool error (no browser in the test machine) | 3 warnings |
+| mcp-server-time | stdio | 3 | ok | none |
+| mcp-server-git | stdio | 14 | ok | 24 warnings |
+| mcp-server-fetch | stdio | 1 | not called (needs network) | none |
+| Official Python SDK 2.3 (`MCPServer`) | stdio, Streamable HTTP | 2 | ok | 3 warnings |
+
+Almost all warnings are parameters with no description (MCP007) or very short descriptions (MCP005).
+
 ## Limits
 
 - Covers tools fully, resources and prompts through the client only (no lint rules for them yet).

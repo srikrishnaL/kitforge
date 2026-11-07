@@ -1,0 +1,56 @@
+name: Auto-merge
+
+# When CI passes on a pull request from this repository's own claude/* or daily/* branches
+# (the daily package run and project threads), squash-merge it and start the Release workflow,
+# which publishes any package version that has no tag yet.
+#
+# A merge made with GITHUB_TOKEN does not trigger push workflows, so Release is started
+# explicitly with workflow_dispatch.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: automerge
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      (startsWith(github.event.workflow_run.head_branch, 'claude/') ||
+       startsWith(github.event.workflow_run.head_branch, 'daily/'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      BRANCH: ${{ github.event.workflow_run.head_branch }}
+      SHA: ${{ github.event.workflow_run.head_sha }}
+      OWNER: ${{ github.repository_owner }}
+    steps:
+      - name: Find the pull request CI just passed on
+        id: pr
+        run: |
+          pr=$(gh pr list --head "$BRANCH" --base main --state open \
+                 --json number,headRefOid,author,isDraft \
+                 --jq ".[] | select(.headRefOid == \"$SHA\" and .author.login == \"$OWNER\" and (.isDraft | not)) | .number")
+          if [ -z "$pr" ]; then
+            echo "No open, non-draft PR by $OWNER from $BRANCH at $SHA (newer push, draft, or closed); nothing to do."
+          fi
+          echo "number=$pr" >> "$GITHUB_OUTPUT"
+
+      - name: Squash-merge
+        if: steps.pr.outputs.number != ''
+        run: gh pr merge "${{ steps.pr.outputs.number }}" --squash --match-head-commit "$SHA"
+
+      - name: Start the release
+        if: steps.pr.outputs.number != ''
+        run: gh workflow run release.yml --ref main

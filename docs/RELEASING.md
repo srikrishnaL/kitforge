@@ -19,6 +19,11 @@ version, runs the tests, builds, publishes to PyPI or npm, then creates the tag 
 release with the built files. Packages whose version didn't change are skipped, so merges that
 don't bump a version publish nothing.
 
+Pull requests from this repository's `claude/*` and `daily/*` branches (the daily run and
+project threads) are squash-merged by the `Auto-merge` workflow as soon as CI passes, and it then
+starts `Release`. So for those, publishing needs no step from anyone; close or mark the PR as a
+draft to stop it.
+
 Other ways to start it:
 
 - Push or create (as a GitHub release) a tag `<published name>-v<version>` or

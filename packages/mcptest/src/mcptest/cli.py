@@ -17,6 +17,7 @@ import sys
 from typing import Any, Dict, List, Optional, Sequence
 
 from . import __version__
+from . import github as gh
 from . import snapshot as snap
 from .client import MCPClient, MCPError, MCPTransportError
 from .lint import RULES, SEVERITIES, at_or_above, count_by_severity, lint_tools
@@ -67,7 +68,8 @@ def _parser() -> argparse.ArgumentParser:
     lint.add_argument("--ignore", default="", help="comma-separated rule codes to skip")
     lint.add_argument("--fail-on", choices=SEVERITIES, default="error",
                       help="exit 1 if a finding is at this level or worse (default: error)")
-    lint.add_argument("--format", choices=("text", "json"), default="text")
+    lint.add_argument("--format", choices=("text", "json", "github"), default="text",
+                      help="github: annotations plus a job summary in GitHub Actions")
     lint.add_argument("--rules", action="store_true", help="list the rules and exit")
 
     tools = sub.add_parser("tools", help="print the server's tools as JSON")
@@ -86,7 +88,8 @@ def _parser() -> argparse.ArgumentParser:
     _add_server_args(diff)
     diff.add_argument("old", help="the earlier snapshot file")
     diff.add_argument("new", nargs="?", help="the later snapshot file (omit to use the live server)")
-    diff.add_argument("--format", choices=("text", "json"), default="text")
+    diff.add_argument("--format", choices=("text", "json", "github"), default="text",
+                      help="github: annotations plus a job summary in GitHub Actions")
     diff.add_argument("--allow-breaking", action="store_true",
                       help="exit 0 even when there are breaking changes")
     return p
@@ -117,8 +120,13 @@ def _run(args: argparse.Namespace, command: List[str]) -> int:
             print(json.dumps({"server": name, "tools": len(tools),
                               "findings": [f.as_dict() for f in findings]}, indent=2))
         else:
-            for f in findings:
-                print(f)
+            if args.format == "github":
+                for line in gh.lint_annotations(findings, name):
+                    print(line)
+                gh.write_step_summary(gh.lint_summary(name, len(tools), findings))
+            else:
+                for f in findings:
+                    print(f)
             counts = count_by_severity(findings)
             size = len(json.dumps(tools))
             print(
@@ -166,9 +174,17 @@ def _run(args: argparse.Namespace, command: List[str]) -> int:
             print(json.dumps([c.as_dict() for c in changes], indent=2))
         elif not changes:
             print("no changes")
+            if args.format == "github":
+                gh.write_step_summary(gh.diff_summary(changes))
         else:
-            for c in changes:
-                print(c)
+            if args.format == "github":
+                for line in gh.diff_annotations(
+                        changes, "warning" if args.allow_breaking else "error"):
+                    print(line)
+                gh.write_step_summary(gh.diff_summary(changes))
+            else:
+                for c in changes:
+                    print(c)
             n = len(snap.breaking(changes))
             print(f"\n{n} breaking, {len(changes) - n} compatible")
         return 1 if snap.breaking(changes) and not args.allow_breaking else 0

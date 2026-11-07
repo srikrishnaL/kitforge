@@ -43,6 +43,44 @@ jobs:
       - run: pip install -e "packages/mcptest[test]" mcp
       - run: pytest -q packages/mcptest/tests/test_sdk_interop.py
 
+  mcptest-action:
+    # Run the reusable GitHub Action in packages/mcptest against the test server.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clean server passes lint and snapshot diff
+        uses: ./packages/mcptest
+        with:
+          command: python3 packages/mcptest/tests/servers/fake_server.py
+          fail-on: warning
+          snapshot: packages/mcptest/tests/servers/fake-tools.json
+      - name: Breaking changes are reported without failing when allowed
+        uses: ./packages/mcptest
+        with:
+          command: FAKE_TOOLS=v2 python3 packages/mcptest/tests/servers/fake_server.py
+          snapshot: packages/mcptest/tests/servers/fake-tools.json
+          allow-breaking: "true"
+      - name: Breaking changes fail the step
+        id: breaking
+        continue-on-error: true
+        uses: ./packages/mcptest
+        with:
+          command: FAKE_TOOLS=v2 python3 packages/mcptest/tests/servers/fake_server.py
+          snapshot: packages/mcptest/tests/servers/fake-tools.json
+      - name: Lint errors fail the step
+        id: bad
+        continue-on-error: true
+        uses: ./packages/mcptest
+        with:
+          command: FAKE_TOOLS=bad python3 packages/mcptest/tests/servers/fake_server.py
+      - name: Check the failing cases failed
+        env:
+          BREAKING: ${{ steps.breaking.outcome }}
+          BAD: ${{ steps.bad.outcome }}
+        run: |
+          echo "breaking=$BREAKING bad=$BAD"
+          [ "$BREAKING" = failure ] && [ "$BAD" = failure ]
+
   node:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,94 @@
+name: mcptest
+description: Lint an MCP server's tools and catch breaking schema changes, with annotations on the pull request.
+author: Sri Krishna Lingamaneni
+branding:
+  icon: check-circle
+  color: green
+
+inputs:
+  command:
+    description: "Shell command that starts the server over stdio, e.g. 'python -m my_server' or 'node dist/index.js'."
+    required: false
+    default: ""
+  url:
+    description: "Streamable HTTP URL of a server that is already running. Use this or command."
+    required: false
+    default: ""
+  headers:
+    description: "HTTP headers for url, one 'Name: value' per line."
+    required: false
+    default: ""
+  fail-on:
+    description: "Fail the step on findings at this level or worse (error, warning or info)."
+    required: false
+    default: error
+  ignore:
+    description: "Comma-separated lint rule codes to skip, e.g. 'MCP005,MCP015'."
+    required: false
+    default: ""
+  snapshot:
+    description: "Path to a committed snapshot (from 'mcptest snapshot'). When set, the step also fails on breaking tool changes."
+    required: false
+    default: ""
+  allow-breaking:
+    description: "Report breaking changes against the snapshot without failing."
+    required: false
+    default: "false"
+  working-directory:
+    description: "Directory to start the server in."
+    required: false
+    default: "."
+  timeout:
+    description: "Seconds to wait for each reply from the server."
+    required: false
+    default: "30"
+
+runs:
+  using: composite
+  steps:
+    - name: Install mcptest
+      shell: bash
+      run: |
+        python3 -m venv "$RUNNER_TEMP/mcptest-venv"
+        "$RUNNER_TEMP/mcptest-venv/bin/pip" install -q "$GITHUB_ACTION_PATH"
+
+    - name: Lint and diff the server
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        MCPTEST: ${{ runner.temp }}/mcptest-venv/bin/mcptest
+        MCP_COMMAND: ${{ inputs.command }}
+        MCP_URL: ${{ inputs.url }}
+        MCP_HEADERS: ${{ inputs.headers }}
+        MCP_FAIL_ON: ${{ inputs.fail-on }}
+        MCP_IGNORE: ${{ inputs.ignore }}
+        MCP_SNAPSHOT: ${{ inputs.snapshot }}
+        MCP_ALLOW_BREAKING: ${{ inputs.allow-breaking }}
+        MCP_TIMEOUT: ${{ inputs.timeout }}
+      run: |
+        set -u
+        server=()
+        if [ -n "$MCP_URL" ] && [ -n "$MCP_COMMAND" ]; then
+          echo "::error title=mcptest::give either command or url, not both"; exit 2
+        elif [ -n "$MCP_URL" ]; then
+          server=(--url "$MCP_URL")
+          while IFS= read -r h; do
+            [ -n "$h" ] && server+=(--header "$h")
+          done <<< "$MCP_HEADERS"
+        elif [ -n "$MCP_COMMAND" ]; then
+          server=(-- bash -c "$MCP_COMMAND")
+        else
+          echo "::error title=mcptest::set the command or url input"; exit 2
+        fi
+
+        status=0
+        lint=(lint --format github --fail-on "$MCP_FAIL_ON" --timeout "$MCP_TIMEOUT")
+        [ -n "$MCP_IGNORE" ] && lint+=(--ignore "$MCP_IGNORE")
+        "$MCPTEST" "${lint[@]}" "${server[@]}" || status=$?
+
+        if [ -n "$MCP_SNAPSHOT" ]; then
+          diff=(diff --format github --timeout "$MCP_TIMEOUT")
+          [ "$MCP_ALLOW_BREAKING" = "true" ] && diff+=(--allow-breaking)
+          "$MCPTEST" "${diff[@]}" "$MCP_SNAPSHOT" "${server[@]}" || status=$?
+        fi
+        exit "$status"

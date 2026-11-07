@@ -11,8 +11,23 @@ One-time setup (repository owner):
 Per release:
 
 1. Bump `version` in the package's `pyproject.toml` or `package.json` and add a CHANGELOG entry.
-2. Merge to `main`.
-3. Tag and push: create a GitHub release with a new tag `<PyPI or npm name>-v<version>`, e.g. `pytest-mcp-server-v0.1.0`.
+2. Merge to `main`. That's it.
 
-The `Release` workflow refuses to publish if the tag and the package version differ or the tests
-fail, and it creates a GitHub release with the built files.
+On every push to `main` the `Release` workflow lists each package's published name and version
+and releases those whose tag `<published name>-v<version>` doesn't exist yet: it checks the
+version, runs the tests, builds, publishes to PyPI or npm, then creates the tag and a GitHub
+release with the built files. Packages whose version didn't change are skipped, so merges that
+don't bump a version publish nothing.
+
+Pull requests from this repository's `claude/*` and `daily/*` branches (the daily run and
+project threads) are squash-merged by the `Auto-merge` workflow as soon as CI passes, and it then
+starts `Release`. So for those, publishing needs no step from anyone; close or mark the PR as a
+draft to stop it.
+
+Other ways to start it:
+
+- Push or create (as a GitHub release) a tag `<published name>-v<version>` or
+  `<folder>-v<version>`; the version must match the package.
+- Actions → Release → Run workflow: releases whatever is missing, e.g. after fixing a failed run.
+
+A re-run after a partial failure is safe: a version already on PyPI or npm is not uploaded again.

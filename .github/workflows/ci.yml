@@ -116,3 +116,5 @@ jobs:
             python -m build "$dir" --outdir "dist/$(basename "$dir")"
             twine check "dist/$(basename "$dir")"/*
           done
+      - name: Release plan reads every package
+        run: python .github/scripts/release_plan.py

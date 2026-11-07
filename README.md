@@ -37,8 +37,10 @@ docs/                how releases and the daily run work
 
 ## Releasing
 
-Push a tag `<package>-v<version>`, for example `pytest-mcp-server-v0.1.0`. The release workflow checks the
-version matches, runs the tests, and publishes to PyPI or npm. See [docs/RELEASING.md](docs/RELEASING.md).
+Bump the version in the package's `pyproject.toml` or `package.json`, add a CHANGELOG entry, and
+merge to `main`. The release workflow sees a version with no tag yet, runs the tests, publishes to
+PyPI or npm, and creates the tag `<published name>-v<version>` (for example
+`pytest-mcp-server-v0.2.0`) with a GitHub release. See [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Contributing
 

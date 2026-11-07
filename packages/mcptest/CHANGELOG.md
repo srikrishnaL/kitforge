@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-11-07)
 
 - GitHub Actions output: `mcptest lint --format github` and `mcptest diff --format github`
   print each finding as an annotation on the run and the pull request, and add a table to the

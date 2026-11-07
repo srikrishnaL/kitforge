@@ -61,8 +61,9 @@ Hard rules
      daily/<YYYY-MM-DD>-<id>), push, and open a PR to main titled
      "<id>: <one-line problem it solves>". Assign srikrishnaL.
    - Wait for CI. Fix failures (at most 3 attempts).
-   - Leave the PR open for Sri's review. This environment cannot push tags, so Sri publishes by
-     creating a GitHub release with tag <published name>-v<version>; say so in the report.
+   - Leave the PR open for Sri's review. Merging it publishes the package: the release workflow
+     releases every package version on main that has no tag yet. Never bump a version you do
+     not mean to publish.
 
 5. Report in 5 lines or fewer: what shipped (PR link), why (top evidence link and score),
    what was fixed, and anything Sri needs to do.

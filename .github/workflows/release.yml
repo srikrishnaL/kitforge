@@ -1,40 +1,67 @@
 name: Release
 
-# Push a tag named <published name>-v<version>, e.g. pytest-mcp-server-v0.1.0, to publish that
-# package. The name may be the folder under packages/ or the name in pyproject.toml/package.json.
+# Runs on every push to main: any package whose version has no tag yet
+# (<published name>-v<version>, e.g. pytest-mcp-server-v0.2.0) is tested, published to PyPI or
+# npm, tagged and given a GitHub release. So releasing is: bump the version, merge.
+# Pushing such a tag by hand still works, and so does "Run workflow" (it releases what's missing).
 on:
   push:
+    branches: [main]
     tags: ["*-v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
-  release:
+  plan:
     runs-on: ubuntu-latest
+    outputs:
+      releases: ${{ steps.plan.outputs.releases }}
     steps:
       - uses: actions/checkout@v4
-      - name: Work out package and version from the tag
-        id: tag
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Find packages to release
+        id: plan
         run: |
-          tag="${GITHUB_REF_NAME}"
-          pkg="${tag%-v*}"
-          ver="${tag##*-v}"
-          dir="packages/$pkg"
-          if [ ! -d "$dir" ]; then
-            dir=""
-            for d in packages/*/; do
-              d="${d%/}"
-              if [ -f "$d/pyproject.toml" ] && grep -Eq "^name = \"$pkg\"" "$d/pyproject.toml"; then dir="$d"; fi
-              if [ -f "$d/package.json" ] && [ "$(node -p "require('./$d/package.json').name" 2>/dev/null)" = "$pkg" ]; then dir="$d"; fi
-            done
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            releases=$(python .github/scripts/release_plan.py "$GITHUB_REF_NAME")
+          else
+            releases=$(python .github/scripts/release_plan.py)
           fi
-          [ -n "$dir" ] && [ -d "$dir" ] || { echo "no package named $pkg under packages/"; exit 1; }
-          echo "pkg=$pkg" >> "$GITHUB_OUTPUT"
-          echo "ver=$ver" >> "$GITHUB_OUTPUT"
-          echo "dir=$dir" >> "$GITHUB_OUTPUT"
-          if [ -f "$dir/pyproject.toml" ]; then echo "kind=python" >> "$GITHUB_OUTPUT"; fi
-          if [ -f "$dir/package.json" ]; then echo "kind=node" >> "$GITHUB_OUTPUT"; fi
+          echo "$releases"
+          echo "releases=$releases" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: plan
+    if: needs.plan.outputs.releases != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.releases) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package to release
+        id: tag
+        env:
+          TAG: ${{ matrix.tag }}
+          PKG: ${{ matrix.pkg }}
+          VER: ${{ matrix.ver }}
+          DIR: ${{ matrix.dir }}
+          KIND: ${{ matrix.kind }}
+        run: |
+          echo "Releasing $PKG $VER from $DIR as $TAG"
+          { echo "tag=$TAG"; echo "pkg=$PKG"; echo "ver=$VER"; echo "dir=$DIR"; echo "kind=$KIND"; } >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-python@v5
         if: steps.tag.outputs.kind == 'python'
@@ -57,6 +84,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+          skip-existing: true  # a re-run after a failed tag step must not fail here
 
       - uses: actions/setup-node@v4
         if: steps.tag.outputs.kind == 'node'
@@ -74,11 +102,18 @@ jobs:
           [ "$have" = "${{ steps.tag.outputs.ver }}" ] || { echo "version mismatch: $have"; exit 1; }
           npm install --no-audit --no-fund
           npm test
-          npm publish --access public
+          name=$(node -p "require('./package.json').name")
+          if [ "$(npm view "$name@$have" version 2>/dev/null)" = "$have" ]; then
+            echo "$name@$have is already on npm"
+          else
+            npm publish --access public
+          fi
 
-      - name: GitHub release
+      - name: Tag and GitHub release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           name: ${{ steps.tag.outputs.pkg }} ${{ steps.tag.outputs.ver }}
           body: "See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/${{ steps.tag.outputs.dir }}/CHANGELOG.md)."
           files: dist/*

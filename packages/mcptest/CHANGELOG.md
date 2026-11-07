@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 (unreleased)
+
+- GitHub Actions output: `mcptest lint --format github` and `mcptest diff --format github`
+  print each finding as an annotation on the run and the pull request, and add a table to the
+  job summary. Text from the server is escaped, so a tool description cannot inject workflow
+  commands.
+- A reusable GitHub Action (`uses: srikrishnaL/kitforge/packages/mcptest@<ref>`) that lints a
+  server and, given a committed snapshot, fails on breaking tool changes.
+
 ## 0.1.0 (2026-11-06)
 
 First release. Published on PyPI as `pytest-mcp-server` (the name `mcptest` was refused as too

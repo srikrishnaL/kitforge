@@ -179,11 +179,57 @@ MCPTransportError: server closed stdout (exit code 3)
 
 ## In CI
 
+### GitHub Action
+
+```yaml
+# .github/workflows/mcp.yml
+name: MCP server checks
+on: [push, pull_request]
+jobs:
+  mcptest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5   # or setup-node, whatever your server needs
+        with:
+          python-version: "3.13"
+      - run: pip install -e .
+      - uses: srikrishnaL/kitforge/packages/mcptest@pytest-mcp-server-v0.2.0
+        with:
+          command: python -m my_server
+          fail-on: warning
+          snapshot: mcp-tools.json      # optional: fail on breaking tool changes
+```
+
+Each finding shows up as an annotation on the pull request, and the job summary gets a table of
+findings and schema changes. Inputs:
+
+| Input | Default | Meaning |
+| --- | --- | --- |
+| `command` | | Shell command that starts the server over stdio |
+| `url` | | Streamable HTTP URL of a running server (instead of `command`) |
+| `headers` | | HTTP headers for `url`, one `Name: value` per line |
+| `fail-on` | `error` | Fail on findings at this level or worse: `error`, `warning`, `info` |
+| `ignore` | | Rule codes to skip, e.g. `MCP005,MCP015` |
+| `snapshot` | | Committed snapshot to diff against; breaking changes fail the step |
+| `allow-breaking` | `false` | Report breaking changes as warnings instead of failing |
+| `working-directory` | `.` | Where to start the server |
+| `timeout` | `30` | Seconds to wait for each reply |
+
+Create the snapshot once with `mcptest snapshot -o mcp-tools.json -- python -m my_server`,
+commit it, and update it whenever you change the tools on purpose. The action installs mcptest
+in its own virtual environment, so it does not touch your project's packages.
+
+### Any other CI
+
 ```yaml
 - run: pip install pytest-mcp-server
 - run: mcptest lint --fail-on warning -- python -m my_server
 - run: mcptest diff mcp-tools.json -- python -m my_server
 ```
+
+Add `--format github` to either command for annotations when you run it yourself in GitHub
+Actions, or `--format json` to feed another tool.
 
 ## Tested against real servers
 

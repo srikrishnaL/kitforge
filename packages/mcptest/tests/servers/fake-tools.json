@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "tools": {
+    "add": {
+      "description": "Add two integers and return their sum.",
+      "inputSchema": {
+        "properties": {
+          "a": {
+            "description": "First number to add",
+            "type": "integer"
+          },
+          "b": {
+            "description": "Second number to add",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "type": "object"
+      }
+    },
+    "echo": {
+      "description": "Return the given text unchanged. Useful for checking connectivity.",
+      "inputSchema": {
+        "properties": {
+          "text": {
+            "description": "Text to send back",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "type": "object"
+      }
+    }
+  }
+}

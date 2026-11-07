@@ -41,8 +41,14 @@ Hard rules
 3. Build one package in packages/<id>/, copying the conventions of packages/mcptest:
    - Python (pyproject.toml, hatchling, src/ layout, Python 3.9+) or TypeScript
      (package.json, Node 20+, vitest). MCP servers in the language their users' ecosystem uses.
+   - Give it a catchy name developers remember after hearing it once: short (one word or two
+     short ones, ideally under 12 characters), easy to say and spell, and hinting at what it
+     does (think "ruff", "httpx", "zod"). No generic names like "<topic>-utils" or
+     "<topic>-tool". Put the plain search words (the problem, the tool it serves) in the
+     package description and keywords, so it is still found by searching for the problem.
+     Pick 3 to 5 candidates and take the best one that is free.
    - The published name must be free on PyPI or npm (check https://pypi.org/pypi/<name>/json
-     and https://registry.npmjs.org/<name>) and easy to find by searching for the problem.
+     and https://registry.npmjs.org/<name>), and not clash with a well-known project on GitHub.
      PyPI also rejects names "too similar" to existing ones: check the name with every "-", "_"
      and "." removed and with dashes inserted between words (mcptest was rejected because
      mcp-test exists). Set the name in pyproject.toml/package.json; the folder may differ.

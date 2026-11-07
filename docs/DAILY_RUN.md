@@ -24,8 +24,8 @@ Hard rules
    - Read open issues and PRs on srikrishnaL/kitforge and the latest CI run on main.
    - Fix CI failures and bugs reported by users before anything else. Answer questions in
      issues only if Sri has allowed replies; otherwise draft the answer in the PR.
-   - On Saturday and Sunday do only this step: improve the most-used package (docs, examples,
-     a requested feature) instead of starting a new one.
+   - Change an existing package only for a real problem its users reported (an issue, a bug
+     report, a failing CI run). Then still go on to build a new package below.
 
 2. Refresh demand.
    - Add 2 or 3 new ideas to demand/ideas.json from fresh research: GitHub issues asking for an

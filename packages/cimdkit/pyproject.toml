@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cimdkit"
+version = "0.1.0"
+description = "OAuth Client ID Metadata Documents (CIMD) for authorization servers: safe fetch, spec validation, caching and redirect_uri matching for MCP clients"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "oauth", "oauth2", "cimd", "client id metadata document", "client_id", "mcp",
+  "model context protocol", "authorization server", "dynamic client registration", "ssrf",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Security",
+  "Topic :: Software Development :: Libraries",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/cimdkit"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/cimdkit/CHANGELOG.md"
+
+[project.scripts]
+cimdkit = "cimdkit.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cimdkit"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

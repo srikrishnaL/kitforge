@@ -1,15 +1,15 @@
 {
-  "generated": "2026-11-06T04:06:55Z",
+  "generated": "2026-11-08T07:49:21Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
       "id": "trips",
       "title": "trips: split a GPS track into stays and trips",
-      "status": "idea",
+      "status": "skipped",
       "score": 86,
       "demand": 0.995,
       "gap": 0.7,
-      "open_requests": 15289,
+      "open_requests": 15591,
       "top_requests": [
         {
           "title": "[Important, please read] Replies from Aircoookie",
@@ -19,12 +19,12 @@
         {
           "title": "[FEATURE] Support Azure DevOps repositories in Claude Code on the web (Cloud Sessions)",
           "url": "https://github.com/anthropics/claude-code/issues/54054",
-          "reactions": 65
+          "reactions": 69
         },
         {
           "title": "AliasVault v1.0 roadmap",
           "url": "https://github.com/aliasvault/aliasvault/issues/731",
-          "reactions": 49
+          "reactions": 50
         },
         {
           "title": "Enhanced DynamoDB annotations are incompatible with Lombok",
@@ -52,11 +52,11 @@
     {
       "id": "geoprivacy",
       "title": "Make location tracks safe to share",
-      "status": "idea",
+      "status": "skipped",
       "score": 79,
       "demand": 0.622,
       "gap": 1.0,
-      "open_requests": 457,
+      "open_requests": 459,
       "top_requests": [
         {
           "title": "privacy: Add camera and location indicator",
@@ -88,59 +88,106 @@
         "repo": "jonathan-demlie/privacy-policy",
         "url": "https://github.com/jonathan-demlie/privacy-policy",
         "stars": 0,
-        "months_since_push": 70.6
+        "months_since_push": 70.7
       },
       "existing_projects": 1,
       "queries": {
-        "requests": "\"location privacy\" in:title is:issue",
+        "requests": "\"location privacy\" (gps OR trajectory OR anonymize) in:title is:issue",
         "existing": "location privacy anonymization gps"
       }
     },
     {
-      "id": "mcptest-js",
-      "title": "mcptest for vitest and Jest",
-      "status": "idea",
-      "score": 69,
-      "demand": 0.777,
-      "gap": 0.591,
-      "open_requests": 6376,
+      "id": "cimd",
+      "title": "Resolve and validate OAuth Client ID Metadata Documents (CIMD) in authorization servers",
+      "status": "shipped",
+      "score": 68,
+      "demand": 0.631,
+      "gap": 0.742,
+      "open_requests": 291,
       "top_requests": [
         {
-          "title": "\u2602\ufe0f Plan for 2026 Q3 (Jul - Sep)",
-          "url": "https://github.com/voidzero-dev/vite-plus/issues/2405",
+          "title": "[Feature Request] Support MCP servers with Client ID Metadata Documents (CIMD) OAuth authentication",
+          "url": "https://github.com/anthropics/claude-code/issues/18251",
+          "reactions": 40
+        },
+        {
+          "title": "SEP-991: Enable URL-based Client Registration using OAuth Client ID Metadata Documents",
+          "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/issues/991",
+          "reactions": 33
+        },
+        {
+          "title": "Support \"Client ID Metadata Document\" (CIMD)",
+          "url": "https://github.com/ory/hydra/issues/4061",
           "reactions": 31
         },
         {
-          "title": "GitHub Copilot LLMs disappear from agent list",
-          "url": "https://github.com/zed-industries/zed/issues/47567",
-          "reactions": 9
+          "title": "CIMD: authorization request rejected when Client ID Metadata Document contains unknown properties",
+          "url": "https://github.com/keycloak/keycloak/issues/51236",
+          "reactions": 25
         },
         {
-          "title": "NX Console 18.74.5 hangs forever in Cursor 2",
-          "url": "https://github.com/nrwl/nx-console/issues/2858",
-          "reactions": 9
-        },
-        {
-          "title": "MCP server for test results and coverage",
-          "url": "https://github.com/vitest-dev/vitest/issues/8411",
-          "reactions": 6
-        },
-        {
-          "title": "Unordered and partial query parameter matching",
-          "url": "https://github.com/modelcontextprotocol/typescript-sdk/issues/149",
-          "reactions": 6
+          "title": "Support Client ID Metadata",
+          "url": "https://github.com/FusionAuth/fusionauth-issues/issues/3230",
+          "reactions": 22
         }
       ],
       "best_existing": {
-        "repo": "blackwell-systems/mcp-assert",
-        "url": "https://github.com/blackwell-systems/mcp-assert",
-        "stars": 26,
-        "months_since_push": 0.0
+        "repo": "ThisIsMissEm/cimd-service",
+        "url": "https://github.com/ThisIsMissEm/cimd-service",
+        "stars": 7,
+        "months_since_push": 0.4
       },
-      "existing_projects": 30,
+      "existing_projects": 69,
       "queries": {
-        "requests": "\"mcp server\" vitest in:title,body is:issue",
-        "existing": "mcp server vitest testing"
+        "requests": "\"client id metadata\" in:title is:issue",
+        "existing": "\"client id metadata\" in:description"
+      }
+    },
+    {
+      "id": "mcp-prm",
+      "title": "RFC 9728 Protected Resource Metadata and 401 challenges for HTTP MCP servers",
+      "status": "idea",
+      "score": 66,
+      "demand": 0.62,
+      "gap": 0.7,
+      "open_requests": 376,
+      "top_requests": [
+        {
+          "title": "[BUG]  Claude Code MCP client ignores scopes_supported from OAuth protected resource metadata, preventing refresh token issuance",
+          "url": "https://github.com/anthropics/claude-code/issues/7744",
+          "reactions": 30
+        },
+        {
+          "title": "Remote MCP: scopes_supported should be extracted from the protected resource metadata document",
+          "url": "https://github.com/openai/codex/issues/15643",
+          "reactions": 20
+        },
+        {
+          "title": "OAuth Protected Resource Metadata Discovery Not Following RFC 9728 \u00a73.1",
+          "url": "https://github.com/google-gemini/gemini-cli/issues/15754",
+          "reactions": 9
+        },
+        {
+          "title": "feat(mcp): support OAuth 2.1 / Protected Resource Metadata for remote MCP clients (ChatGPT, web agents)",
+          "url": "https://github.com/go-vikunja/vikunja/issues/3930",
+          "reactions": 4
+        },
+        {
+          "title": "oauth protected resource metadata URL ",
+          "url": "https://github.com/modelcontextprotocol/python-sdk/issues/1049",
+          "reactions": 4
+        }
+      ],
+      "best_existing": {
+        "repo": "blackchoey/remote-mcp-apim-oauth-prm",
+        "url": "https://github.com/blackchoey/remote-mcp-apim-oauth-prm",
+        "stars": 13,
+        "months_since_push": 15.3
+      },
+      "existing_projects": 8,
+      "queries": {
+        "requests": "\"protected resource metadata\" in:title is:issue",
+        "existing": "\"protected resource metadata\" in:name,description"
       }
     },
     {
@@ -150,7 +197,7 @@
       "score": 62,
       "demand": 0.468,
       "gap": 0.8,
-      "open_requests": 313,
+      "open_requests": 314,
       "top_requests": [
         {
           "title": "Feature request: elevation gain",
@@ -182,7 +229,7 @@
         "repo": "CF20852/Hike-Elevation-Gain-System",
         "url": "https://github.com/CF20852/Hike-Elevation-Gain-System",
         "stars": 4,
-        "months_since_push": 100.1
+        "months_since_push": 100.2
       },
       "existing_projects": 7,
       "queries": {
@@ -213,13 +260,60 @@
       }
     },
     {
+      "id": "mcptest-js",
+      "title": "mcptest for vitest and Jest",
+      "status": "idea",
+      "score": 59,
+      "demand": 0.59,
+      "gap": 0.591,
+      "open_requests": 2316,
+      "top_requests": [
+        {
+          "title": "MCP server for test results and coverage",
+          "url": "https://github.com/vitest-dev/vitest/issues/8411",
+          "reactions": 6
+        },
+        {
+          "title": "[FEATURE]: Add MCP server setup and connection testing to Desktop",
+          "url": "https://github.com/anomalyco/opencode/issues/40335",
+          "reactions": 5
+        },
+        {
+          "title": "Unable to Use Postman MCP Server for API Testing",
+          "url": "https://github.com/delano/postman-mcp-server/issues/10",
+          "reactions": 3
+        },
+        {
+          "title": "[FEATURE] ability for claude ITSELF to restart MCP servers to allow testing",
+          "url": "https://github.com/anthropics/claude-code/issues/21129",
+          "reactions": 3
+        },
+        {
+          "title": "CI test runner connects then breaks MCP server",
+          "url": "https://github.com/CoplayDev/unity-mcp/issues/1010",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "blackwell-systems/mcp-assert",
+        "url": "https://github.com/blackwell-systems/mcp-assert",
+        "stars": 26,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 32,
+      "queries": {
+        "requests": "mcp server (vitest OR jest) test in:title is:issue",
+        "existing": "mcp server vitest testing"
+      }
+    },
+    {
       "id": "trajsim",
       "title": "Trajectory similarity (Frechet, DTW, Hausdorff) for tracks",
       "status": "idea",
       "score": 56,
       "demand": 0.433,
       "gap": 0.714,
-      "open_requests": 497,
+      "open_requests": 498,
       "top_requests": [
         {
           "title": "SGLang Diffusion \u5916\u90e8\u5f71\u54cd\u529b\u8c03\u7814\uff1akernel\u3001feature \u4e0e\u5e73\u53f0\u91c7\u7528\u60c5\u51b5",
@@ -251,7 +345,7 @@
         "repo": "MemoryMmy/OCJ_srajectory_similarity",
         "url": "https://github.com/MemoryMmy/OCJ_srajectory_similarity",
         "stars": 9,
-        "months_since_push": 97.7
+        "months_since_push": 97.8
       },
       "existing_projects": 8,
       "queries": {
@@ -298,7 +392,7 @@
         "repo": "Simonemenicucci/UBI_pricing_calculator",
         "url": "https://github.com/Simonemenicucci/UBI_pricing_calculator",
         "stars": 1,
-        "months_since_push": 12.5
+        "months_since_push": 12.6
       },
       "existing_projects": 7,
       "queries": {
@@ -311,9 +405,9 @@
       "title": "Drop-in OAuth 2.1 (PKCE, discovery) for HTTP MCP servers",
       "status": "idea",
       "score": 53,
-      "demand": 0.857,
+      "demand": 0.858,
       "gap": 0.132,
-      "open_requests": 2263,
+      "open_requests": 2287,
       "top_requests": [
         {
           "title": "Claude Code cannot connect to GitHub's remote MCP server using OAuth authentication",
@@ -344,60 +438,13 @@
       "best_existing": {
         "repo": "apify/mcpc",
         "url": "https://github.com/apify/mcpc",
-        "stars": 1089,
+        "stars": 1092,
         "months_since_push": 0.0
       },
-      "existing_projects": 201,
+      "existing_projects": 200,
       "queries": {
         "requests": "mcp oauth in:title is:issue is:open",
         "existing": "mcp oauth proxy"
-      }
-    },
-    {
-      "id": "mcptest",
-      "title": "mcptest: automated tests and lint for MCP servers",
-      "status": "shipped",
-      "score": 52,
-      "demand": 0.588,
-      "gap": 0.44,
-      "open_requests": 2263,
-      "top_requests": [
-        {
-          "title": "MCP server for test results and coverage",
-          "url": "https://github.com/vitest-dev/vitest/issues/8411",
-          "reactions": 6
-        },
-        {
-          "title": "[FEATURE]: Add MCP server setup and connection testing to Desktop",
-          "url": "https://github.com/anomalyco/opencode/issues/40335",
-          "reactions": 5
-        },
-        {
-          "title": "Unable to Use Postman MCP Server for API Testing",
-          "url": "https://github.com/delano/postman-mcp-server/issues/10",
-          "reactions": 3
-        },
-        {
-          "title": "[FEATURE] ability for claude ITSELF to restart MCP servers to allow testing",
-          "url": "https://github.com/anthropics/claude-code/issues/21129",
-          "reactions": 3
-        },
-        {
-          "title": "CI test runner connects then breaks MCP server",
-          "url": "https://github.com/CoplayDev/unity-mcp/issues/1010",
-          "reactions": 2
-        }
-      ],
-      "best_existing": {
-        "repo": "PawelKozy/mcp-breach-to-fix-labs",
-        "url": "https://github.com/PawelKozy/mcp-breach-to-fix-labs",
-        "stars": 90,
-        "months_since_push": 11.1
-      },
-      "existing_projects": 73,
-      "queries": {
-        "requests": "\"mcp server\" test in:title is:issue",
-        "existing": "mcp server testing pytest"
       }
     },
     {
@@ -424,7 +471,7 @@
         "repo": "weironz/appflowy_mcp",
         "url": "https://github.com/weironz/appflowy_mcp",
         "stars": 11,
-        "months_since_push": 0.5
+        "months_since_push": 0.6
       },
       "existing_projects": 16,
       "queries": {
@@ -471,7 +518,7 @@
         "repo": "voicetreelab/lazy-mcp",
         "url": "https://github.com/voicetreelab/lazy-mcp",
         "stars": 114,
-        "months_since_push": 9.9
+        "months_since_push": 10.0
       },
       "existing_projects": 17,
       "queries": {
@@ -484,21 +531,21 @@
       "title": "MCP server for OWASP Dependency-Track",
       "status": "idea",
       "score": 47,
-      "demand": 0.284,
+      "demand": 0.289,
       "gap": 0.7,
       "open_requests": 1,
       "top_requests": [
         {
           "title": "MCP Server for Dependency Track",
           "url": "https://github.com/DependencyTrack/dependency-track/issues/5791",
-          "reactions": 16
+          "reactions": 17
         }
       ],
       "best_existing": {
         "repo": "cjo4m06/mcp-shrimp-task-manager",
         "url": "https://github.com/cjo4m06/mcp-shrimp-task-manager",
-        "stars": 2149,
-        "months_since_push": 14.5
+        "stars": 2150,
+        "months_since_push": 14.6
       },
       "existing_projects": 25,
       "queries": {
@@ -525,7 +572,7 @@
         "repo": "chickenzord/linkding-mcp",
         "url": "https://github.com/chickenzord/linkding-mcp",
         "stars": 15,
-        "months_since_push": 5.4
+        "months_since_push": 5.5
       },
       "existing_projects": 9,
       "queries": {
@@ -568,6 +615,100 @@
       "queries": {
         "requests": "repo:usebruno/bruno mcp in:title is:issue",
         "existing": "bruno mcp in:name"
+      }
+    },
+    {
+      "id": "mcp-tasks",
+      "title": "MCP Tasks extension (long-running tool calls) for Python MCP servers",
+      "status": "idea",
+      "score": 37,
+      "demand": 0.443,
+      "gap": 0.291,
+      "open_requests": 104,
+      "top_requests": [
+        {
+          "title": "[FEATURE] Implement SEP-1686 (Tasks) client support to unblock long-running MCP tool calls in Cowork / Desktop",
+          "url": "https://github.com/anthropics/claude-code/issues/52137",
+          "reactions": 8
+        },
+        {
+          "title": "[FEATURE]: Support for long-running tool calls or tasks over MCP",
+          "url": "https://github.com/anomalyco/opencode/issues/13126",
+          "reactions": 6
+        },
+        {
+          "title": "[Enhancement]: Support for MCP Tasks",
+          "url": "https://github.com/LibreChat-AI/LibreChat/issues/11997",
+          "reactions": 5
+        },
+        {
+          "title": "Support MCP Tasks (task-augmented tool calls)",
+          "url": "https://github.com/openai/codex/issues/48617",
+          "reactions": 4
+        },
+        {
+          "title": "[FEATURE] Support the MCP Tasks extension (io.modelcontextprotocol/tasks, spec 2026-07-28) for long-running tool calls",
+          "url": "https://github.com/anthropics/claude-code/issues/102347",
+          "reactions": 4
+        }
+      ],
+      "best_existing": {
+        "repo": "HarmonicSecurity/claudit-sec",
+        "url": "https://github.com/HarmonicSecurity/claudit-sec",
+        "stars": 302,
+        "months_since_push": 5.9
+      },
+      "existing_projects": 71,
+      "queries": {
+        "requests": "\"MCP Tasks\" support in:title is:issue",
+        "existing": "mcp tasks extension in:name,description"
+      }
+    },
+    {
+      "id": "mcptest",
+      "title": "mcptest: automated tests and lint for MCP servers",
+      "status": "shipped",
+      "score": 32,
+      "demand": 0.589,
+      "gap": 0.0,
+      "open_requests": 2278,
+      "top_requests": [
+        {
+          "title": "MCP server for test results and coverage",
+          "url": "https://github.com/vitest-dev/vitest/issues/8411",
+          "reactions": 6
+        },
+        {
+          "title": "[FEATURE]: Add MCP server setup and connection testing to Desktop",
+          "url": "https://github.com/anomalyco/opencode/issues/40335",
+          "reactions": 5
+        },
+        {
+          "title": "Unable to Use Postman MCP Server for API Testing",
+          "url": "https://github.com/delano/postman-mcp-server/issues/10",
+          "reactions": 3
+        },
+        {
+          "title": "[FEATURE] ability for claude ITSELF to restart MCP servers to allow testing",
+          "url": "https://github.com/anthropics/claude-code/issues/21129",
+          "reactions": 3
+        },
+        {
+          "title": "CI test runner connects then breaks MCP server",
+          "url": "https://github.com/CoplayDev/unity-mcp/issues/1010",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "seleniumbase/SeleniumBase",
+        "url": "https://github.com/seleniumbase/SeleniumBase",
+        "stars": 13232,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 76,
+      "queries": {
+        "requests": "\"mcp server\" test in:title is:issue",
+        "existing": "mcp server testing pytest"
       }
     }
   ]

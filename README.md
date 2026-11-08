@@ -10,7 +10,8 @@ gap where the only existing project is unmaintained. The demand evidence for eac
 
 | Package | What it does | Install | Status |
 | --- | --- | --- | --- |
-| [mcptest](packages/mcptest/) | Automated tests, linting and breaking-change checks for MCP servers (pytest plugin + CLI) | `pip install pytest-mcp-server` | 0.1.0 |
+| [mcptest](packages/mcptest/) | Automated tests, linting and breaking-change checks for MCP servers (pytest plugin + CLI) | `pip install pytest-mcp-server` | 0.2.0 |
+| [cimdkit](packages/cimdkit/) | OAuth Client ID Metadata Documents (CIMD) for authorization servers: safe fetch, validation, caching, redirect URI matching for MCP clients | `pip install cimdkit` | 0.1.0 |
 
 ## How packages are chosen
 

@@ -88,7 +88,7 @@
     "title": "mcptest for vitest and Jest",
     "kind": "node",
     "problem": "Most MCP servers are TypeScript; they need the same tests in their own test runner.",
-    "request_query": "\"mcp server\" vitest in:title,body is:issue",
+    "request_query": "mcp server (vitest OR jest) test in:title is:issue",
     "repo_query": "mcp server vitest testing",
     "status": "idea",
     "evidence": []
@@ -100,8 +100,9 @@
     "problem": "Turning raw location pings into places visited and journeys between them.",
     "request_query": "\"stay point\" in:title,body is:issue",
     "repo_query": "stay point detection",
-    "status": "idea",
-    "evidence": []
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-08: movingpandas (TrajectoryStopDetector/StopSplitter, 1k+ stars, maintained) and scikit-mobility already detect stays and split trips; the search matches were noise."
   },
   {
     "id": "elevation",
@@ -131,10 +132,11 @@
     "title": "Make location tracks safe to share",
     "kind": "python",
     "problem": "Hide home and work endpoints and add calibrated noise before sharing tracks.",
-    "request_query": "\"location privacy\" in:title is:issue",
+    "request_query": "\"location privacy\" (gps OR trajectory OR anonymize) in:title is:issue",
     "repo_query": "location privacy anonymization gps",
-    "status": "idea",
-    "evidence": []
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-08: no real requests found; matches are about OS location indicators and privacy policies, not GPS track anonymization."
   },
   {
     "id": "harsh-events",
@@ -143,6 +145,44 @@
     "problem": "Telematics without an OBD device.",
     "request_query": "\"harsh braking\" in:title,body is:issue",
     "repo_query": "telematics harsh braking",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "cimd",
+    "title": "Resolve and validate OAuth Client ID Metadata Documents (CIMD) in authorization servers",
+    "kind": "python",
+    "problem": "MCP clients now identify themselves with a URL client_id, and authorization servers have to fetch, validate and cache that document safely; every server is re-implementing it.",
+    "request_query": "\"client id metadata\" in:title is:issue",
+    "repo_query": "\"client id metadata\" in:description",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/modelcontextprotocol/python-sdk/issues/1801",
+      "https://github.com/authlib/authlib/issues/900",
+      "https://github.com/ory/hydra/issues/4061",
+      "https://github.com/modelcontextprotocol/modelcontextprotocol/issues/991",
+      "https://github.com/PrefectHQ/fastmcp/issues/6153"
+    ],
+    "package": "packages/cimdkit",
+    "published_name": "cimdkit"
+  },
+  {
+    "id": "mcp-prm",
+    "title": "RFC 9728 Protected Resource Metadata and 401 challenges for HTTP MCP servers",
+    "kind": "python",
+    "problem": "Remote MCP servers advertise the wrong resource URL, scheme or scopes in their protected resource metadata, so clients cannot start OAuth.",
+    "request_query": "\"protected resource metadata\" in:title is:issue",
+    "repo_query": "\"protected resource metadata\" in:name,description",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "mcp-tasks",
+    "title": "MCP Tasks extension (long-running tool calls) for Python MCP servers",
+    "kind": "python",
+    "problem": "Long-running tool calls time out; the Tasks extension fixes it but servers have no easy way to adopt it.",
+    "request_query": "\"MCP Tasks\" support in:title is:issue",
+    "repo_query": "mcp tasks extension in:name,description",
     "status": "idea",
     "evidence": []
   }

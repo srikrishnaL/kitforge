@@ -185,5 +185,39 @@
     "repo_query": "mcp tasks extension in:name,description",
     "status": "idea",
     "evidence": []
+  },
+  {
+    "id": "mcp-guard",
+    "title": "Read-only mode and tool allow/deny lists for Python MCP servers",
+    "kind": "python",
+    "problem": "Every MCP server re-implements a read-only mode and tool filtering by hand, and most get it wrong (writes leak through, hidden tools stay callable).",
+    "request_query": "mcp \"read-only mode\" in:title is:issue",
+    "repo_query": "mcp \"read-only mode\" in:description",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/strausmann/mcp-dockhand/issues/254",
+      "https://github.com/MemPalace/mempalace/issues/1981",
+      "https://github.com/signadot/community/issues/122",
+      "https://github.com/BreachSAFE/qureddy/issues/1113"
+    ],
+    "package": "askfirst"
+  },
+  {
+    "id": "mcp-confirm",
+    "title": "Confirm destructive MCP tool calls, with a fallback for clients without elicitation",
+    "kind": "python",
+    "problem": "Servers want a human to confirm destructive tools, but many clients do not support elicitation, so the guard is either skipped or the call fails.",
+    "request_query": "mcp elicitation (confirm OR confirmation) destructive in:title,body is:issue",
+    "repo_query": "mcp destructive confirmation elicitation in:description",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/erayendes/app-store-connect-mcp/issues/112",
+      "https://github.com/TojiiSamaa/netbox-mcp-rust/issues/4",
+      "https://github.com/rianvdm/discogs-mcp/issues/44",
+      "https://github.com/MemPalace/mempalace/issues/1981",
+      "https://github.com/pulsemcp/mcp-servers/issues/384",
+      "https://github.com/PrefectHQ/fastmcp/issues/4929"
+    ],
+    "package": "askfirst"
   }
 ]

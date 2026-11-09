@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-08T07:49:21Z",
+  "generated": "2026-11-09T07:41:06Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -9,7 +9,7 @@
       "score": 86,
       "demand": 0.995,
       "gap": 0.7,
-      "open_requests": 15591,
+      "open_requests": 15703,
       "top_requests": [
         {
           "title": "[Important, please read] Replies from Aircoookie",
@@ -41,7 +41,7 @@
         "repo": "zhang35/StayPointDetection",
         "url": "https://github.com/zhang35/StayPointDetection",
         "stars": 21,
-        "months_since_push": 73.7
+        "months_since_push": 73.8
       },
       "existing_projects": 13,
       "queries": {
@@ -54,9 +54,9 @@
       "title": "Make location tracks safe to share",
       "status": "skipped",
       "score": 79,
-      "demand": 0.622,
+      "demand": 0.623,
       "gap": 1.0,
-      "open_requests": 459,
+      "open_requests": 463,
       "top_requests": [
         {
           "title": "privacy: Add camera and location indicator",
@@ -97,13 +97,55 @@
       }
     },
     {
+      "id": "mcp-confirm",
+      "title": "Confirm destructive MCP tool calls, with a fallback for clients without elicitation",
+      "status": "shipped",
+      "score": 79,
+      "demand": 0.626,
+      "gap": 1.0,
+      "open_requests": 781,
+      "top_requests": [
+        {
+          "title": "[BUG] MCP elicitation: capability is declared but requests are auto-declined (\"print mode\") in interactive VSCode sessions",
+          "url": "https://github.com/anthropics/claude-code/issues/98256",
+          "reactions": 20
+        },
+        {
+          "title": "Feature Request: Add support for MCP Elicitation",
+          "url": "https://github.com/anthropics/claude-code/issues/7108",
+          "reactions": 11
+        },
+        {
+          "title": "Feature: MCP server for AI agents",
+          "url": "https://github.com/karatektus/pl_mail/issues/246",
+          "reactions": 4
+        },
+        {
+          "title": "MCP elicitation: capability is declared but requests are auto-declined (\"print mode\") in interactive VSCode sessions",
+          "url": "https://github.com/anthropics/claude-code/issues/79174",
+          "reactions": 4
+        },
+        {
+          "title": "[FEATURE]:MCP elicitation",
+          "url": "https://github.com/Kilo-Org/kilocode/issues/14355",
+          "reactions": 2
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "mcp elicitation (confirm OR confirmation) destructive in:title,body is:issue",
+        "existing": "mcp destructive confirmation elicitation in:description"
+      }
+    },
+    {
       "id": "cimd",
       "title": "Resolve and validate OAuth Client ID Metadata Documents (CIMD) in authorization servers",
       "status": "shipped",
       "score": 68,
       "demand": 0.631,
       "gap": 0.742,
-      "open_requests": 291,
+      "open_requests": 295,
       "top_requests": [
         {
           "title": "[Feature Request] Support MCP servers with Client ID Metadata Documents (CIMD) OAuth authentication",
@@ -123,7 +165,7 @@
         {
           "title": "CIMD: authorization request rejected when Client ID Metadata Document contains unknown properties",
           "url": "https://github.com/keycloak/keycloak/issues/51236",
-          "reactions": 25
+          "reactions": 26
         },
         {
           "title": "Support Client ID Metadata",
@@ -148,9 +190,9 @@
       "title": "RFC 9728 Protected Resource Metadata and 401 challenges for HTTP MCP servers",
       "status": "idea",
       "score": 66,
-      "demand": 0.62,
+      "demand": 0.621,
       "gap": 0.7,
-      "open_requests": 376,
+      "open_requests": 378,
       "top_requests": [
         {
           "title": "[BUG]  Claude Code MCP client ignores scopes_supported from OAuth protected resource metadata, preventing refresh token issuance",
@@ -197,7 +239,7 @@
       "score": 62,
       "demand": 0.468,
       "gap": 0.8,
-      "open_requests": 314,
+      "open_requests": 316,
       "top_requests": [
         {
           "title": "Feature request: elevation gain",
@@ -266,7 +308,7 @@
       "score": 59,
       "demand": 0.59,
       "gap": 0.591,
-      "open_requests": 2316,
+      "open_requests": 2333,
       "top_requests": [
         {
           "title": "MCP server for test results and coverage",
@@ -405,9 +447,9 @@
       "title": "Drop-in OAuth 2.1 (PKCE, discovery) for HTTP MCP servers",
       "status": "idea",
       "score": 53,
-      "demand": 0.858,
+      "demand": 0.859,
       "gap": 0.132,
-      "open_requests": 2287,
+      "open_requests": 2324,
       "top_requests": [
         {
           "title": "Claude Code cannot connect to GitHub's remote MCP server using OAuth authentication",
@@ -439,12 +481,59 @@
         "repo": "apify/mcpc",
         "url": "https://github.com/apify/mcpc",
         "stars": 1092,
-        "months_since_push": 0.0
+        "months_since_push": 0.1
       },
       "existing_projects": 200,
       "queries": {
         "requests": "mcp oauth in:title is:issue is:open",
         "existing": "mcp oauth proxy"
+      }
+    },
+    {
+      "id": "mcptest",
+      "title": "mcptest: automated tests and lint for MCP servers",
+      "status": "shipped",
+      "score": 52,
+      "demand": 0.589,
+      "gap": 0.44,
+      "open_requests": 2294,
+      "top_requests": [
+        {
+          "title": "MCP server for test results and coverage",
+          "url": "https://github.com/vitest-dev/vitest/issues/8411",
+          "reactions": 6
+        },
+        {
+          "title": "[FEATURE]: Add MCP server setup and connection testing to Desktop",
+          "url": "https://github.com/anomalyco/opencode/issues/40335",
+          "reactions": 5
+        },
+        {
+          "title": "Unable to Use Postman MCP Server for API Testing",
+          "url": "https://github.com/delano/postman-mcp-server/issues/10",
+          "reactions": 3
+        },
+        {
+          "title": "[FEATURE] ability for claude ITSELF to restart MCP servers to allow testing",
+          "url": "https://github.com/anthropics/claude-code/issues/21129",
+          "reactions": 3
+        },
+        {
+          "title": "CI test runner connects then breaks MCP server",
+          "url": "https://github.com/CoplayDev/unity-mcp/issues/1010",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "PawelKozy/mcp-breach-to-fix-labs",
+        "url": "https://github.com/PawelKozy/mcp-breach-to-fix-labs",
+        "stars": 90,
+        "months_since_push": 11.2
+      },
+      "existing_projects": 75,
+      "queries": {
+        "requests": "\"mcp server\" test in:title is:issue",
+        "existing": "mcp server testing pytest"
       }
     },
     {
@@ -609,12 +698,59 @@
         "repo": "hungthai1401/bruno-mcp",
         "url": "https://github.com/hungthai1401/bruno-mcp",
         "stars": 44,
-        "months_since_push": 0.4
+        "months_since_push": 0.5
       },
       "existing_projects": 32,
       "queries": {
         "requests": "repo:usebruno/bruno mcp in:title is:issue",
         "existing": "bruno mcp in:name"
+      }
+    },
+    {
+      "id": "mcp-guard",
+      "title": "Read-only mode and tool allow/deny lists for Python MCP servers",
+      "status": "shipped",
+      "score": 39,
+      "demand": 0.452,
+      "gap": 0.309,
+      "open_requests": 147,
+      "top_requests": [
+        {
+          "title": "MCP read-only mode prevents FTS index creation \u2014 query/context/impact all return empty",
+          "url": "https://github.com/abhigyanpatwari/GitNexus/issues/1170",
+          "reactions": 7
+        },
+        {
+          "title": "[Feature]: Read-Only Mode for MCP Server",
+          "url": "https://github.com/strausmann/mcp-dockhand/issues/254",
+          "reactions": 4
+        },
+        {
+          "title": "(redshift-mcp): Add configurable read-only mode for Redshift MCP (support for Spectrum/Federated queries)",
+          "url": "https://github.com/awslabs/mcp/issues/3259",
+          "reactions": 3
+        },
+        {
+          "title": "Codex CLI ignores \"read-only\" mode and approval policy by executing MCP edit tools",
+          "url": "https://github.com/openai/codex/issues/4152",
+          "reactions": 3
+        },
+        {
+          "title": "Auto-mode permission classifier denies read-only MCP tools on servers named \"production\"",
+          "url": "https://github.com/anthropics/claude-code/issues/89951",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "mpeirone/zabbix-mcp-server",
+        "url": "https://github.com/mpeirone/zabbix-mcp-server",
+        "stars": 262,
+        "months_since_push": 6.0
+      },
+      "existing_projects": 75,
+      "queries": {
+        "requests": "mcp \"read-only mode\" in:title is:issue",
+        "existing": "mcp \"read-only mode\" in:description"
       }
     },
     {
@@ -662,53 +798,6 @@
       "queries": {
         "requests": "\"MCP Tasks\" support in:title is:issue",
         "existing": "mcp tasks extension in:name,description"
-      }
-    },
-    {
-      "id": "mcptest",
-      "title": "mcptest: automated tests and lint for MCP servers",
-      "status": "shipped",
-      "score": 32,
-      "demand": 0.589,
-      "gap": 0.0,
-      "open_requests": 2278,
-      "top_requests": [
-        {
-          "title": "MCP server for test results and coverage",
-          "url": "https://github.com/vitest-dev/vitest/issues/8411",
-          "reactions": 6
-        },
-        {
-          "title": "[FEATURE]: Add MCP server setup and connection testing to Desktop",
-          "url": "https://github.com/anomalyco/opencode/issues/40335",
-          "reactions": 5
-        },
-        {
-          "title": "Unable to Use Postman MCP Server for API Testing",
-          "url": "https://github.com/delano/postman-mcp-server/issues/10",
-          "reactions": 3
-        },
-        {
-          "title": "[FEATURE] ability for claude ITSELF to restart MCP servers to allow testing",
-          "url": "https://github.com/anthropics/claude-code/issues/21129",
-          "reactions": 3
-        },
-        {
-          "title": "CI test runner connects then breaks MCP server",
-          "url": "https://github.com/CoplayDev/unity-mcp/issues/1010",
-          "reactions": 2
-        }
-      ],
-      "best_existing": {
-        "repo": "seleniumbase/SeleniumBase",
-        "url": "https://github.com/seleniumbase/SeleniumBase",
-        "stars": 13232,
-        "months_since_push": 0.0
-      },
-      "existing_projects": 76,
-      "queries": {
-        "requests": "\"mcp server\" test in:title is:issue",
-        "existing": "mcp server testing pytest"
       }
     }
   ]

@@ -219,5 +219,40 @@
       "https://github.com/PrefectHQ/fastmcp/issues/4929"
     ],
     "package": "askfirst"
+  },
+  {
+    "id": "tool-schema-compat",
+    "title": "Make MCP and agent tool schemas accepted by Gemini and strict OpenAI",
+    "kind": "python",
+    "problem": "Gemini and OpenAI strict mode reject ordinary JSON Schema ($ref/$defs, anyOf with null, type arrays, arrays without items, non-string enums, missing required), so one MCP tool breaks every request; each client hand-rolls a sanitizer.",
+    "request_query": "\"tool schema\" gemini in:title is:issue",
+    "repo_query": "json schema gemini openai strict tool in:description",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/google-gemini/gemini-cli/issues/13326",
+      "https://github.com/modelcontextprotocol/servers/issues/1624",
+      "https://github.com/Portkey-AI/gateway/issues/1203",
+      "https://github.com/chatboxai/chatbox/issues/2606",
+      "https://github.com/langchain-ai/langchain-google/issues/535",
+      "https://github.com/BerriAI/litellm/issues/18442",
+      "https://github.com/Kilo-Org/kilocode/issues/15512",
+      "https://github.com/cline/cline/issues/11162",
+      "https://github.com/CherryHQ/cherry-studio/issues/18890",
+      "https://github.com/anomalyco/opencode/issues/48073",
+      "https://github.com/openclaw/openclaw/issues/166877",
+      "https://github.com/NousResearch/hermes-agent/issues/104796",
+      "https://github.com/cloudflare/mcp-server-cloudflare/issues/378"
+    ],
+    "package": "schemashim"
+  },
+  {
+    "id": "mcp-big-results",
+    "title": "Paginate or trim oversized MCP tool results before they hit the client's token limit",
+    "kind": "python",
+    "problem": "MCP tools return results larger than the client's limit (Claude Code caps at 25k tokens), so the call fails; servers need cursor pagination and safe truncation.",
+    "request_query": "mcp \"response size\" in:title is:issue",
+    "repo_query": "mcp tool response pagination truncate in:description",
+    "status": "idea",
+    "evidence": []
   }
 ]

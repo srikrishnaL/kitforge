@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "schemashim"
+version = "0.1.0"
+description = "Fix MCP and agent tool JSON Schemas that Gemini and OpenAI strict mode reject ($ref, anyOf null, type lists, arrays without items, enums), and map the model's arguments back"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "json schema", "gemini", "vertex ai", "openai", "structured outputs", "strict mode",
+  "function calling", "tool calling", "mcp", "model context protocol", "invalid_argument",
+  "function declarations", "llm", "agents",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7", "pydantic>=2"]
+
+[project.scripts]
+schemashim = "schemashim.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/schemashim"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/schemashim/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/schemashim"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-09T07:41:06Z",
+  "generated": "2026-11-10T07:44:19Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -9,7 +9,7 @@
       "score": 86,
       "demand": 0.995,
       "gap": 0.7,
-      "open_requests": 15703,
+      "open_requests": 15828,
       "top_requests": [
         {
           "title": "[Important, please read] Replies from Aircoookie",
@@ -50,13 +50,55 @@
       }
     },
     {
+      "id": "mcp-confirm",
+      "title": "Confirm destructive MCP tool calls, with a fallback for clients without elicitation",
+      "status": "shipped",
+      "score": 80,
+      "demand": 0.634,
+      "gap": 1.0,
+      "open_requests": 786,
+      "top_requests": [
+        {
+          "title": "[BUG] MCP elicitation: capability is declared but requests are auto-declined (\"print mode\") in interactive VSCode sessions",
+          "url": "https://github.com/anthropics/claude-code/issues/98256",
+          "reactions": 22
+        },
+        {
+          "title": "Feature Request: Add support for MCP Elicitation",
+          "url": "https://github.com/anthropics/claude-code/issues/7108",
+          "reactions": 11
+        },
+        {
+          "title": "Feature: MCP server for AI agents",
+          "url": "https://github.com/karatektus/pl_mail/issues/246",
+          "reactions": 4
+        },
+        {
+          "title": "MCP elicitation: capability is declared but requests are auto-declined (\"print mode\") in interactive VSCode sessions",
+          "url": "https://github.com/anthropics/claude-code/issues/79174",
+          "reactions": 4
+        },
+        {
+          "title": "[FEATURE]:MCP elicitation",
+          "url": "https://github.com/Kilo-Org/kilocode/issues/14355",
+          "reactions": 2
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "mcp elicitation (confirm OR confirmation) destructive in:title,body is:issue",
+        "existing": "mcp destructive confirmation elicitation in:description"
+      }
+    },
+    {
       "id": "geoprivacy",
       "title": "Make location tracks safe to share",
       "status": "skipped",
       "score": 79,
       "demand": 0.623,
       "gap": 1.0,
-      "open_requests": 463,
+      "open_requests": 466,
       "top_requests": [
         {
           "title": "privacy: Add camera and location indicator",
@@ -97,45 +139,92 @@
       }
     },
     {
-      "id": "mcp-confirm",
-      "title": "Confirm destructive MCP tool calls, with a fallback for clients without elicitation",
-      "status": "shipped",
-      "score": 79,
-      "demand": 0.626,
+      "id": "mcp-big-results",
+      "title": "Paginate or trim oversized MCP tool results before they hit the client's token limit",
+      "status": "idea",
+      "score": 71,
+      "demand": 0.48,
       "gap": 1.0,
-      "open_requests": 781,
+      "open_requests": 100,
       "top_requests": [
         {
-          "title": "[BUG] MCP elicitation: capability is declared but requests are auto-declined (\"print mode\") in interactive VSCode sessions",
-          "url": "https://github.com/anthropics/claude-code/issues/98256",
-          "reactions": 20
+          "title": "Support filters in opslevel:components (MCP) tool to avoid response size errors",
+          "url": "https://github.com/OpsLevel/opslevel-mcp/issues/47",
+          "reactions": 13
         },
         {
-          "title": "Feature Request: Add support for MCP Elicitation",
-          "url": "https://github.com/anthropics/claude-code/issues/7108",
-          "reactions": 11
+          "title": "\"browser-kit : getReadableElements\" mcp response output exceeds available context size",
+          "url": "https://github.com/ndthanhdev/mcp-browser-kit/issues/110",
+          "reactions": 1
         },
         {
-          "title": "Feature: MCP server for AI agents",
-          "url": "https://github.com/karatektus/pl_mail/issues/246",
-          "reactions": 4
+          "title": "enhancement: decreasing mcp response size",
+          "url": "https://github.com/PrefectHQ/prefect-mcp-server/issues/125",
+          "reactions": 1
         },
         {
-          "title": "MCP elicitation: capability is declared but requests are auto-declined (\"print mode\") in interactive VSCode sessions",
-          "url": "https://github.com/anthropics/claude-code/issues/79174",
-          "reactions": 4
+          "title": "MCP server: protocol tests, response-size budget and docs",
+          "url": "https://github.com/cdxgen/cdxgen/issues/4661",
+          "reactions": 0
         },
         {
-          "title": "[FEATURE]:MCP elicitation",
-          "url": "https://github.com/Kilo-Org/kilocode/issues/14355",
-          "reactions": 2
+          "title": "[Vulnerability] czlonkowski/n8n-mcp: Denial of Service via Response Size",
+          "url": "https://github.com/Danyw24/mcp-radar/issues/296",
+          "reactions": 0
         }
       ],
       "best_existing": null,
       "existing_projects": 0,
       "queries": {
-        "requests": "mcp elicitation (confirm OR confirmation) destructive in:title,body is:issue",
-        "existing": "mcp destructive confirmation elicitation in:description"
+        "requests": "mcp \"response size\" in:title is:issue",
+        "existing": "mcp tool response pagination truncate in:description"
+      }
+    },
+    {
+      "id": "tool-schema-compat",
+      "title": "Make MCP and agent tool schemas accepted by Gemini and strict OpenAI",
+      "status": "shipped",
+      "score": 71,
+      "demand": 0.468,
+      "gap": 1.0,
+      "open_requests": 317,
+      "top_requests": [
+        {
+          "title": "Gemini API rejects MCP tool schemas with $defs references",
+          "url": "https://github.com/google-gemini/gemini-cli/issues/13326",
+          "reactions": 5
+        },
+        {
+          "title": "[Bug] Not converting JSON Schema to Gemini compatible tool definitions",
+          "url": "https://github.com/Portkey-AI/gateway/issues/1203",
+          "reactions": 5
+        },
+        {
+          "title": "[BUG] Gemini Tool Integration Fails with \"INVALID_ARGUMENT\" due to Incorrect Schema Generation",
+          "url": "https://github.com/chatboxai/chatbox/issues/2606",
+          "reactions": 4
+        },
+        {
+          "title": "[bug] mcp-server-fetch tool json schema  can\u2018t use in Google Gemini 2.5 pro",
+          "url": "https://github.com/modelcontextprotocol/servers/issues/1624",
+          "reactions": 4
+        },
+        {
+          "title": "[Bug] Gemini antigravity models failing with 400 Bad Request (Tool Schema Validation) since yesterday",
+          "url": "https://github.com/NoeFabris/opencode-antigravity-auth/issues/123",
+          "reactions": 3
+        }
+      ],
+      "best_existing": {
+        "repo": "YusufBeratZengin/toolschema-compat",
+        "url": "https://github.com/YusufBeratZengin/toolschema-compat",
+        "stars": 0,
+        "months_since_push": 0.1
+      },
+      "existing_projects": 4,
+      "queries": {
+        "requests": "\"tool schema\" gemini in:title is:issue",
+        "existing": "json schema gemini openai strict tool in:description"
       }
     },
     {
@@ -143,9 +232,9 @@
       "title": "Resolve and validate OAuth Client ID Metadata Documents (CIMD) in authorization servers",
       "status": "shipped",
       "score": 68,
-      "demand": 0.631,
+      "demand": 0.632,
       "gap": 0.742,
-      "open_requests": 295,
+      "open_requests": 299,
       "top_requests": [
         {
           "title": "[Feature Request] Support MCP servers with Client ID Metadata Documents (CIMD) OAuth authentication",
@@ -179,7 +268,7 @@
         "stars": 7,
         "months_since_push": 0.4
       },
-      "existing_projects": 69,
+      "existing_projects": 71,
       "queries": {
         "requests": "\"client id metadata\" in:title is:issue",
         "existing": "\"client id metadata\" in:description"
@@ -202,7 +291,7 @@
         {
           "title": "Remote MCP: scopes_supported should be extracted from the protected resource metadata document",
           "url": "https://github.com/openai/codex/issues/15643",
-          "reactions": 20
+          "reactions": 21
         },
         {
           "title": "OAuth Protected Resource Metadata Discovery Not Following RFC 9728 \u00a73.1",
@@ -224,7 +313,7 @@
         "repo": "blackchoey/remote-mcp-apim-oauth-prm",
         "url": "https://github.com/blackchoey/remote-mcp-apim-oauth-prm",
         "stars": 13,
-        "months_since_push": 15.3
+        "months_since_push": 15.4
       },
       "existing_projects": 8,
       "queries": {
@@ -271,7 +360,7 @@
         "repo": "CF20852/Hike-Elevation-Gain-System",
         "url": "https://github.com/CF20852/Hike-Elevation-Gain-System",
         "stars": 4,
-        "months_since_push": 100.2
+        "months_since_push": 100.3
       },
       "existing_projects": 7,
       "queries": {
@@ -308,7 +397,7 @@
       "score": 59,
       "demand": 0.59,
       "gap": 0.591,
-      "open_requests": 2333,
+      "open_requests": 2351,
       "top_requests": [
         {
           "title": "MCP server for test results and coverage",
@@ -449,7 +538,7 @@
       "score": 53,
       "demand": 0.859,
       "gap": 0.132,
-      "open_requests": 2324,
+      "open_requests": 2349,
       "top_requests": [
         {
           "title": "Claude Code cannot connect to GitHub's remote MCP server using OAuth authentication",
@@ -480,10 +569,10 @@
       "best_existing": {
         "repo": "apify/mcpc",
         "url": "https://github.com/apify/mcpc",
-        "stars": 1092,
+        "stars": 1094,
         "months_since_push": 0.1
       },
-      "existing_projects": 200,
+      "existing_projects": 201,
       "queries": {
         "requests": "mcp oauth in:title is:issue is:open",
         "existing": "mcp oauth proxy"
@@ -494,9 +583,9 @@
       "title": "mcptest: automated tests and lint for MCP servers",
       "status": "shipped",
       "score": 52,
-      "demand": 0.589,
+      "demand": 0.59,
       "gap": 0.44,
-      "open_requests": 2294,
+      "open_requests": 2312,
       "top_requests": [
         {
           "title": "MCP server for test results and coverage",
@@ -585,7 +674,7 @@
         {
           "title": "Optional / Lazy Loading of MCP Servers",
           "url": "https://github.com/openai/codex/issues/2335",
-          "reactions": 46
+          "reactions": 47
         },
         {
           "title": "Lazy-load MCP servers on first tool invocation",
@@ -747,7 +836,7 @@
         "stars": 262,
         "months_since_push": 6.0
       },
-      "existing_projects": 75,
+      "existing_projects": 76,
       "queries": {
         "requests": "mcp \"read-only mode\" in:title is:issue",
         "existing": "mcp \"read-only mode\" in:description"
@@ -757,10 +846,10 @@
       "id": "mcp-tasks",
       "title": "MCP Tasks extension (long-running tool calls) for Python MCP servers",
       "status": "idea",
-      "score": 37,
-      "demand": 0.443,
+      "score": 38,
+      "demand": 0.445,
       "gap": 0.291,
-      "open_requests": 104,
+      "open_requests": 106,
       "top_requests": [
         {
           "title": "[FEATURE] Implement SEP-1686 (Tasks) client support to unblock long-running MCP tool calls in Cowork / Desktop",
@@ -791,8 +880,8 @@
       "best_existing": {
         "repo": "HarmonicSecurity/claudit-sec",
         "url": "https://github.com/HarmonicSecurity/claudit-sec",
-        "stars": 302,
-        "months_since_push": 5.9
+        "stars": 303,
+        "months_since_push": 6.0
       },
       "existing_projects": 71,
       "queries": {

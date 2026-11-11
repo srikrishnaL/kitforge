@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10T07:44:19Z",
+  "generated": "2026-11-11T07:39:38Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -47,7 +47,8 @@
       "queries": {
         "requests": "\"stay point\" in:title,body is:issue",
         "existing": "stay point detection"
-      }
+      },
+      "reason": "2026-11-08: movingpandas (TrajectoryStopDetector/StopSplitter, 1k+ stars, maintained) and scikit-mobility already detect stays and split trips; the search matches were noise."
     },
     {
       "id": "mcp-confirm",
@@ -136,16 +137,113 @@
       "queries": {
         "requests": "\"location privacy\" (gps OR trajectory OR anonymize) in:title is:issue",
         "existing": "location privacy anonymization gps"
-      }
+      },
+      "reason": "2026-11-08: no real requests found; matches are about OS location indicators and privacy policies, not GPS track anonymization."
+    },
+    {
+      "id": "mcp-structured-content",
+      "title": "Return MCP tool results that every client reads: structuredContent validated against outputSchema plus a matching text block",
+      "status": "skipped",
+      "score": 75,
+      "demand": 0.55,
+      "gap": 1.0,
+      "open_requests": 417,
+      "top_requests": [
+        {
+          "title": "langchain-mcp-adapters ignores structuredContent field from MCP tool responses",
+          "url": "https://github.com/langchain-ai/langchain-mcp-adapters/issues/283",
+          "reactions": 12
+        },
+        {
+          "title": "[Bug]: FabricIQ MCP: structuredContent contains only artifact_citation, so VS Code clients never receive query/schema results",
+          "url": "https://github.com/microsoft/skills-for-fabric/issues/99",
+          "reactions": 11
+        },
+        {
+          "title": "MCP tool response text-content block dropped when structuredContent is also present (runtime_get_value)",
+          "url": "https://github.com/anthropics/claude-code/issues/79944",
+          "reactions": 8
+        },
+        {
+          "title": "MCP App Migration: UI fails to persist/re-render structuredContent on chat revisit",
+          "url": "https://github.com/openai/openai-apps-sdk-examples/issues/195",
+          "reactions": 8
+        },
+        {
+          "title": "MCP: structuredContent in tool result overrides content[].text sent to model",
+          "url": "https://github.com/microsoft/vscode/issues/290063",
+          "reactions": 6
+        }
+      ],
+      "best_existing": {
+        "repo": "charliemeyer2000/contextforge-structured-content-repro",
+        "url": "https://github.com/charliemeyer2000/contextforge-structured-content-repro",
+        "stars": 0,
+        "months_since_push": 4.3
+      },
+      "existing_projects": 1,
+      "queries": {
+        "requests": "mcp \"structuredContent\" in:title is:issue",
+        "existing": "mcp structuredContent outputSchema in:description"
+      },
+      "reason": "2026-11-11: top requests are client bugs (clients drop structuredContent or the text block); a server library can't fix those, and the Python SDK already emits both from outputSchema."
+    },
+    {
+      "id": "mcp-tool-annotations",
+      "title": "Add correct MCP tool annotations (readOnlyHint, destructiveHint, idempotentHint) to servers that lack them",
+      "status": "skipped",
+      "score": 74,
+      "demand": 0.532,
+      "gap": 1.0,
+      "open_requests": 646,
+      "top_requests": [
+        {
+          "title": "[REMOTE] Emit per-tool readOnlyHint annotations so read-only MCP clients (GitHub Copilot PR review) don't filter out every tool",
+          "url": "https://github.com/microsoft/azure-devops-mcp/issues/1555",
+          "reactions": 7
+        },
+        {
+          "title": "Add support for MCP tool annotations",
+          "url": "https://github.com/vercel/ai/issues/6732",
+          "reactions": 6
+        },
+        {
+          "title": "[LOCAL] Add per-tool readOnlyHint annotations to @azure-devops/mcp stdio tools",
+          "url": "https://github.com/microsoft/azure-devops-mcp/issues/1603",
+          "reactions": 6
+        },
+        {
+          "title": "Add MCP tool annotations to fiori-mcp-server",
+          "url": "https://github.com/SAP/open-ux-tools/issues/4030",
+          "reactions": 5
+        },
+        {
+          "title": "Honor MCP Tool `readOnlyHint` Annotations for Custom Servers",
+          "url": "https://github.com/microsoft/copilot-intellij-feedback/issues/724",
+          "reactions": 3
+        }
+      ],
+      "best_existing": {
+        "repo": "basitalisandhu/claude-mcp-allow",
+        "url": "https://github.com/basitalisandhu/claude-mcp-allow",
+        "stars": 0,
+        "months_since_push": 0.1
+      },
+      "existing_projects": 2,
+      "queries": {
+        "requests": "mcp \"tool annotations\" in:title is:issue",
+        "existing": "mcp tool annotations readOnlyHint in:description"
+      },
+      "reason": "2026-11-11: requests are per-project asks to add annotations or framework/client support (vercel/ai, fastapi_mcp); correct hints depend on each tool, so there is no reusable library to build."
     },
     {
       "id": "mcp-big-results",
       "title": "Paginate or trim oversized MCP tool results before they hit the client's token limit",
-      "status": "idea",
+      "status": "shipped",
       "score": 71,
-      "demand": 0.48,
+      "demand": 0.481,
       "gap": 1.0,
-      "open_requests": 100,
+      "open_requests": 102,
       "top_requests": [
         {
           "title": "Support filters in opslevel:components (MCP) tool to avoid response size errors",
@@ -281,7 +379,7 @@
       "score": 66,
       "demand": 0.621,
       "gap": 0.7,
-      "open_requests": 378,
+      "open_requests": 380,
       "top_requests": [
         {
           "title": "[BUG]  Claude Code MCP client ignores scopes_supported from OAuth protected resource metadata, preventing refresh token issuance",
@@ -849,7 +947,7 @@
       "score": 38,
       "demand": 0.445,
       "gap": 0.291,
-      "open_requests": 106,
+      "open_requests": 107,
       "top_requests": [
         {
           "title": "[FEATURE] Implement SEP-1686 (Tasks) client support to unblock long-running MCP tool calls in Cowork / Desktop",
@@ -862,14 +960,14 @@
           "reactions": 6
         },
         {
-          "title": "[Enhancement]: Support for MCP Tasks",
-          "url": "https://github.com/LibreChat-AI/LibreChat/issues/11997",
+          "title": "Support MCP Tasks (task-augmented tool calls)",
+          "url": "https://github.com/openai/codex/issues/48617",
           "reactions": 5
         },
         {
-          "title": "Support MCP Tasks (task-augmented tool calls)",
-          "url": "https://github.com/openai/codex/issues/48617",
-          "reactions": 4
+          "title": "[Enhancement]: Support for MCP Tasks",
+          "url": "https://github.com/LibreChat-AI/LibreChat/issues/11997",
+          "reactions": 5
         },
         {
           "title": "[FEATURE] Support the MCP Tasks extension (io.modelcontextprotocol/tasks, spec 2026-07-28) for long-running tool calls",

@@ -252,7 +252,35 @@
     "problem": "MCP tools return results larger than the client's limit (Claude Code caps at 25k tokens), so the call fails; servers need cursor pagination and safe truncation.",
     "request_query": "mcp \"response size\" in:title is:issue",
     "repo_query": "mcp tool response pagination truncate in:description",
-    "status": "idea",
-    "evidence": []
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/strands-agents/harness-sdk/issues/5862",
+      "https://github.com/microsoft/playwright-mcp/issues/395",
+      "https://github.com/OpsLevel/opslevel-mcp/issues/47",
+      "https://github.com/PrefectHQ/prefect-mcp-server/issues/125"
+    ],
+    "package": "toolcap"
+  },
+  {
+    "id": "mcp-structured-content",
+    "title": "Return MCP tool results that every client reads: structuredContent validated against outputSchema plus a matching text block",
+    "kind": "python",
+    "problem": "Clients disagree on structuredContent (some drop it, some drop the text block), and servers that declare outputSchema but return mismatched or missing structured output get rejected by conformant clients.",
+    "request_query": "mcp \"structuredContent\" in:title is:issue",
+    "repo_query": "mcp structuredContent outputSchema in:description",
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-11: top requests are client bugs (clients drop structuredContent or the text block); a server library can't fix those, and the Python SDK already emits both from outputSchema."
+  },
+  {
+    "id": "mcp-tool-annotations",
+    "title": "Add correct MCP tool annotations (readOnlyHint, destructiveHint, idempotentHint) to servers that lack them",
+    "kind": "python",
+    "problem": "Many MCP servers ship tools without annotations, so clients cannot tell read-only tools from destructive ones and ask for approval on everything.",
+    "request_query": "mcp \"tool annotations\" in:title is:issue",
+    "repo_query": "mcp tool annotations readOnlyHint in:description",
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-11: requests are per-project asks to add annotations or framework/client support (vercel/ai, fastapi_mcp); correct hints depend on each tool, so there is no reusable library to build."
   }
 ]

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bomscout"
+version = "0.1.0"
+description = "MCP server for OWASP Dependency-Track: ask Claude, Cursor or any MCP client which projects a CVE affects, what to fix first, licenses and policy violations across your SBOM portfolio"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "dependency-track", "dependencytrack", "owasp", "mcp", "mcp server", "model context protocol",
+  "sbom", "cyclonedx", "vulnerability", "cve", "vulnerability management", "triage", "vex",
+  "software composition analysis", "license compliance", "supply chain security", "claude",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Security",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = ["mcp>=1.10"]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "pytest-mcp-server>=0.2"]
+
+[project.scripts]
+bomscout = "bomscout.server:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/bomscout"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/bomscout/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bomscout"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

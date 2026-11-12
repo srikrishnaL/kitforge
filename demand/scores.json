@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-11T07:39:38Z",
+  "generated": "2026-11-12T07:53:12Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -373,9 +373,56 @@
       }
     },
     {
+      "id": "mcp-sdk2-migrate",
+      "title": "Migrate Python MCP servers from SDK 1.x (FastMCP) to 2.x (MCPServer)",
+      "status": "skipped",
+      "score": 68,
+      "demand": 0.529,
+      "gap": 0.864,
+      "open_requests": 224,
+      "top_requests": [
+        {
+          "title": "Startup crash with mcp SDK 2.0.0: ModuleNotFoundError: No module named 'mcp.server.fastmcp'",
+          "url": "https://github.com/xing5/mcp-google-sheets/issues/86",
+          "reactions": 14
+        },
+        {
+          "title": "Fresh install fails with MCP 2.0 (ModuleNotFoundError: mcp.server.fastmcp)",
+          "url": "https://github.com/Taxuspt/garmin_mcp/issues/226",
+          "reactions": 11
+        },
+        {
+          "title": "No module named 'mcp.server.fastmcp'",
+          "url": "https://github.com/awslabs/mcp/issues/4356",
+          "reactions": 5
+        },
+        {
+          "title": "The uvx command to run the MCP fails with `ModuleNotFoundError: No module named 'mcp.server.fastmcp'`",
+          "url": "https://github.com/ast-grep/ast-grep-mcp/issues/38",
+          "reactions": 4
+        },
+        {
+          "title": "Startup crash with MCP SDK 2.0.0: ModuleNotFoundError: No module named 'mcp.server.fastmcp' \u2014 needs mcp<2 upper bound",
+          "url": "https://github.com/tmonk/mcp-stata/issues/64",
+          "reactions": 3
+        }
+      ],
+      "best_existing": {
+        "repo": "8crsk/mcp-codemod",
+        "url": "https://github.com/8crsk/mcp-codemod",
+        "stars": 2,
+        "months_since_push": 3.4
+      },
+      "existing_projects": 1,
+      "queries": {
+        "requests": "\"mcp.server.fastmcp\" in:title is:issue",
+        "existing": "mcp sdk v2 migrate codemod"
+      }
+    },
+    {
       "id": "mcp-prm",
       "title": "RFC 9728 Protected Resource Metadata and 401 challenges for HTTP MCP servers",
-      "status": "idea",
+      "status": "skipped",
       "score": 66,
       "demand": 0.621,
       "gap": 0.7,
@@ -422,7 +469,7 @@
     {
       "id": "elevation",
       "title": "elevation: honest elevation gain from noisy GPS",
-      "status": "idea",
+      "status": "skipped",
       "score": 62,
       "demand": 0.468,
       "gap": 0.8,
@@ -469,7 +516,7 @@
     {
       "id": "atlantis-mcp",
       "title": "MCP server for Atlantis (Terraform pull request automation)",
-      "status": "idea",
+      "status": "skipped",
       "score": 60,
       "demand": 0.267,
       "gap": 1.0,
@@ -493,9 +540,9 @@
       "title": "mcptest for vitest and Jest",
       "status": "idea",
       "score": 59,
-      "demand": 0.59,
+      "demand": 0.591,
       "gap": 0.591,
-      "open_requests": 2351,
+      "open_requests": 2389,
       "top_requests": [
         {
           "title": "MCP server for test results and coverage",
@@ -533,53 +580,6 @@
       "queries": {
         "requests": "mcp server (vitest OR jest) test in:title is:issue",
         "existing": "mcp server vitest testing"
-      }
-    },
-    {
-      "id": "trajsim",
-      "title": "Trajectory similarity (Frechet, DTW, Hausdorff) for tracks",
-      "status": "idea",
-      "score": 56,
-      "demand": 0.433,
-      "gap": 0.714,
-      "open_requests": 498,
-      "top_requests": [
-        {
-          "title": "SGLang Diffusion \u5916\u90e8\u5f71\u54cd\u529b\u8c03\u7814\uff1akernel\u3001feature \u4e0e\u5e73\u53f0\u91c7\u7528\u60c5\u51b5",
-          "url": "https://github.com/BBuf/how-to-optim-algorithm-in-cuda/issues/14",
-          "reactions": 2
-        },
-        {
-          "title": "Cartan A\u2089 Structure in the Class-Mean Gram Matrix of Trained Neural Network Features",
-          "url": "https://github.com/deepseek-launch-community/XuanJi-ISA/issues/154",
-          "reactions": 1
-        },
-        {
-          "title": "feat: Semantic Tension Hooks for Claude Code CLI",
-          "url": "https://github.com/rjmurillo/ai-agents/issues/1191",
-          "reactions": 1
-        },
-        {
-          "title": "Need resume page.",
-          "url": "https://github.com/moi-taiga/c-est-moi/issues/13",
-          "reactions": 1
-        },
-        {
-          "title": "Design Agent Test Jigs and Harness Testing System",
-          "url": "https://github.com/nisavid/agentworks/issues/61",
-          "reactions": 1
-        }
-      ],
-      "best_existing": {
-        "repo": "MemoryMmy/OCJ_srajectory_similarity",
-        "url": "https://github.com/MemoryMmy/OCJ_srajectory_similarity",
-        "stars": 9,
-        "months_since_push": 97.8
-      },
-      "existing_projects": 8,
-      "queries": {
-        "requests": "\"trajectory similarity\" in:title,body is:issue",
-        "existing": "trajectory similarity frechet"
       }
     },
     {
@@ -747,7 +747,7 @@
         "repo": "weironz/appflowy_mcp",
         "url": "https://github.com/weironz/appflowy_mcp",
         "stars": 11,
-        "months_since_push": 0.6
+        "months_since_push": 0.7
       },
       "existing_projects": 16,
       "queries": {
@@ -760,9 +760,9 @@
       "title": "MCP gateway that loads servers only when a tool is first used",
       "status": "idea",
       "score": 50,
-      "demand": 0.568,
+      "demand": 0.571,
       "gap": 0.411,
-      "open_requests": 18,
+      "open_requests": 19,
       "top_requests": [
         {
           "title": "Feature Request: Lazy Loading for MCP Servers and Tools (95% context reduction possible)",
@@ -794,39 +794,12 @@
         "repo": "voicetreelab/lazy-mcp",
         "url": "https://github.com/voicetreelab/lazy-mcp",
         "stars": 114,
-        "months_since_push": 10.0
+        "months_since_push": 10.1
       },
       "existing_projects": 17,
       "queries": {
         "requests": "mcp lazy load servers in:title is:issue",
         "existing": "mcp lazy load proxy"
-      }
-    },
-    {
-      "id": "dependency-track-mcp",
-      "title": "MCP server for OWASP Dependency-Track",
-      "status": "idea",
-      "score": 47,
-      "demand": 0.289,
-      "gap": 0.7,
-      "open_requests": 1,
-      "top_requests": [
-        {
-          "title": "MCP Server for Dependency Track",
-          "url": "https://github.com/DependencyTrack/dependency-track/issues/5791",
-          "reactions": 17
-        }
-      ],
-      "best_existing": {
-        "repo": "cjo4m06/mcp-shrimp-task-manager",
-        "url": "https://github.com/cjo4m06/mcp-shrimp-task-manager",
-        "stars": 2150,
-        "months_since_push": 14.6
-      },
-      "existing_projects": 25,
-      "queries": {
-        "requests": "repo:DependencyTrack/dependency-track mcp in:title is:issue",
-        "existing": "dependency-track mcp in:name,description"
       }
     },
     {
@@ -894,6 +867,53 @@
       }
     },
     {
+      "id": "trajsim",
+      "title": "Trajectory similarity (Frechet, DTW, Hausdorff) for tracks",
+      "status": "idea",
+      "score": 41,
+      "demand": 0.168,
+      "gap": 0.714,
+      "open_requests": 21,
+      "top_requests": [
+        {
+          "title": "Trajectory similarity: Fr\u00e9chet distance, Hausdorff distance and dynamic time warping",
+          "url": "https://github.com/animovement/animetric/issues/140",
+          "reactions": 0
+        },
+        {
+          "title": "trajectory similarity visualization",
+          "url": "https://github.com/keplergl/kepler.gl/issues/278",
+          "reactions": 0
+        },
+        {
+          "title": "KNN-based Trajectory Similarity Join(Standalone Mode)",
+          "url": "https://github.com/TsinghuaDatabaseGroup/DITA/issues/14",
+          "reactions": 0
+        },
+        {
+          "title": "Large-Scale Maritime Trajectory Similarity Modeling with Long-Horizon and Weak Local Discriminability",
+          "url": "https://github.com/zw555532/An-Unsupervised-Method-for-Vessel-Type-Identification-Based-on-AIS-Data/issues/1",
+          "reactions": 0
+        },
+        {
+          "title": "Succinct Trit-array Trie for Scalable Trajectory Similarity Search",
+          "url": "https://github.com/ikr7/arxiv-survey/issues/12217",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "MemoryMmy/OCJ_srajectory_similarity",
+        "url": "https://github.com/MemoryMmy/OCJ_srajectory_similarity",
+        "stars": 9,
+        "months_since_push": 97.9
+      },
+      "existing_projects": 8,
+      "queries": {
+        "requests": "\"trajectory similarity\" in:title is:issue",
+        "existing": "trajectory similarity frechet"
+      }
+    },
+    {
       "id": "mcp-guard",
       "title": "Read-only mode and tool allow/deny lists for Python MCP servers",
       "status": "shipped",
@@ -941,6 +961,33 @@
       }
     },
     {
+      "id": "dependency-track-mcp",
+      "title": "MCP server for OWASP Dependency-Track",
+      "status": "idea",
+      "score": 38,
+      "demand": 0.293,
+      "gap": 0.492,
+      "open_requests": 1,
+      "top_requests": [
+        {
+          "title": "MCP Server for Dependency Track",
+          "url": "https://github.com/DependencyTrack/dependency-track/issues/5791",
+          "reactions": 18
+        }
+      ],
+      "best_existing": {
+        "repo": "mauriziofonte/toktoken",
+        "url": "https://github.com/mauriziofonte/toktoken",
+        "stars": 59,
+        "months_since_push": 6.6
+      },
+      "existing_projects": 16,
+      "queries": {
+        "requests": "repo:DependencyTrack/dependency-track mcp in:title is:issue",
+        "existing": "dependency-track mcp server in:name,description"
+      }
+    },
+    {
       "id": "mcp-tasks",
       "title": "MCP Tasks extension (long-running tool calls) for Python MCP servers",
       "status": "idea",
@@ -985,6 +1032,100 @@
       "queries": {
         "requests": "\"MCP Tasks\" support in:title is:issue",
         "existing": "mcp tasks extension in:name,description"
+      }
+    },
+    {
+      "id": "mcp-audit-log",
+      "title": "Structured, redacted audit log of every MCP tool call for Python MCP servers",
+      "status": "idea",
+      "score": 31,
+      "demand": 0.423,
+      "gap": 0.168,
+      "open_requests": 419,
+      "top_requests": [
+        {
+          "title": "[Bug]: API/MCP IP allowlist and audit log use Cloudflare edge IP instead of client IP",
+          "url": "https://github.com/coollabsio/coolify/issues/12301",
+          "reactions": 2
+        },
+        {
+          "title": "MCP Actions Backend Audit Logging",
+          "url": "https://github.com/backstage/backstage/issues/32104",
+          "reactions": 2
+        },
+        {
+          "title": "[deep-report] Expose bundled safe_outputs step logs (from #47855) via audit/logs MCP tooling",
+          "url": "https://github.com/github/gh-aw/issues/54756",
+          "reactions": 1
+        },
+        {
+          "title": "MCP server: fragile audit logging and inconsistent tool contracts",
+          "url": "https://github.com/tjorim/worktime/issues/984",
+          "reactions": 1
+        },
+        {
+          "title": "Expand MCP surface with least-privilege scopes + audit logs",
+          "url": "https://github.com/plures/plures-vault/issues/21",
+          "reactions": 1
+        }
+      ],
+      "best_existing": {
+        "repo": "ThinkWatchProject/ThinkWatch",
+        "url": "https://github.com/ThinkWatchProject/ThinkWatch",
+        "stars": 817,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 93,
+      "queries": {
+        "requests": "mcp \"audit log\" in:title is:issue",
+        "existing": "mcp audit log tool calls in:name,description"
+      }
+    },
+    {
+      "id": "mcp-ratelimit",
+      "title": "Per-client rate limits, quotas and concurrency caps for MCP tool calls (official Python SDK)",
+      "status": "idea",
+      "score": 19,
+      "demand": 0.199,
+      "gap": 0.168,
+      "open_requests": 12,
+      "top_requests": [
+        {
+          "title": "Surface upstream HTTP response headers from remote MCP tool calls (e.g. pagination, rate-limit) via CallToolResult._meta",
+          "url": "https://github.com/anomalyco/opencode/issues/29665",
+          "reactions": 1
+        },
+        {
+          "title": "Rate-limit circuit breaker for GitHub MCP backend tool calls",
+          "url": "https://github.com/github/gh-aw-mcpg/issues/3787",
+          "reactions": 1
+        },
+        {
+          "title": "[ASVS V15.2.2] No per-credential rate or concurrency limit on /mcp tool calls",
+          "url": "https://github.com/maxkuminov/obsidian-mcp/issues/188",
+          "reactions": 0
+        },
+        {
+          "title": "Meter and rate-limit MCP tool calls through the existing API-key tier (#377 backend)",
+          "url": "https://github.com/Walid-peach/MonElu/issues/406",
+          "reactions": 0
+        },
+        {
+          "title": "MCP: a normal burst of parallel tool calls hits the connection rate limit; the refusal looks like a broken connection",
+          "url": "https://github.com/marioatcloudvane/litefactory/issues/1411",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "ThinkWatchProject/ThinkWatch",
+        "url": "https://github.com/ThinkWatchProject/ThinkWatch",
+        "stars": 817,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 16,
+      "queries": {
+        "requests": "rate limit mcp tool calls in:title is:issue",
+        "existing": "mcp rate limit tool calls in:name,description"
       }
     }
   ]

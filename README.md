@@ -15,6 +15,7 @@ gap where the only existing project is unmaintained. The demand evidence for eac
 | [askfirst](packages/askfirst/) | Confirm destructive MCP tool calls with the user (elicitation, or a signed one-time token on clients without it) and a real read-only mode for Python MCP servers | `pip install askfirst` | 0.1.0 |
 | [schemashim](packages/schemashim/) | Fix tool JSON Schemas that Gemini and OpenAI strict mode reject (`$ref`, `anyOf` null, arrays without `items`, empty enums...) and map the model's arguments back, for MCP clients and agent frameworks | `pip install schemashim` | 0.1.0 |
 | [toolcap](packages/toolcap/) | Keep MCP tool results under the client's token limit (Claude Code's 25,000): cursor pagination of long lists and text, or safe truncation, as one call or a decorator | `pip install toolcap` | 0.1.0 |
+| [bomscout](packages/bomscout/) | MCP server for OWASP Dependency-Track: which projects a CVE affects and its remediation status, findings ranked by severity/EPSS, licenses, policy violations, where a package is used | `pip install bomscout` | 0.1.0 |
 
 ## How packages are chosen
 

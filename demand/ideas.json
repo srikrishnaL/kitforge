@@ -28,8 +28,9 @@
     "problem": "No solid way to read and write AppFlowy docs and databases from Claude, Cursor or other agents.",
     "request_query": "repo:AppFlowy-IO/AppFlowy mcp in:title is:issue",
     "repo_query": "appflowy mcp in:name",
-    "status": "idea",
-    "evidence": []
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-12: AppFlowy Cloud is adding MCP itself (AppFlowy-Cloud PR #1633) and at least eight community AppFlowy MCP servers exist."
   },
   {
     "id": "dependency-track-mcp",
@@ -37,9 +38,13 @@
     "kind": "mcp-server",
     "problem": "Security teams want to ask an agent which projects use a vulnerable component.",
     "request_query": "repo:DependencyTrack/dependency-track mcp in:title is:issue",
-    "repo_query": "dependency-track mcp in:name,description",
-    "status": "idea",
-    "evidence": []
+    "repo_query": "dependency-track mcp server in:name,description",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/DependencyTrack/dependency-track/issues/5791"
+    ],
+    "package": "bomscout",
+    "reason": "2026-11-12: open request with 18 upvotes in the Dependency-Track repo; the existing community servers (drewrukin/dtrack-mcp, msiemens/dtrack-mcp, pluries and daniel-brenner-fnt dependency-track-mcp-server) have 0-1 stars each, so none is established. Shipped as bomscout."
   },
   {
     "id": "linkding-mcp",
@@ -58,8 +63,9 @@
     "problem": "Agents can't read Atlantis plans, locks and apply status.",
     "request_query": "repo:runatlantis/atlantis mcp in:title is:issue",
     "repo_query": "atlantis terraform mcp in:name,description",
-    "status": "idea",
-    "evidence": []
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-12: the requester proposed a native MCP server inside the Atlantis binary and an ADR for it is open upstream (runatlantis/atlantis#6720); an external server would be replaced by it."
   },
   {
     "id": "mcp-lazy-gateway",
@@ -68,10 +74,11 @@
     "problem": "Many configured MCP servers flood the context window and slow start-up.",
     "request_query": "mcp lazy load servers in:title is:issue",
     "repo_query": "mcp lazy load proxy",
-    "status": "idea",
+    "status": "skipped",
     "evidence": [
       "https://github.com/github/copilot-cli/issues?q=lazy-load+mcp"
-    ]
+    ],
+    "reason": "2026-11-12: the big requests were answered in the clients (Claude Code #7336 and Codex #9266 closed with tool search / deferred loading), and about ten small lazy-loading proxies already exist (voicetreelab/lazy-mcp and others)."
   },
   {
     "id": "mcp-oauth-helper",
@@ -90,8 +97,9 @@
     "problem": "Most MCP servers are TypeScript; they need the same tests in their own test runner.",
     "request_query": "mcp server (vitest OR jest) test in:title is:issue",
     "repo_query": "mcp server vitest testing",
-    "status": "idea",
-    "evidence": []
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-12: the official MCP Inspector (11k stars, pushed today) now describes itself as deterministic testing tools for MCP servers, and the top matches were not requests for a vitest/Jest plugin."
   },
   {
     "id": "trips",
@@ -111,18 +119,19 @@
     "problem": "Elevation gain from GPS tracks is badly overstated; apps disagree by 20 percent or more.",
     "request_query": "\"elevation gain\" in:title is:issue",
     "repo_query": "elevation gain gps",
-    "status": "idea",
+    "status": "skipped",
     "evidence": [
       "https://forums.garmin.com/apps-software/mobile-apps-web/f/garmin-connect-web/213915/garmin-connect-courses-elevation-gain-grossly-overestimated/1083139",
       "https://trainerroad.com/forum/t/why-is-tr-elevation-gain-different-than-whats-on-garmin-garmin-connect-strava/22373"
-    ]
+    ],
+    "reason": "2026-11-12: the top requests are Android/Java apps (RunnerUp, OpenTracks, GraphHopper) that cannot use a Python package, and gpxpy (1.1k stars, pushed this week) already gives smoothed uphill/downhill for Python users."
   },
   {
     "id": "trajsim",
     "title": "Trajectory similarity (Frechet, DTW, Hausdorff) for tracks",
     "kind": "python",
     "problem": "Compare or deduplicate routes; the known library is unmaintained.",
-    "request_query": "\"trajectory similarity\" in:title,body is:issue",
+    "request_query": "\"trajectory similarity\" in:title is:issue",
     "repo_query": "trajectory similarity frechet",
     "status": "idea",
     "evidence": []
@@ -173,8 +182,9 @@
     "problem": "Remote MCP servers advertise the wrong resource URL, scheme or scopes in their protected resource metadata, so clients cannot start OAuth.",
     "request_query": "\"protected resource metadata\" in:title is:issue",
     "repo_query": "\"protected resource metadata\" in:name,description",
-    "status": "idea",
-    "evidence": []
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-12: the official MCP Python and TypeScript SDKs already serve RFC 9728 metadata and 401 challenges when auth is configured; the top requests are client bugs (Claude Code, Codex, Gemini CLI ignoring scopes_supported) and SDK bugs, not a missing library."
   },
   {
     "id": "mcp-tasks",
@@ -282,5 +292,37 @@
     "status": "skipped",
     "evidence": [],
     "reason": "2026-11-11: requests are per-project asks to add annotations or framework/client support (vercel/ai, fastapi_mcp); correct hints depend on each tool, so there is no reusable library to build."
+  },
+  {
+    "id": "mcp-ratelimit",
+    "title": "Per-client rate limits, quotas and concurrency caps for MCP tool calls (official Python SDK)",
+    "kind": "python",
+    "problem": "Hosted MCP servers get flooded by agents that call tools in loops or in parallel bursts, and the official MCP Python SDK has no rate limiting; projects hand-roll it or return HTTP 429, which clients treat as a connection failure.",
+    "request_query": "rate limit mcp tool calls in:title is:issue",
+    "repo_query": "mcp rate limit tool calls in:name,description",
+    "status": "idea",
+    "evidence": [],
+    "reason": "2026-11-12: many projects add MCP tool-call rate limits by hand, but no request has upvotes (score 19); revisit if a request gains traction. FastMCP (standalone) already ships rate-limiting middleware."
+  },
+  {
+    "id": "mcp-audit-log",
+    "title": "Structured, redacted audit log of every MCP tool call for Python MCP servers",
+    "kind": "python",
+    "problem": "Teams running MCP servers need a record of which client called which tool with what arguments and result, with secrets redacted, and each project writes its own.",
+    "request_query": "mcp \"audit log\" in:title is:issue",
+    "repo_query": "mcp audit log tool calls in:name,description",
+    "status": "idea",
+    "evidence": []
+  },
+  {
+    "id": "mcp-sdk2-migrate",
+    "title": "Migrate Python MCP servers from SDK 1.x (FastMCP) to 2.x (MCPServer)",
+    "kind": "python",
+    "problem": "MCP Python SDK 2.0 renamed FastMCP and changed many APIs, so unpinned servers crash with No module named 'mcp.server.fastmcp'.",
+    "request_query": "\"mcp.server.fastmcp\" in:title is:issue",
+    "repo_query": "mcp sdk v2 migrate codemod",
+    "status": "skipped",
+    "evidence": [],
+    "reason": "2026-11-12: real breakage (1,000+ issues mention mcp.server.fastmcp since July), but two active Python codemods already ship it on PyPI (dheerajjha/mcp-migrate with 21 rules, 8crsk/mcp-codemod), and most projects just pin mcp<2; a third tool adds little."
   }
 ]

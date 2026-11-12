@@ -23,6 +23,11 @@ jobs:
           python -m pip install --upgrade pip
           for dir in packages/*/; do
             [ -f "$dir/pyproject.toml" ] || continue
+            req=$(sed -n 's/^requires-python *= *"\(.*\)"/\1/p' "$dir/pyproject.toml")
+            if [ -n "$req" ] && ! python -c "import sys; from pip._vendor.packaging.specifiers import SpecifierSet as S; sys.exit(0 if S('$req').contains('%d.%d.%d' % sys.version_info[:3]) else 1)"; then
+              echo "Skipping $dir: needs Python $req"
+              continue
+            fi
             echo "::group::$dir"
             python -m venv "/tmp/venv-$(basename "$dir")"
             . "/tmp/venv-$(basename "$dir")/bin/activate"
@@ -59,6 +64,23 @@ jobs:
           SDK: ${{ matrix.mcp }}
         run: pip install -e "packages/askfirst[test]" $SDK
       - run: pytest -q packages/askfirst
+
+  bomscout-sdk-v1:
+    # The python job tests bomscout with the newest MCP SDK (2.x); this covers 1.x.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mcp: ["mcp==1.10.0 pydantic<2.11", "mcp<2"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - env:
+          SDK: ${{ matrix.mcp }}
+        run: pip install -e "packages/bomscout[test]" $SDK
+      - run: pytest -q packages/bomscout
 
   mcptest-action:
     # Run the reusable GitHub Action in packages/mcptest against the test server.

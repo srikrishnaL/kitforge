@@ -31,7 +31,7 @@ from typing import Any, Deque, Dict, Iterator, List, Mapping, Optional, Sequence
 #: they will use; the client accepts whatever they choose.
 DEFAULT_PROTOCOL_VERSION = "2025-06-18"
 
-CLIENT_INFO = {"name": "mcptest", "version": "0.2.0"}
+CLIENT_INFO = {"name": "mcptest", "version": "0.2.1"}
 
 
 class MCPError(Exception):

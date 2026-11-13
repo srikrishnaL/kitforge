@@ -15,7 +15,7 @@ from typing import Any, Callable, Optional, Sequence, Union
 from .core import DEFAULT_MAX_TOKENS, Cap, decode_cursor, encode_cursor, estimate_tokens, jsonable
 from .errors import CursorError
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "Cap",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1 (2026-11-13)
+
+- PyPI description and keywords say what the package does (pytest plugin, linter, tool
+  poisoning checks, GitHub Action), so it shows up in searches for MCP server testing.
+- README links the kitforge proxies for fixing servers you don't own.
+
 ## 0.2.0 (2026-11-07)
 
 - GitHub Actions output: `mcptest lint --format github` and `mcptest diff --format github`

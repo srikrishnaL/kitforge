@@ -1,7 +1,8 @@
 # schemashim
 
 Make MCP and agent tool schemas work on Gemini and OpenAI strict mode, then turn the model's
-arguments back into what the tool expects.
+arguments back into what the tool expects. Use it as a library, a CI check, or a proxy that
+fixes any MCP server without touching its code.
 
 Gemini and OpenAI's `strict: true` function calling accept only a subset of JSON Schema, so one
 ordinary tool (a pydantic `$ref`, `Optional[int]`, an array without `items`, an `enum` with `""`,
@@ -14,6 +15,33 @@ pip install schemashim
 ```
 
 Python 3.9+, no dependencies.
+
+## Fix an MCP server you didn't write
+
+Gemini CLI, Cline, Kilo Code, opencode and other clients fail with `400 INVALID_ARGUMENT` or
+`Invalid schema for function` when one server has a tool they can't send. Wrap that server in
+`schemashim proxy` in your client's MCP config. Its tools then work as they are, whatever
+language the server is written in:
+
+```json
+{
+  "mcpServers": {
+    "fetch": {
+      "command": "uvx",
+      "args": ["schemashim", "proxy", "--target", "gemini", "--",
+               "uvx", "mcp-server-fetch"]
+    }
+  }
+}
+```
+
+Everything after `--` is the command you had before (`npx -y @acme/server`, `docker run -i
+--rm acme/mcp`, `python server.py`...). Use `--target openai-strict` for clients that call
+OpenAI with `strict: true`. The proxy rewrites each tool's `inputSchema` in `tools/list`, maps
+the model's arguments back on every `tools/call`, and passes everything else through unchanged.
+It logs what it changed to stderr (your client's MCP log); `--quiet` turns that off. No `uv`?
+`pip install schemashim` and use `"command": "schemashim"`. For a remote (HTTP) server, wrap
+a stdio bridge such as `npx -y mcp-remote https://example.com/mcp`.
 
 ## Fix one schema
 
@@ -94,6 +122,8 @@ the name back.
 `restore` also turns `5.0` back into `5` for integer fields (Gemini sends numbers as floats).
 
 ## In CI
+
+Check your server's tools before your users hit the error:
 
 ```bash
 schemashim check tools.json                     # exit 1 if Gemini or OpenAI strict would reject a tool

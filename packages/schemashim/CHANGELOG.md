@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 (2026-11-13)
+
+- `schemashim proxy --target gemini|openai-strict -- <server command>`: runs any stdio MCP
+  server behind schemashim, so its tools work in Gemini and OpenAI strict-mode clients without
+  changing the server. Rewrites `inputSchema` in `tools/list` results, maps `tools/call`
+  arguments back, passes everything else (including batches and server-to-client requests)
+  through unchanged, and logs the changes to stderr (`--quiet` to stop).
+
 ## 0.1.0 (2026-11-10)
 
 First release.

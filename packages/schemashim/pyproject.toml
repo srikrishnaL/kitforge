@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "schemashim"
-version = "0.1.0"
-description = "Fix MCP and agent tool JSON Schemas that Gemini and OpenAI strict mode reject ($ref, anyOf null, type lists, arrays without items, enums), and map the model's arguments back"
+version = "0.2.0"
+description = "Fix MCP and agent tool JSON Schemas that Gemini and OpenAI strict mode reject (400 INVALID_ARGUMENT, Invalid schema for function): as a library, a CI check, or a proxy for any MCP server"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -14,7 +14,8 @@ authors = [{ name = "Sri Krishna Lingamaneni" }]
 keywords = [
   "json schema", "gemini", "vertex ai", "openai", "structured outputs", "strict mode",
   "function calling", "tool calling", "mcp", "model context protocol", "invalid_argument",
-  "function declarations", "llm", "agents",
+  "function declarations", "llm", "agents", "gemini cli", "mcp proxy", "mcp server",
+  "pydantic", "invalid schema",
 ]
 classifiers = [
   "Development Status :: 4 - Beta",

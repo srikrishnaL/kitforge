@@ -40,6 +40,11 @@ def _tools(data: Any) -> Optional[list]:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    command: List[str] = []
+    if "--" in argv:
+        at = argv.index("--")
+        argv, command = argv[:at], argv[at + 1:]
     parser = argparse.ArgumentParser(
         prog="schemashim",
         description="Find and fix JSON Schemas that Gemini or OpenAI strict mode reject. "
@@ -54,7 +59,25 @@ def main(argv: Optional[List[str]] = None) -> int:
     f = sub.add_parser("fix", help="print the adapted schema or tool declarations")
     f.add_argument("file")
     f.add_argument("--target", choices=TARGETS, required=True)
+    p = sub.add_parser(
+        "proxy", help="run an MCP server with its tool schemas fixed for a target",
+        description="Start the MCP server given after -- and sit between it and the client: "
+                    "tool schemas in tools/list are rewritten for the target, and tools/call "
+                    "arguments are mapped back. Example: schemashim proxy --target gemini -- "
+                    "npx -y @modelcontextprotocol/server-everything")
+    p.add_argument("--target", choices=TARGETS, required=True)
+    p.add_argument("--quiet", action="store_true",
+                   help="don't log the changes to stderr")
     args = parser.parse_args(argv)
+
+    if args.command == "proxy":
+        if not command:
+            parser.error("proxy needs the server command after --, e.g. "
+                         "schemashim proxy --target gemini -- npx -y @acme/server")
+        from .proxy import run
+        return run(command, args.target, quiet=args.quiet)
+    if command:
+        parser.error("unexpected arguments after --")
 
     data = _load(args.file)
     tools = _tools(data)

@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "toolcap"
-version = "0.1.0"
-description = "Keep MCP tool results under the client's token limit (Claude Code's 25,000): cursor pagination of long lists and text, or safe truncation, in one call or decorator"
+version = "0.2.0"
+description = "Keep MCP tool results under the client's token limit (Claude Code's 25,000): cursor pagination or safe truncation, as a decorator for your server or a proxy for any MCP server"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -14,7 +14,8 @@ authors = [{ name = "Sri Krishna Lingamaneni" }]
 keywords = [
   "mcp", "model context protocol", "mcp server", "tool result", "response size", "token limit",
   "max_mcp_output_tokens", "pagination", "cursor", "truncate", "context window", "fastmcp",
-  "llm", "agents",
+  "llm", "agents", "claude code", "mcp proxy", "exceeds maximum allowed tokens",
+  "playwright mcp",
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -29,6 +30,9 @@ dependencies = []
 
 [project.optional-dependencies]
 test = ["pytest>=7", "pydantic>=2", "anyio>=4", "mcp>=1.10; python_version >= '3.10'"]
+
+[project.scripts]
+toolcap = "toolcap.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/toolcap"

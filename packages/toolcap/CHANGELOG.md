@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 (2026-11-13)
+
+- `toolcap proxy [--max-tokens N] [--trim] -- <server command>`: runs any stdio MCP server
+  behind toolcap, so its oversized results are paged without changing the server. Adds an
+  optional `cursor` parameter to each tool, pages text and JSON results that are over the
+  budget, keeps the last 16 full results in memory so later pages don't re-run the tool, and
+  trims the results of tools that already have their own `cursor` parameter.
+- New `toolcap` command (also `python -m toolcap`).
+
 ## 0.1.0 (2026-11-11)
 
 First release.

@@ -1,6 +1,7 @@
 # toolcap
 
-Keep MCP tool results under the client's token limit, with pages the model can follow.
+Keep MCP tool results under the client's token limit, with pages the model can follow. Use it
+in your own server (one decorator), or as a proxy in front of any MCP server you didn't write.
 
 A tool that returns 200 flow runs, a long log or a big page snapshot can blow past the client's
 limit (Claude Code rejects results over 25,000 tokens) or fill the context in one call. toolcap
@@ -15,7 +16,47 @@ Python 3.9+, no dependencies. Works with any MCP framework (the official MCP Pyt
 `FastMCP` and 2.x `MCPServer`, the standalone `fastmcp`) or none, because it only turns a value
 into text.
 
-## Example
+## Fix a server you didn't write
+
+`MCP tool "..." response (61,234 tokens) exceeds maximum allowed tokens (25000)` in Claude
+Code, or a client that silently fills its context with one giant snapshot? Wrap the server in
+`toolcap proxy` in your MCP config. It works with servers in any language:
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "uvx",
+      "args": ["toolcap", "proxy", "--",
+               "npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/me/code"]
+    }
+  }
+}
+```
+
+Or from the command line: `claude mcp add filesystem -- uvx toolcap proxy -- npx -y
+@modelcontextprotocol/server-filesystem ~/code`.
+
+Everything after `--` is the command you had before. The proxy adds an optional `cursor`
+parameter to every tool. A result that fits is passed through unchanged; one that doesn't is
+cut into pages exactly as described below. The proxy keeps the last 16 full results in memory,
+so the model's next pages are served from there without running the tool again. Tested on the
+reference filesystem server's `directory_tree` of `/usr/share`: a 1.1 million-token result
+became pages under 20,000 tokens.
+
+| Option | |
+| --- | --- |
+| `--max-tokens N` | budget for one result (default `TOOLCAP_MAX_TOKENS`, else 20,000) |
+| `--trim` | cut long results with a note instead of paging them; adds no parameter |
+| `--cursor-param NAME` | name of the added parameter (default `cursor`) |
+| `--quiet` | don't log cut results to stderr |
+
+Tools that already have a `cursor` parameter are left alone and their results are trimmed
+instead. `outputSchema` is removed from the tool list, because a page can't match it. Images
+and other non-text content stay on the first page. No `uv`? `pip install toolcap` and use
+`"command": "toolcap"`.
+
+## In your own server
 
 ```python
 from mcp.server.fastmcp import FastMCP     # SDK 2.x: from mcp.server.mcpserver import MCPServer

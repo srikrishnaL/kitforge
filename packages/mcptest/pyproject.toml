@@ -4,14 +4,18 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pytest-mcp-server"
-version = "0.2.0"
-description = "Automated tests, linting and breaking-change checks for MCP servers, as a pytest plugin and CLI"
+version = "0.2.1"
+description = "Test MCP servers in CI: a pytest plugin and CLI for any server language, with a linter (incl. tool poisoning), schema snapshots, breaking-change diffs and a GitHub Action"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.9"
 authors = [{ name = "Sri Krishna Lingamaneni" }]
-keywords = ["mcp", "model context protocol", "pytest", "testing", "lint", "ai agents", "llm", "ci"]
+keywords = [
+  "mcp", "model context protocol", "mcp server", "pytest", "pytest plugin", "testing", "lint",
+  "linter", "mcp inspector", "tool poisoning", "breaking changes", "snapshot testing",
+  "github actions", "fastmcp", "ai agents", "llm", "ci",
+]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Framework :: Pytest",

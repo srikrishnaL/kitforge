@@ -255,6 +255,16 @@ Almost all warnings are parameters with no description (MCP007) or very short de
 - No OAuth flow: for protected HTTP servers, pass a token with `--header` or `headers=`.
 - The legacy HTTP+SSE transport (two endpoints) is not supported; Streamable HTTP and stdio are.
 
+## Related
+
+mcptest finds problems in a server you own. For servers you don't own, two sibling packages
+fix the most common ones from the outside, as proxies in your client's MCP config:
+
+- [schemashim](https://github.com/srikrishnaL/kitforge/tree/main/packages/schemashim): tool schemas that Gemini or OpenAI strict mode reject
+  (`400 INVALID_ARGUMENT`): `uvx schemashim proxy --target gemini -- <server command>`
+- [toolcap](https://github.com/srikrishnaL/kitforge/tree/main/packages/toolcap): results over the client's token limit (Claude Code's 25,000):
+  `uvx toolcap proxy -- <server command>`
+
 ## License
 
 MIT

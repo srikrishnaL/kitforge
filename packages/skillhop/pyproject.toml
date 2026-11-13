@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skillhop"
+version = "0.1.0"
+description = "Install the skills MCP servers serve (Skills over MCP, SEP-2640) into Claude Code, Codex, Cursor, Gemini CLI, Copilot, goose and OpenCode, verified against the server's SHA-256 digests, with a lock file to check for changes"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "mcp", "model context protocol", "skills", "agent skills", "SKILL.md", "skills over mcp",
+  "SEP-2640", "io.modelcontextprotocol/skills", "skill://", "claude code", "claude skills",
+  "codex", "cursor", "gemini cli", "github copilot", "goose", "opencode", "install skills",
+  "skills/list", "skills/get",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["pyyaml>=5.4"]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "fastmcp>=4.1.2; python_version >= '3.10'"]
+
+[project.scripts]
+skillhop = "skillhop.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/skillhop"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/skillhop/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/skillhop"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T07:53:12Z",
+  "generated": "2026-11-13T07:41:49Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -139,6 +139,53 @@
         "existing": "location privacy anonymization gps"
       },
       "reason": "2026-11-08: no real requests found; matches are about OS location indicators and privacy policies, not GPS track anonymization."
+    },
+    {
+      "id": "skills-over-mcp-bridge",
+      "title": "Install SEP-2640 skills served by MCP servers into hosts that lack the extension",
+      "status": "shipped",
+      "score": 76,
+      "demand": 0.567,
+      "gap": 1.0,
+      "open_requests": 156,
+      "top_requests": [
+        {
+          "title": "Support the Skills over MCP extension (SEP-2640) in Claude chat, Claude Desktop and Cowork",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/1160",
+          "reactions": 28
+        },
+        {
+          "title": "support SEP-2640: Skills Extension",
+          "url": "https://github.com/openai/codex/issues/48000",
+          "reactions": 7
+        },
+        {
+          "title": "MCP - support Skills Extension (SEP-2640)",
+          "url": "https://github.com/spring-projects/spring-ai/issues/7345",
+          "reactions": 3
+        },
+        {
+          "title": "SEP-2640: Skills Extension",
+          "url": "https://github.com/modelcontextprotocol/java-sdk/issues/1140",
+          "reactions": 3
+        },
+        {
+          "title": "Setup and Workflow: I want to use turnstone but, bootstrapping is challenging.",
+          "url": "https://github.com/turnstonelabs/turnstone/issues/1159",
+          "reactions": 3
+        }
+      ],
+      "best_existing": {
+        "repo": "mehul82099/skills-dir-mcp",
+        "url": "https://github.com/mehul82099/skills-dir-mcp",
+        "stars": 0,
+        "months_since_push": 0.3
+      },
+      "existing_projects": 2,
+      "queries": {
+        "requests": "\"SEP-2640\" is:issue is:open",
+        "existing": "mcp skills install sep-2640"
+      }
     },
     {
       "id": "mcp-structured-content",
@@ -467,6 +514,53 @@
       }
     },
     {
+      "id": "mcp-skills-python",
+      "title": "Serve a folder of SKILL.md skills over MCP (SEP-2640) from the official Python SDK",
+      "status": "skipped",
+      "score": 63,
+      "demand": 0.335,
+      "gap": 1.0,
+      "open_requests": 6,
+      "top_requests": [
+        {
+          "title": "Add SSL Certificate Verification Options to FastMCP Client",
+          "url": "https://github.com/modelcontextprotocol/python-sdk/issues/870",
+          "reactions": 13
+        },
+        {
+          "title": "Add SEP-2640 (Skills Extension) protocol support",
+          "url": "https://github.com/modelcontextprotocol/python-sdk/issues/3486",
+          "reactions": 2
+        },
+        {
+          "title": "Skills: URI traversal validation skips percent-encoded dot-segments",
+          "url": "https://github.com/modelcontextprotocol/python-sdk/issues/3685",
+          "reactions": 0
+        },
+        {
+          "title": "Add a filesystem backed provider for the Skills extension",
+          "url": "https://github.com/modelcontextprotocol/python-sdk/issues/3683",
+          "reactions": 0
+        },
+        {
+          "title": "Align Skills extension with updated spec (2026-07-28): directory caching and skill metadata",
+          "url": "https://github.com/modelcontextprotocol/python-sdk/issues/3718",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "mehul82099/skills-dir-mcp",
+        "url": "https://github.com/mehul82099/skills-dir-mcp",
+        "stars": 0,
+        "months_since_push": 0.3
+      },
+      "existing_projects": 1,
+      "queries": {
+        "requests": "repo:modelcontextprotocol/python-sdk skills is:issue",
+        "existing": "mcp skills server python sep-2640"
+      }
+    },
+    {
       "id": "elevation",
       "title": "elevation: honest elevation gain from noisy GPS",
       "status": "skipped",
@@ -538,7 +632,7 @@
     {
       "id": "mcptest-js",
       "title": "mcptest for vitest and Jest",
-      "status": "idea",
+      "status": "skipped",
       "score": 59,
       "demand": 0.591,
       "gap": 0.591,
@@ -580,6 +674,53 @@
       "queries": {
         "requests": "mcp server (vitest OR jest) test in:title is:issue",
         "existing": "mcp server vitest testing"
+      }
+    },
+    {
+      "id": "mcp-stdout-pollution",
+      "title": "Stdio proxy that keeps only JSON-RPC on an MCP server's stdout",
+      "status": "idea",
+      "score": 54,
+      "demand": 0.408,
+      "gap": 0.702,
+      "open_requests": 198,
+      "top_requests": [
+        {
+          "title": "MCP stdio handshake fails because server writes non-JSON logs to stdout before initialize response",
+          "url": "https://github.com/CarbonoDev/tailwindcss-mcp-server/issues/2",
+          "reactions": 3
+        },
+        {
+          "title": "CWM.RoslynNavigator logs to stdout, breaking MCP stdio JSON-RPC stream",
+          "url": "https://github.com/codewithmukesh/dotnet-claude-kit/issues/10",
+          "reactions": 2
+        },
+        {
+          "title": "MCP stdio handshake fails in Codex; startup logs on stdout and SIGINT shutdown throws ERR_INVALID_ARG_TYPE",
+          "url": "https://github.com/abhigyanpatwari/GitNexus/issues/901",
+          "reactions": 2
+        },
+        {
+          "title": "Fix: console.info writes to stdout breaking MCP stdio transport",
+          "url": "https://github.com/pipe-cd/docs-mcp-server/issues/55",
+          "reactions": 1
+        },
+        {
+          "title": "MCP server fails silently when stdio logging pollutes stdout (fix: QUIET=true)",
+          "url": "https://github.com/RLabs-Inc/gemini-mcp/issues/31",
+          "reactions": 1
+        }
+      ],
+      "best_existing": {
+        "repo": "1Utkarsh1/mcp-stdio-guard",
+        "url": "https://github.com/1Utkarsh1/mcp-stdio-guard",
+        "stars": 10,
+        "months_since_push": 5.7
+      },
+      "existing_projects": 4,
+      "queries": {
+        "requests": "stdout in:title stdio in:title mcp is:issue",
+        "existing": "mcp stdout pollution"
       }
     },
     {
@@ -726,7 +867,7 @@
     {
       "id": "appflowy-mcp",
       "title": "MCP server for AppFlowy",
-      "status": "idea",
+      "status": "skipped",
       "score": 51,
       "demand": 0.366,
       "gap": 0.692,
@@ -758,7 +899,7 @@
     {
       "id": "mcp-lazy-gateway",
       "title": "MCP gateway that loads servers only when a tool is first used",
-      "status": "idea",
+      "status": "skipped",
       "score": 50,
       "demand": 0.571,
       "gap": 0.411,
@@ -963,7 +1104,7 @@
     {
       "id": "dependency-track-mcp",
       "title": "MCP server for OWASP Dependency-Track",
-      "status": "idea",
+      "status": "shipped",
       "score": 38,
       "demand": 0.293,
       "gap": 0.492,

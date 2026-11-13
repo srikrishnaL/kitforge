@@ -324,5 +324,50 @@
     "status": "skipped",
     "evidence": [],
     "reason": "2026-11-12: real breakage (1,000+ issues mention mcp.server.fastmcp since July), but two active Python codemods already ship it on PyPI (dheerajjha/mcp-migrate with 21 rules, 8crsk/mcp-codemod), and most projects just pin mcp<2; a third tool adds little."
+  },
+  {
+    "id": "mcp-stdout-pollution",
+    "title": "Stdio proxy that keeps only JSON-RPC on an MCP server's stdout",
+    "kind": "python",
+    "problem": "Any banner, log line or print() on a stdio MCP server's stdout breaks the JSON-RPC stream and the client fails the handshake; every project fixes it by hand and users wait for upstream releases.",
+    "request_query": "stdout in:title stdio in:title mcp is:issue",
+    "repo_query": "mcp stdout pollution",
+    "status": "idea",
+    "evidence": [
+      "https://github.com/CarbonoDev/tailwindcss-mcp-server/issues/2",
+      "https://github.com/abhigyanpatwari/GitNexus/issues/901",
+      "https://github.com/mhmzdev/figma-flutter-mcp/issues/45",
+      "https://github.com/modelcontextprotocol/python-sdk/issues/3821"
+    ],
+    "reason": "2026-11-13: real and frequent (198 issues titled stdout+stdio+mcp) but each is one server's bug with few upvotes (score 54 with a precise query); a fix-from-outside stdio proxy is still a good candidate."
+  },
+  {
+    "id": "skills-over-mcp-bridge",
+    "title": "Install SEP-2640 skills served by MCP servers into hosts that lack the extension",
+    "kind": "python",
+    "problem": "MCP servers now serve skills (SEP-2640) but Claude Desktop, Claude Code, Codex and goose don't load them yet.",
+    "request_query": "\"SEP-2640\" is:issue is:open",
+    "repo_query": "mcp skills install sep-2640",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/anthropics/claude-ai-mcp/issues/1160",
+      "https://github.com/openai/codex/issues/48000",
+      "https://github.com/anthropics/claude-code/issues/106550",
+      "https://github.com/aaif-goose/goose/issues/12068"
+    ],
+    "package": "skillhop"
+  },
+  {
+    "id": "mcp-skills-python",
+    "title": "Serve a folder of SKILL.md skills over MCP (SEP-2640) from the official Python SDK",
+    "kind": "python",
+    "problem": "The Python SDK's Skills support is merged but unreleased and has no filesystem provider.",
+    "request_query": "repo:modelcontextprotocol/python-sdk skills is:issue",
+    "repo_query": "mcp skills server python sep-2640",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/modelcontextprotocol/python-sdk/issues/3486"
+    ],
+    "reason": "2026-11-13: FastMCP 4.1.2+ (SkillsDirectoryProvider + SkillsExtension) and the official Python SDK (merged) already serve skills folders; little gap."
   }
 ]

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T07:41:49Z",
+  "generated": "2026-11-14T07:41:04Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -373,6 +373,53 @@
       }
     },
     {
+      "id": "mcp-stateless-bridge",
+      "title": "Stdio bridge so initialize-era MCP clients can use 2026-07-28-only servers",
+      "status": "idea",
+      "score": 69,
+      "demand": 0.54,
+      "gap": 0.864,
+      "open_requests": 343,
+      "top_requests": [
+        {
+          "title": "Support the MCP 2026-07-28 stateless protocol for stdio servers",
+          "url": "https://github.com/openai/codex/issues/33952",
+          "reactions": 12
+        },
+        {
+          "title": "Support Stateless MCP (2026-07-28) the current latest version",
+          "url": "https://github.com/earendil-works/pi/issues/10416",
+          "reactions": 6
+        },
+        {
+          "title": "[Feature]: Track upgrade to mcp==2.0.0b2 and MCP 2026-07-28 stateless migration",
+          "url": "https://github.com/NousResearch/hermes-agent/issues/69931",
+          "reactions": 4
+        },
+        {
+          "title": "[Feature]: Track migration to MCP 2.0 (2026-07-28 stateless spec) \u2014 @modelcontextprotocol/sdk \u2192 split client/server v2 packages",
+          "url": "https://github.com/openclaw/openclaw/issues/119294",
+          "reactions": 3
+        },
+        {
+          "title": "Stateless era support (spec 2026-07-28)",
+          "url": "https://github.com/zoedsoupe/anubis-mcp/issues/263",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "MohibShaikh/mcp-uplift",
+        "url": "https://github.com/MohibShaikh/mcp-uplift",
+        "stars": 2,
+        "months_since_push": 3.0
+      },
+      "existing_projects": 2,
+      "queries": {
+        "requests": "\"2026-07-28\" stateless in:title is:issue",
+        "existing": "mcp stateless bridge 2026-07-28"
+      }
+    },
+    {
       "id": "cimd",
       "title": "Resolve and validate OAuth Client ID Metadata Documents (CIMD) in authorization servers",
       "status": "shipped",
@@ -677,6 +724,28 @@
       }
     },
     {
+      "id": "keep-aiops-mcp",
+      "title": "MCP server for Keep, the open-source AIOps alert manager",
+      "status": "skipped",
+      "score": 56,
+      "demand": 0.207,
+      "gap": 1.0,
+      "open_requests": 1,
+      "top_requests": [
+        {
+          "title": "[\u2795 Feature]: Official MCP (Model Context Protocol) server for Keep",
+          "url": "https://github.com/keephq/keep/issues/6618",
+          "reactions": 6
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "repo:keephq/keep \"MCP\" in:title is:issue",
+        "existing": "keephq keep mcp server"
+      }
+    },
+    {
       "id": "mcp-stdout-pollution",
       "title": "Stdio proxy that keeps only JSON-RPC on an MCP server's stdout",
       "status": "idea",
@@ -941,6 +1010,53 @@
       "queries": {
         "requests": "mcp lazy load servers in:title is:issue",
         "existing": "mcp lazy load proxy"
+      }
+    },
+    {
+      "id": "mcp-oauth-front",
+      "title": "OAuth 2.1 front door for MCP servers that only take an API key",
+      "status": "idea",
+      "score": 46,
+      "demand": 0.293,
+      "gap": 0.673,
+      "open_requests": 23,
+      "top_requests": [
+        {
+          "title": "[Bug]: Interactive OAuth2 MCP server returns 500 instead of 401+WWW-Authenticate when x-litellm-api-key is present but no Google OAuth token exists yet",
+          "url": "https://github.com/BerriAI/litellm/issues/29261",
+          "reactions": 3
+        },
+        {
+          "title": "Custom connector only offers OAuth fields for an API-key-authenticated MCP server (Deckbase) \u2014 no \"Request headers\" option available",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/752",
+          "reactions": 1
+        },
+        {
+          "title": "[feature]: Hosted MCP server: decide authentication (OAuth 2.1 versus API keys)",
+          "url": "https://github.com/cheqd/studio/issues/893",
+          "reactions": 0
+        },
+        {
+          "title": "[Submit] APIVerve \u2014 300+ utility APIs behind one remote MCP server (remote, OAuth or API key)",
+          "url": "https://github.com/chatmcp/mcpso/issues/4247",
+          "reactions": 0
+        },
+        {
+          "title": "Feature request: OAuth 2.1 / OIDC authentication for the MCP server (alongside API key)",
+          "url": "https://github.com/AikidoSec/aikido-cursor-plugin/issues/5",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "helv-io/skgate",
+        "url": "https://github.com/helv-io/skgate",
+        "stars": 13,
+        "months_since_push": 0.0
+      },
+      "existing_projects": 9,
+      "queries": {
+        "requests": "mcp server oauth \"api key\" in:title is:issue",
+        "existing": "mcp oauth proxy api key"
       }
     },
     {

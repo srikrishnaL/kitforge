@@ -332,14 +332,18 @@
     "problem": "Any banner, log line or print() on a stdio MCP server's stdout breaks the JSON-RPC stream and the client fails the handshake; every project fixes it by hand and users wait for upstream releases.",
     "request_query": "stdout in:title stdio in:title mcp is:issue",
     "repo_query": "mcp stdout pollution",
-    "status": "idea",
+    "status": "shipped",
     "evidence": [
       "https://github.com/CarbonoDev/tailwindcss-mcp-server/issues/2",
       "https://github.com/abhigyanpatwari/GitNexus/issues/901",
       "https://github.com/mhmzdev/figma-flutter-mcp/issues/45",
-      "https://github.com/modelcontextprotocol/python-sdk/issues/3821"
+      "https://github.com/modelcontextprotocol/python-sdk/issues/3821",
+      "https://github.com/awslabs/mcp/issues/5020",
+      "https://github.com/awslabs/mcp/issues/4991",
+      "https://github.com/happyvertical/smrt/issues/4685"
     ],
-    "reason": "2026-11-13: real and frequent (198 issues titled stdout+stdio+mcp) but each is one server's bug with few upvotes (score 54 with a precise query); a fix-from-outside stdio proxy is still a good candidate."
+    "reason": "2026-11-14: shipped as cleanpipe. 72 issues titled stdout+stdio+mcp opened since 2026-09-01 across Python, TypeScript and .NET servers; existing tools (mcp-stdio-guard, 10 stars) only detect the problem, none fixes it from the client side.",
+    "package": "cleanpipe"
   },
   {
     "id": "skills-over-mcp-bridge",
@@ -369,5 +373,45 @@
       "https://github.com/modelcontextprotocol/python-sdk/issues/3486"
     ],
     "reason": "2026-11-13: FastMCP 4.1.2+ (SkillsDirectoryProvider + SkillsExtension) and the official Python SDK (merged) already serve skills folders; little gap."
+  },
+  {
+    "id": "keep-aiops-mcp",
+    "title": "MCP server for Keep, the open-source AIOps alert manager",
+    "kind": "python",
+    "problem": "Keep (12k stars) has no MCP server, so AI assistants can't triage its alerts and incidents.",
+    "request_query": "repo:keephq/keep \"MCP\" in:title is:issue",
+    "repo_query": "keephq keep mcp server",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/keephq/keep/issues/6618"
+    ],
+    "reason": "2026-11-14: real request (6 upvotes, no external server), but two contributors already have open in-tree PRs for it (keephq/keep#6619, #6896); an outside package would compete with them."
+  },
+  {
+    "id": "mcp-stateless-bridge",
+    "title": "Stdio bridge so initialize-era MCP clients can use 2026-07-28-only servers",
+    "kind": "python",
+    "problem": "Clients like Codex still speak the initialize lifecycle; servers that only speak the stateless 2026-07-28 revision need a hand-built translation gateway.",
+    "request_query": "\"2026-07-28\" stateless in:title is:issue",
+    "repo_query": "mcp stateless bridge 2026-07-28",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/openai/codex/issues/33952",
+      "https://github.com/earendil-works/pi/issues/10416"
+    ],
+    "reason": "2026-11-14: top score (69) but little real gap: the official Python SDK 2.x serves both the initialize era and 2026-07-28 on one stdio connection by default, so modern-only stdio servers are rare; the Codex request (#33952) bridges to remote HTTP upstreams with OAuth, which gateways like agentgateway cover. Revisit if modern-only servers become common."
+  },
+  {
+    "id": "mcp-oauth-front",
+    "title": "OAuth 2.1 front door for MCP servers that only take an API key",
+    "kind": "python",
+    "problem": "claude.ai and ChatGPT connectors need OAuth, but many self-hosted MCP servers only accept a bearer token or API key.",
+    "request_query": "mcp server oauth \"api key\" in:title is:issue",
+    "repo_query": "mcp oauth proxy api key",
+    "status": "idea",
+    "evidence": [
+      "https://github.com/docmost/docmost/issues/2134"
+    ],
+    "reason": ""
   }
 ]

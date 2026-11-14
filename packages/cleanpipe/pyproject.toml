@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cleanpipe"
+version = "0.1.0"
+description = "Fix MCP stdio servers that print logs or banners to stdout: wraps the server so only JSON-RPC reaches the client (no more handshake timeouts or 'Unexpected token' errors), plus a check for CI"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "mcp", "model context protocol", "mcp server", "stdio", "stdout", "json-rpc", "logging",
+  "stdout pollution", "handshake", "timed out handshaking", "unexpected token", "parse error",
+  "mcp proxy", "claude code", "codex", "cursor", "claude desktop",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7", "mcp>=1.10; python_version >= '3.10'"]
+
+[project.scripts]
+cleanpipe = "cleanpipe.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/cleanpipe"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/cleanpipe/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cleanpipe"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

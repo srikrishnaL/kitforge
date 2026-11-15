@@ -18,6 +18,7 @@ gap where the only existing project is unmaintained. The demand evidence for eac
 | [bomscout](packages/bomscout/) | MCP server for OWASP Dependency-Track: which projects a CVE affects and its remediation status, findings ranked by severity/EPSS, licenses, policy violations, where a package is used | `pip install bomscout` | 0.1.0 |
 | [skillhop](packages/skillhop/) | Install the skills MCP servers serve (Skills over MCP, SEP-2640) into Claude Code, Codex, Cursor, Gemini CLI, Copilot, goose or OpenCode, or a zip for claude.ai, verified against the server's digests, with `check` for changes | `pip install skillhop` | 0.1.0 |
 | [cleanpipe](packages/cleanpipe/) | Fix MCP stdio servers that print logs or banners to stdout: wraps any server so only JSON-RPC reaches the client (no more handshake timeouts or `Unexpected token` errors), plus `cleanpipe check` for CI | `pip install cleanpipe` | 0.1.0 |
+| [briefed](packages/briefed/) | Deliver MCP server instructions to clients that drop or cut them (claude.ai connectors, Kiro, Google ADK, agno...): folds `initialize` instructions into the tool list, as a stdio proxy, ASGI middleware for remote servers, or one function, plus `briefed show` | `pip install briefed` | 0.1.0 |
 
 ## How packages are chosen
 

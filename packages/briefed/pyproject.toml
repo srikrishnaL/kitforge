@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "briefed"
+version = "0.1.0"
+description = "Deliver MCP server instructions to clients that ignore or truncate them (claude.ai connectors, Kiro, Google ADK, agno and more): folds InitializeResult.instructions into the tool list, as a stdio proxy, ASGI middleware or one function"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "mcp", "model context protocol", "mcp server", "server instructions", "instructions",
+  "InitializeResult", "initialize", "system prompt", "tool descriptions", "mcp proxy",
+  "asgi", "streamable http", "claude.ai", "custom connector", "fastmcp", "llm", "agents",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7", "anyio>=4", "mcp>=1.10; python_version >= '3.10'"]
+
+[project.scripts]
+briefed = "briefed.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/briefed"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/briefed/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/briefed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

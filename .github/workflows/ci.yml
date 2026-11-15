@@ -101,6 +101,23 @@ jobs:
         run: pip install -e "packages/cleanpipe[test]" $SDK
       - run: pytest -q packages/cleanpipe
 
+  briefed-sdk-v1:
+    # The python job runs briefed's SDK tests with the newest MCP SDK (2.x); this covers 1.x.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mcp: ["mcp==1.10.0 pydantic<2.11", "mcp<2"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - env:
+          SDK: ${{ matrix.mcp }}
+        run: pip install -e "packages/briefed[test]" $SDK
+      - run: pytest -q packages/briefed
+
   mcptest-action:
     # Run the reusable GitHub Action in packages/mcptest against the test server.
     runs-on: ubuntu-latest

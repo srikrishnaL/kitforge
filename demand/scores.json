@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14T07:41:04Z",
+  "generated": "2026-11-15T07:39:30Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -375,7 +375,7 @@
     {
       "id": "mcp-stateless-bridge",
       "title": "Stdio bridge so initialize-era MCP clients can use 2026-07-28-only servers",
-      "status": "idea",
+      "status": "skipped",
       "score": 69,
       "demand": 0.54,
       "gap": 0.864,
@@ -417,6 +417,53 @@
       "queries": {
         "requests": "\"2026-07-28\" stateless in:title is:issue",
         "existing": "mcp stateless bridge 2026-07-28"
+      }
+    },
+    {
+      "id": "mcp-instructions-fold",
+      "title": "Deliver MCP server instructions to clients that ignore them",
+      "status": "shipped",
+      "score": 69,
+      "demand": 0.514,
+      "gap": 0.914,
+      "open_requests": 579,
+      "top_requests": [
+        {
+          "title": "MCP server instructions are silently truncated when multiple servers are configured",
+          "url": "https://github.com/anthropics/claude-code/issues/43474",
+          "reactions": 6
+        },
+        {
+          "title": "[BUG] MCP server instructions from initialize response are not passed to the model",
+          "url": "https://github.com/anthropics/claude-code/issues/23808",
+          "reactions": 6
+        },
+        {
+          "title": "Missing MCP Server Instructions Processing in Claude Code",
+          "url": "https://github.com/anthropics/claude-code/issues/3312",
+          "reactions": 6
+        },
+        {
+          "title": "MCP: Support server `instructions`",
+          "url": "https://github.com/microsoft/vscode/issues/250017",
+          "reactions": 5
+        },
+        {
+          "title": "Copilot CLI ignores MCP server \"instructions\" (returned during MCP initialization)",
+          "url": "https://github.com/github/copilot-cli/issues/1579",
+          "reactions": 4
+        }
+      ],
+      "best_existing": {
+        "repo": "shacharbard/token-smithers",
+        "url": "https://github.com/shacharbard/token-smithers",
+        "stars": 1,
+        "months_since_push": 7.0
+      },
+      "existing_projects": 3,
+      "queries": {
+        "requests": "mcp \"server instructions\" in:title is:issue",
+        "existing": "mcp server instructions proxy"
       }
     },
     {
@@ -558,6 +605,53 @@
       "queries": {
         "requests": "\"protected resource metadata\" in:title is:issue",
         "existing": "\"protected resource metadata\" in:name,description"
+      }
+    },
+    {
+      "id": "connector-preflight",
+      "title": "Check a remote MCP server the way claude.ai and ChatGPT custom connectors do",
+      "status": "idea",
+      "score": 65,
+      "demand": 0.367,
+      "gap": 1.0,
+      "open_requests": 48,
+      "top_requests": [
+        {
+          "title": "Custom connector fails with \"Couldn't reach the MCP server\" \u2014 zero inbound traffic at edge (ofid_c58995a431270861)",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/227",
+          "reactions": 5
+        },
+        {
+          "title": "Adding custom connectors fails (\"Couldn't determine how this server signs in\" \u2192 \"Connector couldn't be added\"), including a previously working Cloudflare Access server, since   2026-11-13",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/1275",
+          "reactions": 2
+        },
+        {
+          "title": "Custom MCP Server (Streamable HTTP) Returns Valid Responses But Claude.ai Connector Fails with \"Couldn't Reach MCP Server\"",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/143",
+          "reactions": 2
+        },
+        {
+          "title": "Custom connector: \"Connector couldn't be added\" although server is reachable and auth is detected",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/1279",
+          "reactions": 1
+        },
+        {
+          "title": "Custom connector check shows \"Couldn't check the server\" for a working MCP server (www.motley.co.uk/mcp)",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/1244",
+          "reactions": 1
+        }
+      ],
+      "best_existing": {
+        "repo": "Maelmaelr/mcp-auth-preflight",
+        "url": "https://github.com/Maelmaelr/mcp-auth-preflight",
+        "stars": 0,
+        "months_since_push": 3.1
+      },
+      "existing_projects": 1,
+      "queries": {
+        "requests": "\"custom connector\" couldn't in:title is:issue",
+        "existing": "mcp oauth discovery checker"
       }
     },
     {
@@ -748,7 +842,7 @@
     {
       "id": "mcp-stdout-pollution",
       "title": "Stdio proxy that keeps only JSON-RPC on an MCP server's stdout",
-      "status": "idea",
+      "status": "shipped",
       "score": 54,
       "demand": 0.408,
       "gap": 0.702,

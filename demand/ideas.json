@@ -413,5 +413,37 @@
       "https://github.com/docmost/docmost/issues/2134"
     ],
     "reason": ""
+  },
+  {
+    "id": "connector-preflight",
+    "title": "Check a remote MCP server the way claude.ai and ChatGPT custom connectors do",
+    "kind": "python",
+    "problem": "Custom connectors fail with a generic \"Couldn't reach the MCP server\" or \"Connector couldn't be added\", and owners cannot tell which step (TLS, transport, 401 challenge, RFC 9728/8414 discovery, registration, PKCE) is wrong.",
+    "request_query": "\"custom connector\" couldn't in:title is:issue",
+    "repo_query": "mcp oauth discovery checker",
+    "status": "idea",
+    "evidence": [
+      "https://github.com/anthropics/claude-ai-mcp/issues/1244",
+      "https://github.com/anthropics/claude-ai-mcp/issues/1023",
+      "https://github.com/anthropics/claude-ai-mcp/issues/1296",
+      "https://github.com/anthropics/claude-ai-mcp/issues/748"
+    ]
+  },
+  {
+    "id": "mcp-instructions-fold",
+    "title": "Deliver MCP server instructions to clients that ignore them",
+    "kind": "python",
+    "problem": "Many clients drop the instructions field of InitializeResult (ADK, Kiro, older Copilot CLI) or truncate it, so servers lose their usage guidance.",
+    "request_query": "mcp \"server instructions\" in:title is:issue",
+    "repo_query": "mcp server instructions proxy",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/anthropics/claude-ai-mcp/issues/93",
+      "https://github.com/google/adk-python/issues/7696",
+      "https://github.com/kirodotdev/Kiro/issues/11096",
+      "https://github.com/anthropics/claude-code/issues/43474",
+      "https://github.com/agno-agi/agno/issues/7049"
+    ],
+    "reason": "Shipped as briefed 0.1.0 (packages/briefed): stdio proxy, ASGI middleware, Brief() helper."
   }
 ]

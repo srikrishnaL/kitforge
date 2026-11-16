@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-15T07:39:30Z",
+  "generated": "2026-11-16T07:42:40Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -284,6 +284,48 @@
       "reason": "2026-11-11: requests are per-project asks to add annotations or framework/client support (vercel/ai, fastapi_mcp); correct hints depend on each tool, so there is no reusable library to build."
     },
     {
+      "id": "mcp-param-headers",
+      "title": "Mirror x-mcp-header tool params into Mcp-Param-* headers for older clients",
+      "status": "idea",
+      "score": 72,
+      "demand": 0.493,
+      "gap": 1.0,
+      "open_requests": 671,
+      "top_requests": [
+        {
+          "title": "Hosted Microsoft 365 MCP server OAuth fails: duplicate prompt param + unregistered redirect URIs",
+          "url": "https://github.com/anthropics/claude-code/issues/52730",
+          "reactions": 4
+        },
+        {
+          "title": "Desktop scheduled tasks: model selection broken end-to-end (spawns ignore user settings; documented picker absent; MCP tool lacks model param)",
+          "url": "https://github.com/anthropics/claude-code/issues/91884",
+          "reactions": 3
+        },
+        {
+          "title": "Feature request: deep-link URL params to pre-fill the Add connector dialog (name + MCP server URL)",
+          "url": "https://github.com/openai/openai-apps-sdk-examples/issues/223",
+          "reactions": 2
+        },
+        {
+          "title": "FEAT: Expandable view for MCP tool params and results (TUI)",
+          "url": "https://github.com/anomalyco/opencode/issues/9781",
+          "reactions": 2
+        },
+        {
+          "title": "browser_take_screenshot: image still returned as base64 in MCP response when `filename` param is provided",
+          "url": "https://github.com/microsoft/playwright-mcp/issues/1581",
+          "reactions": 2
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "\"Mcp-Param\" in:title is:issue",
+        "existing": "mcp param header proxy"
+      }
+    },
+    {
       "id": "mcp-big-results",
       "title": "Paginate or trim oversized MCP tool results before they hit the client's token limit",
       "status": "shipped",
@@ -561,6 +603,53 @@
       }
     },
     {
+      "id": "mcp-session-heal",
+      "title": "Survive MCP server restarts: re-initialize on 404 'Session not found'",
+      "status": "idea",
+      "score": 68,
+      "demand": 0.417,
+      "gap": 1.0,
+      "open_requests": 96,
+      "top_requests": [
+        {
+          "title": "Bug: Session not found error when connecting to https://mcp.data.gouv.fr/mcp via Streamable HTTP",
+          "url": "https://github.com/datagouv/datagouv-mcp/issues/25",
+          "reactions": 6
+        },
+        {
+          "title": "Session not found after successful Kite login via hosted MCP server (mcp.kite.trade)",
+          "url": "https://github.com/zerodha/kite-mcp-server/issues/83",
+          "reactions": 3
+        },
+        {
+          "title": "Frontend side MCP client (MCP server, namespace detail page and inspector) should handle session timeout not found error",
+          "url": "https://github.com/metatool-ai/metamcp/issues/118",
+          "reactions": 3
+        },
+        {
+          "title": "SSE-backed MCP sessions can stay stale after server restart and fail with 'Session not found'",
+          "url": "https://github.com/openclaw/openclaw/issues/68187",
+          "reactions": 2
+        },
+        {
+          "title": "MCP streamable-HTTP transport: 'Session not found' from server permanently breaks tool calls (no auto-reconnect)",
+          "url": "https://github.com/anomalyco/opencode/issues/25137",
+          "reactions": 2
+        }
+      ],
+      "best_existing": {
+        "repo": "Project-SandStar/mcp-proxy",
+        "url": "https://github.com/Project-SandStar/mcp-proxy",
+        "stars": 0,
+        "months_since_push": 1.9
+      },
+      "existing_projects": 3,
+      "queries": {
+        "requests": "mcp \"session not found\" in:title is:issue",
+        "existing": "mcp session reconnect proxy"
+      }
+    },
+    {
       "id": "mcp-prm",
       "title": "RFC 9728 Protected Resource Metadata and 401 challenges for HTTP MCP servers",
       "status": "skipped",
@@ -612,9 +701,9 @@
       "title": "Check a remote MCP server the way claude.ai and ChatGPT custom connectors do",
       "status": "idea",
       "score": 65,
-      "demand": 0.367,
+      "demand": 0.368,
       "gap": 1.0,
-      "open_requests": 48,
+      "open_requests": 49,
       "top_requests": [
         {
           "title": "Custom connector fails with \"Couldn't reach the MCP server\" \u2014 zero inbound traffic at edge (ofid_c58995a431270861)",
@@ -646,7 +735,7 @@
         "repo": "Maelmaelr/mcp-auth-preflight",
         "url": "https://github.com/Maelmaelr/mcp-auth-preflight",
         "stars": 0,
-        "months_since_push": 3.1
+        "months_since_push": 3.2
       },
       "existing_projects": 1,
       "queries": {
@@ -818,6 +907,53 @@
       }
     },
     {
+      "id": "mcp-oauth-front",
+      "title": "OAuth 2.1 front door for MCP servers that only take an API key",
+      "status": "idea",
+      "score": 58,
+      "demand": 0.511,
+      "gap": 0.673,
+      "open_requests": 6,
+      "top_requests": [
+        {
+          "title": "Support custom headers for connectors.",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/10",
+          "reactions": 105
+        },
+        {
+          "title": "Support custom headers for remote MCP server connections",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/110",
+          "reactions": 6
+        },
+        {
+          "title": "Enable static request headers for Cowork custom connectors",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/685",
+          "reactions": 4
+        },
+        {
+          "title": "Claude.ai web custom connector cannot configure required Microsoft Business Central MCP headers",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/427",
+          "reactions": 1
+        },
+        {
+          "title": "Add custom headers to Custom MCP adds to allow for customer headers x-api-key",
+          "url": "https://github.com/anthropics/claude-ai-mcp/issues/641",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "helv-io/skgate",
+        "url": "https://github.com/helv-io/skgate",
+        "stars": 13,
+        "months_since_push": 0.1
+      },
+      "existing_projects": 9,
+      "queries": {
+        "requests": "repo:anthropics/claude-ai-mcp \"custom headers\" in:title is:issue",
+        "existing": "mcp oauth api key proxy"
+      }
+    },
+    {
       "id": "keep-aiops-mcp",
       "title": "MCP server for Keep, the open-source AIOps alert manager",
       "status": "skipped",
@@ -891,10 +1027,15 @@
       "title": "Detect harsh braking, acceleration and cornering from GPS alone",
       "status": "idea",
       "score": 54,
-      "demand": 0.235,
+      "demand": 0.237,
       "gap": 0.914,
-      "open_requests": 75,
+      "open_requests": 78,
       "top_requests": [
+        {
+          "title": "Phone as a sensor: GPS/IMU trips and lap timing",
+          "url": "https://github.com/october-dev/car-use/issues/20",
+          "reactions": 0
+        },
         {
           "title": "Harsh braking detection threshold",
           "url": "https://github.com/austineaero/driving-behaviour-intelligence/issues/6",
@@ -914,18 +1055,13 @@
           "title": "Avoid-overtaking-on-the-right mechanism causes too harsh braking",
           "url": "https://github.com/eclipse-sumo/sumo/issues/4747",
           "reactions": 0
-        },
-        {
-          "title": "Intercity coach mode (FlixBus style)",
-          "url": "https://github.com/SuperQuentin/UnitSportSwitzerland/issues/74",
-          "reactions": 0
         }
       ],
       "best_existing": {
         "repo": "Simonemenicucci/UBI_pricing_calculator",
         "url": "https://github.com/Simonemenicucci/UBI_pricing_calculator",
         "stars": 1,
-        "months_since_push": 12.6
+        "months_since_push": 12.8
       },
       "existing_projects": 7,
       "queries": {
@@ -938,9 +1074,9 @@
       "title": "Drop-in OAuth 2.1 (PKCE, discovery) for HTTP MCP servers",
       "status": "idea",
       "score": 53,
-      "demand": 0.859,
-      "gap": 0.132,
-      "open_requests": 2349,
+      "demand": 0.862,
+      "gap": 0.13,
+      "open_requests": 2457,
       "top_requests": [
         {
           "title": "Claude Code cannot connect to GitHub's remote MCP server using OAuth authentication",
@@ -971,10 +1107,10 @@
       "best_existing": {
         "repo": "apify/mcpc",
         "url": "https://github.com/apify/mcpc",
-        "stars": 1094,
+        "stars": 1105,
         "months_since_push": 0.1
       },
-      "existing_projects": 201,
+      "existing_projects": 207,
       "queries": {
         "requests": "mcp oauth in:title is:issue is:open",
         "existing": "mcp oauth proxy"
@@ -1104,53 +1240,6 @@
       "queries": {
         "requests": "mcp lazy load servers in:title is:issue",
         "existing": "mcp lazy load proxy"
-      }
-    },
-    {
-      "id": "mcp-oauth-front",
-      "title": "OAuth 2.1 front door for MCP servers that only take an API key",
-      "status": "idea",
-      "score": 46,
-      "demand": 0.293,
-      "gap": 0.673,
-      "open_requests": 23,
-      "top_requests": [
-        {
-          "title": "[Bug]: Interactive OAuth2 MCP server returns 500 instead of 401+WWW-Authenticate when x-litellm-api-key is present but no Google OAuth token exists yet",
-          "url": "https://github.com/BerriAI/litellm/issues/29261",
-          "reactions": 3
-        },
-        {
-          "title": "Custom connector only offers OAuth fields for an API-key-authenticated MCP server (Deckbase) \u2014 no \"Request headers\" option available",
-          "url": "https://github.com/anthropics/claude-ai-mcp/issues/752",
-          "reactions": 1
-        },
-        {
-          "title": "[feature]: Hosted MCP server: decide authentication (OAuth 2.1 versus API keys)",
-          "url": "https://github.com/cheqd/studio/issues/893",
-          "reactions": 0
-        },
-        {
-          "title": "[Submit] APIVerve \u2014 300+ utility APIs behind one remote MCP server (remote, OAuth or API key)",
-          "url": "https://github.com/chatmcp/mcpso/issues/4247",
-          "reactions": 0
-        },
-        {
-          "title": "Feature request: OAuth 2.1 / OIDC authentication for the MCP server (alongside API key)",
-          "url": "https://github.com/AikidoSec/aikido-cursor-plugin/issues/5",
-          "reactions": 0
-        }
-      ],
-      "best_existing": {
-        "repo": "helv-io/skgate",
-        "url": "https://github.com/helv-io/skgate",
-        "stars": 13,
-        "months_since_push": 0.0
-      },
-      "existing_projects": 9,
-      "queries": {
-        "requests": "mcp server oauth \"api key\" in:title is:issue",
-        "existing": "mcp oauth proxy api key"
       }
     },
     {

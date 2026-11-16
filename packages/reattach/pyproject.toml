@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "reattach"
+version = "0.1.0"
+description = "Fix MCP 'Session not found' (HTTP 404) after a Streamable HTTP server restarts, redeploys, scales out or times out a session: ASGI middleware and reverse proxy that re-initialize sessions for clients that never do"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "mcp", "model context protocol", "mcp server", "streamable http", "session not found",
+  "mcp-session-id", "404", "session", "reconnect", "restart", "redeploy", "sticky sessions",
+  "load balancer", "replicas", "asgi", "middleware", "reverse proxy", "fastmcp", "llm", "agents",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+proxy = ["httpx>=0.24", "uvicorn>=0.20"]
+test = ["pytest>=7", "anyio>=4", "httpx>=0.24", "uvicorn>=0.20", "mcp>=1.10; python_version >= '3.10'"]
+
+[project.scripts]
+reattach = "reattach.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/reattach"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/reattach/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/reattach"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

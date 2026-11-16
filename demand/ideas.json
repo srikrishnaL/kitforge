@@ -405,14 +405,20 @@
     "id": "mcp-oauth-front",
     "title": "OAuth 2.1 front door for MCP servers that only take an API key",
     "kind": "python",
-    "problem": "claude.ai and ChatGPT connectors need OAuth, but many self-hosted MCP servers only accept a bearer token or API key.",
-    "request_query": "mcp server oauth \"api key\" in:title is:issue",
-    "repo_query": "mcp oauth proxy api key",
+    "problem": "claude.ai, ChatGPT and other connector UIs only offer OAuth (no custom headers), but many MCP servers authenticate each user with an API key or bearer token.",
+    "request_query": "repo:anthropics/claude-ai-mcp \"custom headers\" in:title is:issue",
+    "repo_query": "mcp oauth api key proxy",
     "status": "idea",
     "evidence": [
+      "https://github.com/anthropics/claude-ai-mcp/issues/10",
+      "https://github.com/anthropics/claude-code/issues/88704",
+      "https://github.com/anthropics/claude-ai-mcp/issues/752",
+      "https://github.com/anthropics/claude-ai-mcp/issues/603",
+      "https://github.com/anthropics/claude-ai-mcp/issues/427",
+      "https://github.com/cyanheads/openalex-mcp-server/issues/45",
       "https://github.com/docmost/docmost/issues/2134"
     ],
-    "reason": ""
+    "reason": "2026-11-16: strong ask (claude-ai-mcp#10, 105 upvotes) but claude.ai now has static_headers auth in beta for org connectors (claude-ai-mcp#1097), and sigbit/mcp-auth-proxy (188 stars) fronts single-owner servers. Still open for multi-user API-key servers."
   },
   {
     "id": "connector-preflight",
@@ -445,5 +451,36 @@
       "https://github.com/agno-agi/agno/issues/7049"
     ],
     "reason": "Shipped as briefed 0.1.0 (packages/briefed): stdio proxy, ASGI middleware, Brief() helper."
+  },
+  {
+    "id": "mcp-session-heal",
+    "title": "Survive MCP server restarts: re-initialize on 404 'Session not found'",
+    "kind": "python",
+    "problem": "After a Streamable HTTP MCP server restarts or redeploys, clients keep sending the old Mcp-Session-Id, get 404 'Session not found', and many never re-initialize, so every tool call fails until a manual reload.",
+    "request_query": "mcp \"session not found\" in:title is:issue",
+    "repo_query": "mcp session reconnect proxy",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/anthropics/claude-code/issues/62008",
+      "https://github.com/anomalyco/opencode/issues/25137",
+      "https://github.com/anomalyco/opencode/issues/37626",
+      "https://github.com/openclaw/openclaw/issues/68187",
+      "https://github.com/zerodha/kite-mcp-server/issues/83",
+      "https://github.com/zai-org/feedback/issues/1374"
+    ],
+    "reason": "Shipped as reattach 0.1.0 (packages/reattach): ASGI middleware + reverse proxy that replay initialize when the server forgot a session (restart, redeploy, replica, idle timeout)."
+  },
+  {
+    "id": "mcp-param-headers",
+    "title": "Mirror x-mcp-header tool params into Mcp-Param-* headers for older clients",
+    "kind": "python",
+    "problem": "2026-07-28 servers can require tool arguments mirrored into Mcp-Param-* HTTP headers (x-mcp-header), and clients that do not send them fail with -32020.",
+    "request_query": "\"Mcp-Param\" in:title is:issue",
+    "repo_query": "mcp param header proxy",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/niki914/zafiro/issues/417"
+    ],
+    "reason": "2026-11-16: the 72 score came from keyword noise (\"param\" matches any MCP params issue); only one real report (zafiro#417). Revisit if more clients hit -32020."
   }
 ]

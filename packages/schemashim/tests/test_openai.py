@@ -1,3 +1,5 @@
+import json
+
 from schemashim import adapt
 
 
@@ -123,3 +125,54 @@ def test_restore_none_and_arrays():
         "required": ["n"]}}}, "required": ["rows"]})
     assert shim.restore(None) == {}
     assert shim.restore({"rows": [{"n": 1.0, "tag": None}]}) == {"rows": [{"n": 1}]}
+
+
+def test_unicode_escape_pattern_moved():
+    # cherry-studio#24524: '"^[\u0041-\u005A]+$" is not a "regex"' ends the whole turn.
+    shim = o({"type": "object", "properties": {"code": {"type": "string",
+                                                        "pattern": "^[\\u0041-\\u005A]+$"}},
+              "required": ["code"]})
+    code = shim.schema["properties"]["code"]
+    assert "pattern" not in code
+    assert "^[\\u0041-\\u005A]+$" in code["description"]
+
+
+def test_escaped_backslash_u_is_not_a_unicode_escape():
+    # "\\\\u" in the regex is a literal backslash followed by "u", which validators accept.
+    shim = o({"type": "object", "properties": {"p": {"type": "string",
+                                                     "pattern": "^C:\\\\\\\\users"}},
+              "required": ["p"]})
+    assert shim.schema["properties"]["p"]["pattern"] == "^C:\\\\\\\\users"
+
+
+def test_surrogate_only_pattern_dropped():
+    # morluto/rea#12387, yetone/magpie#6827: '"^[^\uD800-\uDFFF]*$" is not a "regex"' on every
+    # request. The pattern only rejects lone surrogates, which JSON text can't carry anyway.
+    for pattern in ("^[^\\uD800-\\uDFFF]*$", "^[^\\ud800-\\udbff\\udc00-\\udfff]+$"):
+        shim = o({"type": "object", "properties": {"path": {"type": "string",
+                                                            "pattern": pattern}},
+                  "required": ["path"]})
+        assert shim.schema["properties"]["path"] == {"type": "string"}
+        assert any("lone surrogates" in str(c) for c in shim.changes)
+
+
+def test_allof_keeps_every_pattern_and_the_tightest_bounds():
+    # rea's real schema: three patterns under allOf. Merging must not silently lose any.
+    shim = o({"type": "object", "required": ["path"], "properties": {"path": {
+        "type": "string", "minLength": 1, "maxLength": 100,
+        "allOf": [{"pattern": "^[^\\x00]*$"}, {"pattern": "^[^\\uD800-\\uDFFF]*$"},
+                  {"pattern": "^\\/"}, {"maxLength": 50}, {"minLength": 2}]}}})
+    path = shim.schema["properties"]["path"]
+    assert path["pattern"] == "^[^\\x00]*$"
+    assert "must match the regex ^\\/" in path["description"].lower()
+    assert "uD800" not in json.dumps(path)
+    assert "at least 2 character(s)" in path["description"].lower()
+    assert "at most 50 character(s)" in path["description"].lower()
+
+
+def test_allof_prefers_a_pattern_the_target_accepts():
+    shim = o({"type": "object", "required": ["s"], "properties": {"s": {
+        "type": "string", "allOf": [{"pattern": "^(?=.*\\d)"}, {"pattern": "^[a-z0-9]+$"}]}}})
+    s = shim.schema["properties"]["s"]
+    assert s["pattern"] == "^[a-z0-9]+$"
+    assert "(?=.*\\d)" in s["description"]

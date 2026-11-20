@@ -35,6 +35,14 @@ _STRUCTURAL = {"$ref", "$defs", "definitions", "allOf", "anyOf", "oneOf", "type"
                "required", "items", "prefixItems", "additionalProperties", "nullable", "const",
                "enum"}
 _LOOKAROUND = re.compile(r"\(\?<?[=!]|\\[1-9]|\\k<")
+# A \uXXXX or \u{...} escape (not an escaped backslash followed by "u"). OpenAI-compatible schema
+# validators (OpenAI, DeepSeek...) answer '"..." is not a "regex"' for these.
+_UNICODE_ESCAPE = re.compile(r"(?:^|[^\\])(?:\\\\)*\\u(?:[0-9a-fA-F]{4}|\{)")
+# "^[^\uD800-\uDFFF]*$": only rejects lone surrogates, which JSON text from a model can't carry.
+_SURROGATE = r"\\u[dD][89a-fA-F][0-9a-fA-F]{2}"
+_SURROGATE_ONLY = re.compile(r"\^?\[\^(?:%s(?:-%s)?)+\][*+]?\$?\Z" % (_SURROGATE, _SURROGATE))
+_LOWER_BOUNDS = {"minLength", "minItems", "minProperties", "minimum", "exclusiveMinimum"}
+_UPPER_BOUNDS = {"maxLength", "maxItems", "maxProperties", "maximum", "exclusiveMaximum"}
 
 _PHRASES = {
     "minLength": "at least {} character(s)",
@@ -264,6 +272,14 @@ class _Adapter:
                             merged["properties"].setdefault(pk, pv)
                     elif k == "required" and isinstance(v, list):
                         merged["required"] = list(dict.fromkeys((merged.get("required") or []) + v))
+                    elif k == "pattern" and k in merged and merged[k] != v:
+                        # Every pattern must hold; keep the others instead of dropping them.
+                        extra = merged.setdefault("__patterns__", [])
+                        if v not in extra:
+                            extra.append(v)
+                    elif (k in _LOWER_BOUNDS or k in _UPPER_BOUNDS) and _is_num(v) \
+                            and _is_num(merged.get(k)):
+                        merged[k] = max(merged[k], v) if k in _LOWER_BOUNDS else min(merged[k], v)
                     else:
                         merged.setdefault(k, v)
             self.note(path, "merged allOf into one schema")
@@ -524,7 +540,7 @@ class _Adapter:
         t = out.get("type")
         moved = []
         for k, v in s.items():
-            if k in out or k in skip or k == "__free__":
+            if k in out or k in skip or k in ("__free__", "__patterns__"):
                 continue
             if k in _STRUCTURAL and k not in ("const",):
                 continue
@@ -543,8 +559,8 @@ class _Adapter:
                 else:
                     moved.append((k, v))
                 continue
-            if k == "pattern" and not self.gemini and isinstance(v, str) and _LOOKAROUND.search(v):
-                moved.append((k, v))
+            if k == "pattern":
+                self.patterns([v] + list(s.get("__patterns__") or []), out, moved, path)
                 continue
             if k in allowed:
                 out[k] = v
@@ -559,10 +575,28 @@ class _Adapter:
             self.note(path, "moved " + ", ".join(k for k, _ in moved) + " to the description "
                             "(not supported)")
 
+    def patterns(self, patterns, out, moved, path):
+        """Keep one pattern the target accepts; describe the rest."""
+        for p in patterns:
+            if not self.gemini and isinstance(p, str) and _SURROGATE_ONLY.match(p):
+                self.note(path, f"dropped pattern {p} (it only rejects lone surrogates, which "
+                                "valid JSON text can't contain)")
+                continue
+            usable = isinstance(p, str) and (self.gemini or not (
+                _LOOKAROUND.search(p) or _UNICODE_ESCAPE.search(p)))
+            if usable and "pattern" not in out:
+                out["pattern"] = p
+            else:
+                moved.append(("pattern", p))
+
     @staticmethod
     def add_note(out, text):
         desc = out.get("description")
         out["description"] = f"{desc} ({text})" if desc else text[0].upper() + text[1:]
+
+
+def _is_num(v: Any) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
 
 
 def _infer(s: Dict[str, Any]) -> Optional[str]:

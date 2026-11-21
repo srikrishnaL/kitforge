@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "toolcap"
-version = "0.2.0"
+version = "0.3.0"
 description = "Keep MCP tool results under the client's token limit (Claude Code's 25,000): cursor pagination or safe truncation, as a decorator for your server or a proxy for any MCP server"
 readme = "README.md"
 license = "MIT"

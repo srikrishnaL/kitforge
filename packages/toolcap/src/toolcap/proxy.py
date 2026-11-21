@@ -27,8 +27,11 @@ CACHE_SIZE = 16
 class CapProxy:
     """The message hooks, kept apart from the process handling so they are easy to test."""
 
-    def __init__(self, cap: Optional[Cap] = None, *, trim: bool = False, quiet: bool = False) -> None:
+    def __init__(self, cap: Optional[Cap] = None, *, trim: bool = False, quiet: bool = False,
+                 tools: Optional[Dict[str, Optional[Cap]]] = None) -> None:
         self.cap = cap or Cap()
+        # Per-tool settings: a Cap with its own budget, or None to leave the tool alone.
+        self.tools: Dict[str, Optional[Cap]] = dict(tools or {})
         self.trim = trim
         self.quiet = quiet
         self.param = self.cap.cursor_param
@@ -52,8 +55,9 @@ class CapProxy:
             return msg, []
         params = msg["params"]
         name = params.get("name")
-        if not isinstance(name, str):
+        if not isinstance(name, str) or self._off(name):
             return msg, []
+        cap = self._cap(name)
         if name not in self.paged:
             with self._lock:
                 self._calls[_key(msg["id"])] = (name, None)
@@ -72,7 +76,11 @@ class CapProxy:
                 if data is not None:
                     self._cache.move_to_end(fp)
             if data is not None:
-                return None, [_result(msg["id"], self.cap.page(data, cursor))]
+                try:
+                    page = cap.page(data, cursor)
+                except (CursorError, ValueError) as exc:
+                    return None, [_result(msg["id"], str(exc), error=True)]
+                return None, [_result(msg["id"], page)]
         with self._lock:
             self._calls[_key(msg["id"])] = (name, cursor)
         if self.param not in (params.get("arguments") or {}):
@@ -104,6 +112,10 @@ class CapProxy:
         tools = []
         for tool in result["tools"]:
             if not isinstance(tool, dict) or not isinstance(tool.get("name"), str):
+                tools.append(tool)
+                continue
+            if self._off(tool["name"]):
+                self.paged.discard(tool["name"])  # passed through exactly as the server sent it
                 tools.append(tool)
                 continue
             tool = dict(tool)
@@ -141,7 +153,8 @@ class CapProxy:
         if not texts:
             return msg
         text = "\n".join(texts)
-        if not cursor and self.cap.fits(text):
+        cap = self._cap(name)
+        if not cursor and cap.fits(text):
             return msg
         data: Any = text
         if text.lstrip()[:1] in ("[", "{"):
@@ -151,29 +164,39 @@ class CapProxy:
                 pass
         try:
             if cursor is None or self.trim:
-                out = self.cap.trim(data)
+                out = cap.trim(data)
             else:
-                out = self.cap.page(data, cursor)
+                out = cap.page(data, cursor)
                 with self._lock:
-                    self._cache[self._fp(data)] = data
-                    self._cache.move_to_end(self._fp(data))
+                    fp = _data_fp(cap, data)
+                    self._cache[fp] = data
+                    self._cache.move_to_end(fp)
                     while len(self._cache) > CACHE_SIZE:
                         self._cache.popitem(last=False)
         except (CursorError, ValueError) as exc:
             return dict(msg, result={"content": [{"type": "text", "text": str(exc)}], "isError": True})
         if not self.quiet and not cursor:
-            print(f"toolcap: {name}: result of about {self.cap.count(text):,} tokens "
+            print(f"toolcap: {name}: result of about {cap.count(text):,} tokens "
                   f"{'cut' if cursor is None or self.trim else 'paged'} to fit "
-                  f"{self.cap.max_tokens:,}", file=sys.stderr)
+                  f"{cap.max_tokens:,}", file=sys.stderr)
         others = [b for b in blocks if not (isinstance(b, dict) and b.get("type") == "text")]
         new = {k: v for k, v in result.items() if k not in ("content", "structuredContent")}
         new["content"] = (others if not cursor else []) + [{"type": "text", "text": out}]
         return dict(msg, result=new)
 
-    def _fp(self, data: Any) -> str:
-        if isinstance(data, str):
-            return _fingerprint(data)
-        return _fingerprint(self.cap._dumps(jsonable(data)))
+    def _cap(self, name: str) -> Cap:
+        return self.tools.get(name) or self.cap
+
+    def _off(self, name: str) -> bool:
+        return name in self.tools and self.tools[name] is None
+
+
+
+def _data_fp(cap: Cap, data: Any) -> str:
+    """The fingerprint ``cap.page`` puts in its cursors for ``data``."""
+    if isinstance(data, str):
+        return _fingerprint(data)
+    return _fingerprint(cap._dumps(jsonable(data)))
 
 
 def _key(value: Any) -> str:
@@ -188,8 +211,9 @@ def _result(id_: Any, text: str, *, error: bool = False) -> dict:
 
 
 def run(command: List[str], cap: Optional[Cap] = None, *, trim: bool = False, quiet: bool = False,
+        tools: Optional[Dict[str, Optional[Cap]]] = None,
         stdin: Optional[BinaryIO] = None, stdout: Optional[BinaryIO] = None) -> int:
-    proxy = CapProxy(cap, trim=trim, quiet=quiet)
+    proxy = CapProxy(cap, trim=trim, quiet=quiet, tools=tools)
     relay = Relay(command, to_server=proxy.to_server, to_client=proxy.to_client,
                   stdin=stdin, stdout=stdout, name="toolcap proxy")
     return relay.run()

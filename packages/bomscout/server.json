@@ -1,0 +1,50 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.srikrishnal/bomscout",
+  "title": "bomscout (Dependency-Track)",
+  "description": "Ask which projects a CVE affects, what to fix first and license risk in OWASP Dependency-Track",
+  "version": "0.1.1",
+  "repository": {
+    "url": "https://github.com/srikrishnaL/kitforge",
+    "source": "github",
+    "subfolder": "packages/bomscout"
+  },
+  "websiteUrl": "https://github.com/srikrishnaL/kitforge/tree/main/packages/bomscout",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "bomscout",
+      "version": "0.1.1",
+      "runtimeHint": "uvx",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "DT_URL",
+          "description": "Dependency-Track API server URL, e.g. https://dtrack.example.com",
+          "isRequired": true,
+          "format": "string"
+        },
+        {
+          "name": "DT_API_KEY",
+          "description": "API key of a team with VIEW_PORTFOLIO, VIEW_VULNERABILITY and VIEW_POLICY_VIOLATION",
+          "isRequired": true,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "DT_CA_BUNDLE",
+          "description": "Path to a CA bundle for a server with a private certificate",
+          "isRequired": false,
+          "format": "filepath"
+        },
+        {
+          "name": "BOMSCOUT_ALLOW_WRITE",
+          "description": "Set to 1 to add the record_analysis tool for triage decisions",
+          "isRequired": false,
+          "format": "boolean"
+        }
+      ]
+    }
+  ]
+}

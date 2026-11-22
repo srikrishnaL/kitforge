@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bomscout"
-version = "0.1.0"
+version = "0.1.1"
 description = "MCP server for OWASP Dependency-Track: ask Claude, Cursor or any MCP client which projects a CVE affects, what to fix first, licenses and policy violations across your SBOM portfolio"
 readme = "README.md"
 license = "MIT"

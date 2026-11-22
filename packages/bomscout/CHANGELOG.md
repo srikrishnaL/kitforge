@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (2026-11-22)
+
+- `server.json` for the official MCP Registry, and the `mcp-name` line in the README that the
+  registry checks on PyPI to confirm the package belongs to this server. No code changes.
+
 ## 0.1.0 (2026-11-12)
 
 First release.

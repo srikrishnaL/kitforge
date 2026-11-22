@@ -1,5 +1,7 @@
 # bomscout
 
+<!-- mcp-name: io.github.srikrishnal/bomscout -->
+
 **An MCP server for [OWASP Dependency-Track](https://dependencytrack.org/).** Ask Claude, Cursor,
 VS Code or any MCP client about your software portfolio in plain words: "which of our projects
 are affected by CVE-2021-44228, and has anyone triaged it?", "what should we fix first in
@@ -8,6 +10,9 @@ are affected by CVE-2021-44228, and has anyone triaged it?", "what should we fix
 Dependency-Track already knows the answers, but getting them means clicking through the UI or
 writing scripts against several REST endpoints. bomscout wraps those endpoints as a handful of
 read-only tools that return small, ranked results a model can reason over.
+
+Listed in the [official MCP Registry](https://registry.modelcontextprotocol.io/) as
+`io.github.srikrishnal/bomscout` (see [`server.json`](server.json)).
 
 ```bash
 pip install bomscout        # or run it without installing: uvx bomscout

@@ -19,7 +19,9 @@ SERVER = textwrap.dedent(
 
     app = MCPServer("sdk-demo")
 
-    @app.tool()
+    from mcp.types import ToolAnnotations
+
+    @app.tool(annotations=ToolAnnotations(readOnlyHint=True))
     def add(a: int, b: int) -> int:
         \"\"\"Add two integers and return the sum.\"\"\"
         return a + b
@@ -55,6 +57,9 @@ def test_sdk_stdio(server_file):
         # SDK-generated schemas have no parameter descriptions: mcptest says so.
         codes = {f.code for f in lint_tools(c.list_tools())}
         assert {"MCP004", "MCP007"} <= codes
+        # Annotations set through the SDK arrive as readOnlyHint and satisfy MCP016.
+        unannotated = {f.tool for f in lint_tools(c.list_tools()) if f.code == "MCP016"}
+        assert unannotated == {"fail"}
 
 
 def _free_port():

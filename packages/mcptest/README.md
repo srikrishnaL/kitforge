@@ -7,8 +7,9 @@ that run in CI: start the server, call its tools, check what an agent will actua
 the build when a change would break the agents and clients that depend on it.
 
 - **pytest plugin**: an `mcp` fixture connected to your server, plus schema snapshots.
-- **Linter**: 15 rules for tool names, descriptions and schemas, including hidden instructions
-  aimed at the model ("tool poisoning").
+- **Linter**: 19 rules for tool names, descriptions, schemas and annotations, including hidden
+  instructions aimed at the model ("tool poisoning") and missing or wrong `readOnlyHint` /
+  `destructiveHint`.
 - **Breaking-change diff**: removed tools, new required parameters, narrowed types, removed
   enum values, removed output fields.
 - **CLI** for any server in any language: `mcptest lint -- node dist/index.js`.
@@ -151,6 +152,34 @@ Pass `allow_compatible=True` to fail only on breaking changes.
 | MCP013 | error | Invisible or bidirectional control characters |
 | MCP014 | error | `outputSchema` is not `"type": "object"` |
 | MCP015 | info | Parameter description just repeats its name |
+| MCP016 | info | Annotations don't say whether the tool is read-only (`readOnlyHint`) or, for a tool that writes, destructive (`destructiveHint`) |
+| MCP017 | error | `annotations` is not an object, or a hint is not `true`/`false` (e.g. the string `"true"`) |
+| MCP018 | warning | `readOnlyHint` and `destructiveHint` are both `true` |
+| MCP019 | warning | `readOnlyHint: true` on a tool whose name starts with a write verb (`delete_file`, `sendEmail`, `github.create_issue`) |
+
+### Tool annotations
+
+Clients read a tool's `annotations` to decide which calls need the user's confirmation. When a
+hint is missing, the spec tells them to assume the worst: not read-only, destructive. So a
+`get_user` tool with no annotations gets the same "are you sure?" treatment as `delete_user`,
+and connector directories ask servers to set the hints. MCP016 lists the tools that leave the
+question open (info level, so existing `assert_lint_clean` tests keep passing); MCP017 to
+MCP019 catch hints that are malformed or claim a write tool is read-only, which is worse than
+no hint because clients may then run it without asking.
+
+```python
+# Official Python SDK
+from mcp.types import ToolAnnotations
+
+@app.tool(annotations=ToolAnnotations(readOnlyHint=True))
+def get_user(user_id: str) -> dict: ...
+
+@app.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False))
+def create_note(text: str) -> str: ...
+```
+
+Run `mcptest lint --fail-on info -- <server>` to see them, or make them required in CI with
+`assert_lint_clean(mcp, fail_on="info")`.
 
 Skip rules with `--ignore MCP005,MCP015` or `assert_lint_clean(mcp, ignore=["MCP005"])`.
 MCP012 is a heuristic: it catches common tool-poisoning phrasing, not every attack.

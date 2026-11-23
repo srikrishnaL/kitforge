@@ -2,6 +2,10 @@
   "format": 1,
   "tools": {
     "add": {
+      "annotations": {
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
       "description": "Add two integers and return their sum.",
       "inputSchema": {
         "properties": {
@@ -33,6 +37,10 @@
       }
     },
     "echo": {
+      "annotations": {
+        "readOnlyHint": true,
+        "title": "Echo"
+      },
       "description": "Return the given text unchanged. Useful for checking connectivity.",
       "inputSchema": {
         "properties": {

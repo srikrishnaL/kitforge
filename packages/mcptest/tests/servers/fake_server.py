@@ -31,6 +31,7 @@ GOOD = [
             "properties": {"result": {"type": "integer"}},
             "required": ["result"],
         },
+        "annotations": {"readOnlyHint": True, "openWorldHint": False},
     },
     {
         "name": "echo",
@@ -40,6 +41,7 @@ GOOD = [
             "properties": {"text": {"type": "string", "description": "Text to send back"}},
             "required": ["text"],
         },
+        "annotations": {"title": "Echo", "readOnlyHint": True},
     },
 ]
 

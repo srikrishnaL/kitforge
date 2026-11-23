@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0 (2026-11-23)
+
+- Four lint rules for tool annotations, which clients use to decide which calls need the
+  user's confirmation:
+  - MCP016 (info): annotations don't say whether the tool is read-only, or whether a tool that
+    writes is destructive, so clients assume the worst. Names such as `get_*` or `list_*` get a
+    hint that the tool looks read-only.
+  - MCP017 (error): `annotations` is not an object, or a hint is not a boolean (e.g. `"true"`).
+  - MCP018 (warning): `readOnlyHint` and `destructiveHint` are both true.
+  - MCP019 (warning): `readOnlyHint: true` on a tool whose name starts with a write verb
+    (`delete_file`, `sendEmail`, `github.create_issue`).
+- MCP016 is info level, so `assert_lint_clean` and `--fail-on warning` keep passing for
+  servers without annotations. Tests that use `fail_on="info"` will now list unannotated tools.
+
 ## 0.2.1 (2026-11-13)
 
 - PyPI description and keywords say what the package does (pytest plugin, linter, tool

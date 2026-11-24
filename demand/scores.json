@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T07:42:40Z",
+  "generated": "2026-11-24T07:48:36Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -188,6 +188,48 @@
       }
     },
     {
+      "id": "mcp-stringified-args",
+      "title": "Repair tool-call arguments that clients send as JSON strings (arrays, objects, numbers) before the MCP server validates them",
+      "status": "shipped",
+      "score": 76,
+      "demand": 0.566,
+      "gap": 1.0,
+      "open_requests": 240,
+      "top_requests": [
+        {
+          "title": "[BUG] Claude Desktop 1.1.3189 (Cowork) serializes MCP object parameters as strings, breaking Notion MCP writes",
+          "url": "https://github.com/anthropics/claude-code/issues/26094",
+          "reactions": 21
+        },
+        {
+          "title": "Remote MCP server breaks Cursor (and likely other clients) due to pre-release SDK with incompatible icons.sizes schema",
+          "url": "https://github.com/github/github-mcp-server/issues/1644",
+          "reactions": 8
+        },
+        {
+          "title": "\ud83d\udc1b Bug: @copilotkit not work with langchain-mcp-adapters(>0.1.4)",
+          "url": "https://github.com/CopilotKit/CopilotKit/issues/2922",
+          "reactions": 7
+        },
+        {
+          "title": "[BUG] notion-create-pages: 'pages' array parameter received as string \u2014 Expected array, received string",
+          "url": "https://github.com/makenotion/notion-mcp-server/issues/215",
+          "reactions": 5
+        },
+        {
+          "title": "codex mcp login sends the OAuth `resource` parameter twice when `oauth_resource` is set, breaking strict providers (e.g. Amplitude MCP)",
+          "url": "https://github.com/openai/codex/issues/34467",
+          "reactions": 3
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "mcp \"expected array, received string\" is:issue",
+        "existing": "mcp stringified arguments coerce"
+      }
+    },
+    {
       "id": "mcp-structured-content",
       "title": "Return MCP tool results that every client reads: structuredContent validated against outputSchema plus a matching text block",
       "status": "skipped",
@@ -234,6 +276,48 @@
         "existing": "mcp structuredContent outputSchema in:description"
       },
       "reason": "2026-11-11: top requests are client bugs (clients drop structuredContent or the text block); a server library can't fix those, and the Python SDK already emits both from outputSchema."
+    },
+    {
+      "id": "mcp-progress-heartbeat",
+      "title": "Send progress heartbeats during long MCP tool calls so client timeouts reset",
+      "status": "skipped",
+      "score": 75,
+      "demand": 0.553,
+      "gap": 1.0,
+      "open_requests": 187,
+      "top_requests": [
+        {
+          "title": "[Enhancement]: Support progress notifications for MCP",
+          "url": "https://github.com/LibreChat-AI/LibreChat/issues/8221",
+          "reactions": 21
+        },
+        {
+          "title": "Render MCP notifications/progress during long-running tool calls",
+          "url": "https://github.com/kirodotdev/Kiro/issues/10134",
+          "reactions": 11
+        },
+        {
+          "title": "[BUG] MCP progress notifications are no longer displayed in the UI (regression)",
+          "url": "https://github.com/anthropics/claude-code/issues/51713",
+          "reactions": 6
+        },
+        {
+          "title": "Implement MCP progress notifications",
+          "url": "https://github.com/anomalyco/opencode/issues/2101",
+          "reactions": 5
+        },
+        {
+          "title": "Copilot Agent Host does not surface MCP progress notifications shown by Local Harness",
+          "url": "https://github.com/microsoft/vscode/issues/340231",
+          "reactions": 2
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "mcp \"progress notifications\" in:title is:issue",
+        "existing": "mcp progress heartbeat timeout"
+      }
     },
     {
       "id": "mcp-tool-annotations",
@@ -286,7 +370,7 @@
     {
       "id": "mcp-param-headers",
       "title": "Mirror x-mcp-header tool params into Mcp-Param-* headers for older clients",
-      "status": "idea",
+      "status": "skipped",
       "score": 72,
       "demand": 0.493,
       "gap": 1.0,
@@ -605,7 +689,7 @@
     {
       "id": "mcp-session-heal",
       "title": "Survive MCP server restarts: re-initialize on 404 'Session not found'",
-      "status": "idea",
+      "status": "shipped",
       "score": 68,
       "demand": 0.417,
       "gap": 1.0,
@@ -701,9 +785,9 @@
       "title": "Check a remote MCP server the way claude.ai and ChatGPT custom connectors do",
       "status": "idea",
       "score": 65,
-      "demand": 0.368,
+      "demand": 0.369,
       "gap": 1.0,
-      "open_requests": 49,
+      "open_requests": 50,
       "top_requests": [
         {
           "title": "Custom connector fails with \"Couldn't reach the MCP server\" \u2014 zero inbound traffic at edge (ofid_c58995a431270861)",
@@ -735,7 +819,7 @@
         "repo": "Maelmaelr/mcp-auth-preflight",
         "url": "https://github.com/Maelmaelr/mcp-auth-preflight",
         "stars": 0,
-        "months_since_push": 3.2
+        "months_since_push": 3.4
       },
       "existing_projects": 1,
       "queries": {
@@ -945,7 +1029,7 @@
         "repo": "helv-io/skgate",
         "url": "https://github.com/helv-io/skgate",
         "stars": 13,
-        "months_since_push": 0.1
+        "months_since_push": 0.4
       },
       "existing_projects": 9,
       "queries": {
@@ -1475,13 +1559,60 @@
       }
     },
     {
+      "id": "mcp-tool-filter",
+      "title": "Expose only chosen tools of an MCP server (allow/deny lists) to cut token cost",
+      "status": "idea",
+      "score": 38,
+      "demand": 0.38,
+      "gap": 0.371,
+      "open_requests": 12,
+      "top_requests": [
+        {
+          "title": "Explore agent always fails with \"Prompt is too long\" when many MCP tools are connected",
+          "url": "https://github.com/anthropics/claude-code/issues/38928",
+          "reactions": 15
+        },
+        {
+          "title": "Too many mcp tools .Can we disable some tools?",
+          "url": "https://github.com/0x4m4/hexstrike-ai/issues/119",
+          "reactions": 1
+        },
+        {
+          "title": "[bug]: Too many tools in MCP server",
+          "url": "https://github.com/devantler-tech/ksail/issues/1977",
+          "reactions": 1
+        },
+        {
+          "title": "Too many mcp tools",
+          "url": "https://github.com/AllDmeat/kaiten-mcp/issues/123",
+          "reactions": 0
+        },
+        {
+          "title": "Too many MCP tools",
+          "url": "https://github.com/Gennadiyev/STS2MCP/issues/11",
+          "reactions": 0
+        }
+      ],
+      "best_existing": {
+        "repo": "chris-schra/mcp-funnel",
+        "url": "https://github.com/chris-schra/mcp-funnel",
+        "stars": 158,
+        "months_since_push": 12.0
+      },
+      "existing_projects": 41,
+      "queries": {
+        "requests": "mcp \"too many tools\" in:title is:issue",
+        "existing": "mcp proxy filter tools"
+      }
+    },
+    {
       "id": "mcp-audit-log",
       "title": "Structured, redacted audit log of every MCP tool call for Python MCP servers",
       "status": "idea",
       "score": 31,
-      "demand": 0.423,
-      "gap": 0.168,
-      "open_requests": 419,
+      "demand": 0.429,
+      "gap": 0.167,
+      "open_requests": 464,
       "top_requests": [
         {
           "title": "[Bug]: API/MCP IP allowlist and audit log use Cloudflare edge IP instead of client IP",
@@ -1512,10 +1643,10 @@
       "best_existing": {
         "repo": "ThinkWatchProject/ThinkWatch",
         "url": "https://github.com/ThinkWatchProject/ThinkWatch",
-        "stars": 817,
+        "stars": 819,
         "months_since_push": 0.0
       },
-      "existing_projects": 93,
+      "existing_projects": 103,
       "queries": {
         "requests": "mcp \"audit log\" in:title is:issue",
         "existing": "mcp audit log tool calls in:name,description"
@@ -1526,9 +1657,9 @@
       "title": "Per-client rate limits, quotas and concurrency caps for MCP tool calls (official Python SDK)",
       "status": "idea",
       "score": 19,
-      "demand": 0.199,
-      "gap": 0.168,
-      "open_requests": 12,
+      "demand": 0.203,
+      "gap": 0.167,
+      "open_requests": 13,
       "top_requests": [
         {
           "title": "Surface upstream HTTP response headers from remote MCP tool calls (e.g. pagination, rate-limit) via CallToolResult._meta",
@@ -1551,15 +1682,15 @@
           "reactions": 0
         },
         {
-          "title": "MCP: a normal burst of parallel tool calls hits the connection rate limit; the refusal looks like a broken connection",
-          "url": "https://github.com/marioatcloudvane/litefactory/issues/1411",
+          "title": "[mcp-server] Discovery calls consume the tool-call rate limit",
+          "url": "https://github.com/leonfullxr/Wazuh/issues/62",
           "reactions": 0
         }
       ],
       "best_existing": {
         "repo": "ThinkWatchProject/ThinkWatch",
         "url": "https://github.com/ThinkWatchProject/ThinkWatch",
-        "stars": 817,
+        "stars": 819,
         "months_since_push": 0.0
       },
       "existing_projects": 16,

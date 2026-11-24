@@ -482,5 +482,51 @@
       "https://github.com/niki914/zafiro/issues/417"
     ],
     "reason": "2026-11-16: the 72 score came from keyword noise (\"param\" matches any MCP params issue); only one real report (zafiro#417). Revisit if more clients hit -32020."
+  },
+  {
+    "id": "mcp-stringified-args",
+    "title": "Repair tool-call arguments that clients send as JSON strings (arrays, objects, numbers) before the MCP server validates them",
+    "kind": "python",
+    "problem": "Claude Code, opencode, Continue, n8n's connector and several models intermittently send array/object/number tool arguments as JSON strings, so servers fail with 'expected array, received string' and each project hand-rolls a tryParseJson.",
+    "request_query": "mcp \"expected array, received string\" is:issue",
+    "repo_query": "mcp stringified arguments coerce",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/n8n-io/n8n/issues/33864",
+      "https://github.com/anthropics/claude-code/issues/86459",
+      "https://github.com/czlonkowski/n8n-mcp/issues/814",
+      "https://github.com/continuedev/continue/issues/13350",
+      "https://github.com/exa-labs/exa-mcp-server/issues/477",
+      "https://github.com/langgenius/dify/issues/44181",
+      "https://github.com/anomalyco/opencode/issues/57023"
+    ],
+    "reason": "Shipped as unstring 0.1.0 (packages/unstring): schema-guided repair of stringified tool arguments, stdio proxy for any server, unstring fix CLI. Score 76; 240 open issues match the request query, top claude-code#26094 (21 upvotes); no existing project (best match 0 stars)."
+  },
+  {
+    "id": "mcp-tool-filter",
+    "title": "Expose only chosen tools of an MCP server (allow/deny lists) to cut token cost",
+    "kind": "python",
+    "problem": "Servers with 100+ tools cost too many tokens and clients cannot hide individual tools.",
+    "request_query": "mcp \"too many tools\" in:title is:issue",
+    "repo_query": "mcp proxy filter tools",
+    "status": "idea",
+    "evidence": [
+      "https://github.com/Feur-Inc/1loop/issues/447",
+      "https://github.com/Mintplex-Labs/anything-llm/issues/7164"
+    ]
+  },
+  {
+    "id": "mcp-progress-heartbeat",
+    "title": "Send progress heartbeats during long MCP tool calls so client timeouts reset",
+    "kind": "python",
+    "problem": "Long tool calls hit client request timeouts; servers rarely send progress notifications.",
+    "request_query": "mcp \"progress notifications\" in:title is:issue",
+    "repo_query": "mcp progress heartbeat timeout",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/livekit/agents/issues/8523",
+      "https://github.com/cognizant-ai-lab/neuro-san/issues/1655"
+    ],
+    "reason": "2026-11-24: score 75 but the top requests (LibreChat#8221, Kiro#10134, claude-code#51713, opencode#2101) ask clients to show progress; a server-side heartbeat does not help until clients reset timeouts on progress."
   }
 ]

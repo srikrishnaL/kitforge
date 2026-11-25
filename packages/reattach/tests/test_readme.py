@@ -13,7 +13,7 @@ README = (Path(__file__).parent.parent / "README.md").read_text(encoding="utf-8"
 
 def test_middleware_options_in_the_readme_exist():
     params = inspect.signature(Reattach).parameters
-    for name in ["secret", "path", "max_sessions", "on_reattach"]:
+    for name in ["secret", "path", "max_sessions", "on_reattach", "strict"]:
         assert name in params and f"`{name}" in README
     assert "`reattached`" in README and hasattr(Reattach(lambda *a: None), "reattached")
 
@@ -25,6 +25,6 @@ def test_every_proxy_option_in_the_readme_exists(capsys):
         main(["proxy", "--help"])
     help_text = capsys.readouterr().out
     flags = set(re.findall(r"`(--[a-z-]+)", README))
-    assert flags >= {"--host", "--port", "--path", "--secret", "--timeout", "--quiet"}
+    assert flags >= {"--host", "--port", "--path", "--secret", "--timeout", "--quiet", "--strict"}
     for flag in flags:
         assert flag in help_text, flag

@@ -10,7 +10,7 @@ from . import __version__
 
 
 def build_app(upstream: str, secret: Optional[str] = None, path: Optional[str] = None,
-              timeout: Optional[float] = None, quiet: bool = False):
+              timeout: Optional[float] = None, quiet: bool = False, strict: bool = False):
     from .asgi import Reattach
     from .proxy import Proxy
 
@@ -19,7 +19,8 @@ def build_app(upstream: str, secret: Optional[str] = None, path: Optional[str] =
             print(f"reattach: reattached session {token[:16]}... to {inner}", file=sys.stderr,
                   flush=True)
 
-    return Reattach(Proxy(upstream, timeout=timeout), secret, path=path, on_reattach=log)
+    return Reattach(Proxy(upstream, timeout=timeout), secret, path=path, on_reattach=log,
+                    strict=strict)
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -37,6 +38,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--timeout", type=float, default=None,
                    help="upstream read timeout in seconds (default: none, for SSE streams)")
     p.add_argument("--quiet", action="store_true", help="do not log reattached sessions")
+    p.add_argument("--strict", action="store_true",
+                   help="reattach only on 404 (default: also on replies such as 400 'Invalid "
+                        "session ID' or a JSON-RPC error 'Session not found')")
     args = parser.parse_args(argv)
     if args.command != "proxy":
         parser.print_help()
@@ -48,7 +52,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         print('reattach proxy needs extra packages: pip install "reattach[proxy]"',
               file=sys.stderr)
         return 2
-    app = build_app(args.upstream, args.secret, args.path, args.timeout, args.quiet)
+    app = build_app(args.upstream, args.secret, args.path, args.timeout, args.quiet,
+                    args.strict)
     uvicorn.run(app, host=args.host, port=args.port, log_level="warning")
     return 0
 

@@ -22,6 +22,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import re
 from collections import OrderedDict
 from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple
 
@@ -35,9 +36,20 @@ App = Callable[[Scope, Receive, Send], Awaitable[None]]
 
 SESSION = b"mcp-session-id"
 VERSION = b"mcp-protocol-version"
-# headers of the client's request that must not be copied into a replayed handshake
 # MCP Python SDK before 1.11 answers an unknown session id with this 400 instead of a 404
 _SESSION_GONE_400 = b"no valid session id"
+# Many servers say "session gone" without the 404 the spec asks for: a 400 "Invalid or missing
+# session ID", a 410, or even a 200/500 carrying a JSON-RPC error "Session not found". The
+# message is what they have in common.
+_GONE_TEXT = re.compile(
+    r"session\W{0,3}(?:id\W{0,3})?(?:\S+\s+)?(?:not found|expired|unknown|invalid|is not valid"
+    r"|does not exist|no longer exists|(?:has been |was )?terminated)"
+    r"|(?:no valid|unknown|invalid|expired|stale)\s+(?:or missing\s+)?(?:mcp[- ])?session"
+    r"|(?:invalid|unknown|expired)_session|session_(?:not_found|expired)",
+    re.IGNORECASE)
+_HELD_STATUSES = {200, 400, 410, 422, 500}  # replies that may be "session gone" in disguise
+_HOLD_LIMIT = 4096  # a "session gone" reply is short; anything longer is passed on as it is
+# headers of the client's request that must not be copied into a replayed handshake
 _NOT_REPLAYED = {SESSION, VERSION, b"content-length", b"content-type", b"accept",
                  b"last-event-id", b"content-encoding", b"transfer-encoding"}
 
@@ -50,12 +62,19 @@ class Reattach:
     ``max_sessions`` caps the in-memory map from tokens to server sessions (oldest dropped first;
     a dropped token is simply re-attached on its next request). ``on_reattach(token, session_id)``
     is called after each replayed handshake, for logs or metrics.
+
+    Besides the ``404`` the spec asks for, a reply that says the session is gone in other words
+    (``400 Invalid or missing session ID``, ``410``, or a JSON-RPC error "Session not found"
+    sent with ``200`` or ``500``) also reattaches. ``strict=True`` turns that off and only
+    trusts ``404`` (and the MCP Python SDK's old ``400 No valid session ID provided``).
     """
 
     def __init__(self, app: App, secret: Optional[str] = None, *, path: Optional[str] = None,
                  max_sessions: int = 10000,
-                 on_reattach: Optional[Callable[[str, str], Any]] = None) -> None:
+                 on_reattach: Optional[Callable[[str, str], Any]] = None,
+                 strict: bool = False) -> None:
         self.app = app
+        self.strict = strict
         self.tokens = Tokens(secret)
         self.path = path.rstrip("/") if path else None
         self.max_sessions = max_sessions
@@ -141,7 +160,8 @@ class Reattach:
                     return
                 fresh = True
             retry_on_404 = attempt == 0 and not fresh
-            rewriter = _HeaderRewriter(send, inner=inner, outer=sid, swallow_404=retry_on_404)
+            rewriter = _HeaderRewriter(send, inner=inner, outer=sid, swallow_404=retry_on_404,
+                                       strict=self.strict)
             new_scope = dict(scope, headers=_with(headers, SESSION, inner))
             await self.app(new_scope, _replayer(body, early, receive), rewriter)
             await rewriter.flush()
@@ -220,8 +240,9 @@ class _HeaderRewriter:
     """The ``send`` given to the app: maps the server's session id to the client's token."""
 
     def __init__(self, send: Send, inner: Optional[str] = None, outer: Optional[str] = None,
-                 swallow_404: bool = False) -> None:
+                 swallow_404: bool = False, strict: bool = False) -> None:
         self.send = send
+        self.strict = strict
         self.inner = inner
         self.outer = outer
         self.swallow_404 = swallow_404
@@ -234,14 +255,15 @@ class _HeaderRewriter:
     async def __call__(self, message: Message) -> None:
         if self.swallowed:
             return
-        if self.held is not None:  # a 400 that may be "unknown session" from an older server
+        if self.held is not None:  # a reply that may be "session gone" without a 404
             if message.get("type") != "http.response.body":
                 return
             self.held_body += message.get("body", b"")
-            if message.get("more_body", False) and len(self.held_body) < 4096:
+            more = message.get("more_body", False)
+            if more and len(self.held_body) < _HOLD_LIMIT:
                 return
             start, self.held = self.held, None
-            if _SESSION_GONE_400 in self.held_body.lower():
+            if not more and self._gone(self.held_body):
                 self.swallowed = True
                 return
             await self._start(start)
@@ -253,12 +275,39 @@ class _HeaderRewriter:
             if self.swallow_404 and self.status == 404:
                 self.swallowed = True
                 return
-            if self.swallow_404 and self.status == 400:
+            if self.swallow_404 and self._may_be_gone(message):
                 self.held = message
                 return
             await self._start(message)
             return
         await self.send(message)
+
+    def _may_be_gone(self, start: Message) -> bool:
+        if self.strict:
+            return self.status == 400
+        if self.status not in _HELD_STATUSES:
+            return False
+        ctype = b""
+        for k, v in start.get("headers", []):
+            if bytes(k).lower() == b"content-type":
+                ctype = bytes(v).lower()
+        return not ctype.startswith(b"text/event-stream")  # streams are never held
+
+    def _gone(self, body: bytes) -> bool:
+        if self.status == 400 and _SESSION_GONE_400 in body.lower():
+            return True
+        if self.strict:
+            return False
+        text = body.decode("utf-8", "replace")
+        if self.status in (400, 410):  # an error status: the text alone is enough
+            return _GONE_TEXT.search(text) is not None
+        try:  # a 200 or 500: only a JSON-RPC error (never a result) counts
+            msg = json.loads(text)
+        except ValueError:
+            return False
+        error = msg.get("error") if isinstance(msg, dict) and "result" not in msg else None
+        message = error.get("message") if isinstance(error, dict) else None
+        return isinstance(message, str) and _GONE_TEXT.search(message) is not None
 
     async def _start(self, message: Message) -> None:
         headers = []
@@ -276,7 +325,7 @@ class _HeaderRewriter:
         await self.send(message)
 
     async def flush(self) -> None:
-        """Send a held 400 the app never finished (it ended without a last body)."""
+        """Send a held reply the app never finished (it ended without a last body)."""
         if self.held is not None:
             start, self.held = self.held, None
             await self._start(start)

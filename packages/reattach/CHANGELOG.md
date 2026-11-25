@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 (2026-11-25)
+
+- Reattach also when the server says the session is gone without the `404` the spec asks
+  for: `400` "Invalid or missing session ID" / `invalid_session` / "Session not found",
+  `410`, and a JSON-RPC error "Session not found" (or "expired", "unknown", "invalid")
+  sent with `200` or `500`. JSON-RPC results, other errors and SSE replies are never taken
+  for it. Before, only `404` and the MCP Python SDK's old `400 No valid session ID provided`
+  were.
+- `strict=True` / `reattach proxy --strict` keeps the old behaviour (trust `404` only).
+
 ## 0.1.0 (2026-11-16)
 
 First release.

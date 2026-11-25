@@ -47,7 +47,7 @@ reattaches.
 
 ### Options
 
-`Reattach(app, secret=None, *, path=None, max_sessions=10000, on_reattach=None)`
+`Reattach(app, secret=None, *, path=None, max_sessions=10000, on_reattach=None, strict=False)`
 
 - `secret` signs session tokens with HMAC-SHA256. Default: the `REATTACH_SECRET` env var.
   Without one, tokens are unsigned (see Limits). Use the same secret on every replica and
@@ -57,10 +57,31 @@ reattaches.
   are dropped first; a dropped token just reattaches on its next request.
 - `on_reattach(token, session_id)` is called after each replayed handshake (logs, metrics).
   The `reattached` attribute counts them.
+- `strict=True` reattaches only on `404` (see "Servers that don't answer 404" below).
 
 `reattach proxy UPSTREAM` takes `--host` (default 127.0.0.1), `--port` (default 8080),
-`--path`, `--secret`, `--timeout` (upstream read timeout; default none, for SSE streams) and
-`--quiet`.
+`--path`, `--secret`, `--timeout` (upstream read timeout; default none, for SSE streams),
+`--strict` and `--quiet`.
+
+### Servers that don't answer 404
+
+The spec says a server must answer `404` for a session it no longer has, and that `404` is
+the only thing that tells a client to start over. Many servers say it differently, so even
+clients that do handle the `404` stay stuck. reattach also recognises these, from the first
+request after the session was lost:
+
+| Server answers | Seen in |
+|---|---|
+| `400` "Bad Request: No valid session ID provided" | MCP Python SDK before 1.11, TypeScript SDK example servers and their many copies |
+| `400` "Invalid or missing session ID", `invalid_session` | hand-written Express/Node transports |
+| `410` "Session expired" | servers that use Gone for expiry |
+| `200` or `500` with a JSON-RPC error "Session not found", "MCP session not found: &lt;id&gt;" | Rust and Java servlet transports |
+
+So putting reattach in front of such a server fixes "Session not found" for every client,
+without touching the server. A JSON-RPC *result* is never mistaken for this (a tool may well
+say "session not found" about something else), nor is a `200` or `500` error whose message is
+about something else, nor any streamed (SSE) reply. If you'd rather trust only `404`, pass
+`strict=True` (or `--strict`).
 
 ## How it works
 
@@ -70,7 +91,7 @@ reattaches.
 2. Later requests carry the token. reattach maps it to the server's session id and back on
    the way out.
 3. If the token is unknown here (restart, other replica) or the server answers `404`
-   (expired session), reattach sends `initialize` and `notifications/initialized` from the
+   (expired session, or one of the replies above), reattach sends `initialize` and `notifications/initialized` from the
    token, with the request's own `Authorization`, and retries the request once on the new
    session. Concurrent requests for the same token share one handshake.
 
@@ -105,6 +126,14 @@ server owner cannot fix the client:
 - [openclaw/openclaw#68187](https://github.com/openclaw/openclaw/issues/68187): sessions stay stale after a server restart
 - [zerodha/kite-mcp-server#83](https://github.com/zerodha/kite-mcp-server/issues/83) and [datagouv/datagouv-mcp#25](https://github.com/datagouv/datagouv-mcp/issues/25): users of hosted servers hitting it
 - [zai-org/feedback#1374](https://github.com/zai-org/feedback/issues/1374): client never re-initializes an expired session after a server restart
+- [mcp-use/mcp-use#3154](https://github.com/mcp-use/mcp-use/issues/3154) and [slopus/happy-agent#121](https://github.com/slopus/happy-agent/issues/121): clients that keep a dead session after a 404
+- [apify/actor-templates#1174](https://github.com/apify/actor-templates/issues/1174): "Session not found" once a hosted server scales to more than one instance
+
+And servers that never send the `404` in the first place, so no client can recover:
+
+- [YosefHayim/ebay-mcp#228](https://github.com/YosefHayim/ebay-mcp/issues/228): `400` instead of `404` for an unknown session after a restart
+- [mortonanalytics/ione#166](https://github.com/mortonanalytics/ione/issues/166): `200` with JSON-RPC error "MCP session not found"
+- [gradusnikov/eclipse-chatgpt-plugin#189](https://github.com/gradusnikov/eclipse-chatgpt-plugin/issues/189): JSON-RPC error "Session not found: &lt;id&gt;" after a restart or idle sweep
 
 It also removes the need for sticky sessions behind a load balancer: any replica with the same
 secret can serve any token.

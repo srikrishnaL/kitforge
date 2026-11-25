@@ -349,3 +349,139 @@ def test_old_sdk_400_for_unknown_session_is_retried_but_other_400s_are_not():
     assert healed.status == 200 and "a ran in s2" in healed.body.decode()
     assert other.status == 400 and other.body == b"not initialized"
     assert [m for _, _, m in server.log].count("initialize") == 3
+
+
+class Disguised(FakeMCP):
+    """A server that says "session gone" without the 404 the spec asks for."""
+
+    def __init__(self, status, body, ctype=b"application/json", chunks=1, **kw):
+        super().__init__(**kw)
+        self.gone = (status, body, ctype, chunks)
+
+    async def __call__(self, scope, receive, send):
+        status, body, ctype, chunks = self.gone
+
+        async def disguise(message):
+            if message["type"] == "http.response.start" and message["status"] == 404:
+                self.rewriting = True
+                await send({"type": "http.response.start", "status": status,
+                            "headers": [(b"content-type", ctype)]})
+                size = max(1, -(-len(body) // chunks))
+                for i in range(0, len(body), size):
+                    await send({"type": "http.response.body", "body": body[i:i + size],
+                                "more_body": i + size < len(body)})
+                return
+            if message["type"] == "http.response.body" and getattr(self, "rewriting", False):
+                self.rewriting = False
+                return
+            await send(message)
+
+        await super().__call__(scope, receive, disguise)
+
+
+def _rpc_error(code, message):
+    return json.dumps({"jsonrpc": "2.0", "id": 2,
+                       "error": {"code": code, "message": message}}).encode()
+
+
+GONE_REPLIES = [
+    # TypeScript SDK example servers and many forks of them (ebay-mcp, ...)
+    (400, _rpc_error(-32000, "Bad Request: No valid session ID provided"), b"application/json"),
+    (400, b'{"error":"invalid_session","error_description":"Invalid or missing session ID"}',
+     b"application/json"),
+    (400, b"Session not found", b"text/plain"),
+    (410, b"Session expired", b"text/plain"),
+    # a JSON-RPC error with HTTP 200 (IONe) or 500 (Java servlet transports)
+    (200, _rpc_error(-32002, "MCP session not found"), b"application/json"),
+    (500, _rpc_error(-32603, "Session not found: 3f2a9c1e-0d4b"), b"application/json"),
+    (200, _rpc_error(-32001, "Session abc123 not found or has expired"),
+     b"application/json; charset=utf-8"),
+]
+
+
+@pytest.mark.parametrize("status,body,ctype", GONE_REPLIES)
+@pytest.mark.parametrize("chunks", [1, 3])
+def test_session_gone_without_a_404_is_also_reattached(status, body, ctype, chunks):
+    server = Disguised(status, body, ctype, chunks)
+    app = Reattach(server)
+
+    async def go():
+        sid = await connect(app)
+        server.sessions.clear()  # restart or idle timeout on the server
+        return await request(app, msg=call("a"), session=sid)
+
+    r = run(go())
+    assert r.status == 200, r.body
+    assert "a ran in s2" in r.body.decode()
+    assert app.reattached == 1
+
+
+@pytest.mark.parametrize("status,body,ctype", GONE_REPLIES[1:])
+def test_strict_mode_only_trusts_404(status, body, ctype):
+    server = Disguised(status, body, ctype)
+    app = Reattach(server, strict=True)
+
+    async def go():
+        sid = await connect(app)
+        server.sessions.clear()
+        return await request(app, msg=call("a"), session=sid)
+
+    r = run(go())
+    assert r.status == status and r.body == body
+    assert app.reattached == 0
+
+
+class Replies(FakeMCP):
+    """Answers tools/call with a fixed reply, to check what is not mistaken for "gone"."""
+
+    def __init__(self, status, body, ctype=b"application/json"):
+        super().__init__()
+        self.fixed = (status, body, ctype)
+        self.calling = False
+
+    async def __call__(self, scope, receive, send):
+        async def fixed(message):
+            if message["type"] == "http.response.start" and self.calling:
+                status, body, ctype = self.fixed
+                await send({"type": "http.response.start", "status": status,
+                            "headers": [(b"content-type", ctype)]})
+                await send({"type": "http.response.body", "body": body, "more_body": False})
+                return
+            if message["type"] == "http.response.body" and self.calling:
+                return
+            await send(message)
+
+        await super().__call__(scope, receive, fixed)
+
+
+NOT_GONE = [
+    # a tool result that talks about sessions is still a result
+    (200, json.dumps({"jsonrpc": "2.0", "id": 2, "result": {"content": [
+        {"type": "text", "text": "Session not found in the booking system"}]}}).encode(),
+     b"application/json"),
+    # other errors, and errors whose text is about something else
+    (200, _rpc_error(-32602, "Unknown tool: a"), b"application/json"),
+    (500, _rpc_error(-32603, "Internal error"), b"application/json"),
+    (400, b"Server not initialized", b"text/plain"),
+    (500, b"Session not found", b"text/plain"),  # not JSON-RPC: a 500 needs the error shape
+    (200, b"x" * 10000, b"application/json"),  # longer than anything held
+]
+
+
+@pytest.mark.parametrize("status,body,ctype", NOT_GONE)
+def test_other_replies_pass_through_and_are_not_retried(status, body, ctype):
+    server = Replies(status, body, ctype)
+    app = Reattach(server)
+
+    async def go():
+        sid = await connect(app)
+        server.calling = True
+        try:
+            return await request(app, msg=call("a"), session=sid)
+        finally:
+            server.calling = False
+
+    r = run(go())
+    assert r.status == status and r.body == body
+    assert app.reattached == 0
+    assert [m for _, _, m in server.log].count("initialize") == 1

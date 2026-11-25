@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "unstring"
+version = "0.1.0"
+description = "Fix MCP tool calls that fail with \"expected array, received string\": repairs tool-call arguments that clients and models send as JSON strings (arrays, objects, numbers, booleans), guided by the tool's inputSchema, as a stdio proxy for any MCP server or one function"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "mcp", "model context protocol", "mcp server", "mcp proxy", "tool calling",
+  "function calling", "tool arguments", "stringified", "json string", "expected array",
+  "received string", "invalid arguments", "json schema", "coerce", "zod", "pydantic",
+  "claude code", "claude desktop", "opencode", "n8n", "llm", "agents",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+unstring = "unstring.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/unstring"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/unstring/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/unstring"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

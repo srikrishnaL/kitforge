@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 (2026-11-21)
+
+- `toolcap proxy --tool NAME=TOKENS`: a budget for one tool that overrides `--max-tokens`, used
+  for its first page and every later page. Repeat it for more tools.
+- `toolcap proxy --tool NAME=off`: that tool is passed through exactly as the server sends it,
+  with no added `cursor` parameter, its `outputSchema` kept and nothing cut.
+- If serving a later page from memory fails, the model now gets a tool error it can act on,
+  instead of the call reaching the server with the proxy's own `cursor` argument.
+
 ## 0.2.0 (2026-11-13)
 
 - `toolcap proxy [--max-tokens N] [--trim] -- <server command>`: runs any stdio MCP server

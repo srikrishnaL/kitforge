@@ -18,6 +18,7 @@ def test_bad_tools():
     findings = lint_tools(fake_server.BAD)
     assert codes(findings) == [
         "MCP001", "MCP003", "MCP005", "MCP007", "MCP008", "MCP009", "MCP011", "MCP012",
+        "MCP016",
     ]
     # Errors are listed first.
     assert findings[0].severity == "error"
@@ -42,7 +43,8 @@ def test_assert_lint_clean_raises():
 
 def tool(**kw):
     base = {"name": "t", "description": "A perfectly reasonable description.",
-            "inputSchema": {"type": "object", "properties": {}}}
+            "inputSchema": {"type": "object", "properties": {}},
+            "annotations": {"readOnlyHint": True}}
     base.update(kw)
     return base
 
@@ -78,4 +80,50 @@ def test_output_schema_must_be_object():
 
 
 def test_every_rule_documented():
-    assert len(RULES) == 15
+    assert len(RULES) == 19
+
+
+def test_missing_annotations_are_info():
+    found = lint_tools([tool(name="get_user", annotations=None), tool(name="sync", annotations={})])
+    assert [(f.code, f.severity, f.tool) for f in found] == [
+        ("MCP016", "info", "get_user"), ("MCP016", "info", "sync"),
+    ]
+    assert "looks read-only" in found[0].message
+    assert "neither readOnlyHint nor destructiveHint" in found[1].message
+    # Info only: the default assert_lint_clean threshold (warning) still passes.
+    assert_lint_clean([tool(annotations=None)])
+
+
+def test_annotations_that_answer_the_question():
+    ok = [
+        tool(name="a", annotations={"readOnlyHint": False, "destructiveHint": False}),
+        tool(name="b", annotations={"readOnlyHint": False, "destructiveHint": True}),
+        tool(name="c", annotations={"destructiveHint": False}),
+        tool(name="d", annotations={"readOnlyHint": True, "idempotentHint": True, "title": "D"}),
+    ]
+    assert lint_tools(ok) == []
+    half = lint_tools([tool(name="create_note", annotations={"readOnlyHint": False})])
+    assert codes(half) == ["MCP016"] and "destructiveHint is not set" in half[0].message
+
+
+def test_malformed_annotations():
+    assert codes(lint_tools([tool(annotations=["readOnlyHint"])])) == ["MCP017"]
+    found = lint_tools([tool(annotations={"readOnlyHint": "true", "title": 3})])
+    assert codes(found) == ["MCP017"] and found[0].severity == "error"
+    assert "readOnlyHint='true'" in found[0].message and "title=3" in found[0].message
+
+
+def test_contradictory_annotations():
+    found = lint_tools([tool(name="peek", annotations={"readOnlyHint": True, "destructiveHint": True})])
+    assert codes(found) == ["MCP018"]
+
+
+@pytest.mark.parametrize("name", ["delete_file", "deleteFile", "Send-Email", "repo.update", "github.create_issue", "_drop_table"])
+def test_read_only_claim_on_a_write_tool(name):
+    found = lint_tools([tool(name=name, annotations={"readOnlyHint": True})])
+    assert codes(found) == ["MCP019"] and found[0].severity == "warning"
+
+
+@pytest.mark.parametrize("name", ["get_settings", "list_deletions", "add", "settings", "updates_feed"])
+def test_read_only_names_are_not_flagged(name):
+    assert lint_tools([tool(name=name, annotations={"readOnlyHint": True})]) == []

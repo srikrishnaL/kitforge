@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 from bomscout import server
 
 README = (Path(__file__).parent.parent / "README.md").read_text()
@@ -31,3 +33,21 @@ def test_every_tool_is_documented():
     for name in tools:
         if name != "run":
             assert f"`{name}`" in README, name
+
+
+def test_registry_entry_matches_package():
+    """The MCP Registry only accepts server.json if PyPI's README names it and versions agree."""
+    tomllib = pytest.importorskip("tomllib")  # 3.11+
+
+    root = Path(__file__).parent.parent
+    entry = json.loads((root / "server.json").read_text())
+    project = tomllib.loads((root / "pyproject.toml").read_text())["project"]
+    assert entry["name"] == entry["name"].lower()
+    assert re.search(rf"<!-- mcp-name: {re.escape(entry['name'])} -->", README)
+    assert len(entry["description"]) <= 100
+    (package,) = entry["packages"]
+    assert package["identifier"] == project["name"]
+    assert entry["version"] == package["version"] == project["version"]
+    documented = re.findall(r"`((?:DT|DEPENDENCY_TRACK|BOMSCOUT)_[A-Z_]+)", README)
+    for var in package["environmentVariables"]:
+        assert var["name"] in documented, var["name"]

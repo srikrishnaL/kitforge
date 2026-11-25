@@ -38,6 +38,22 @@ _HIDDEN_CHARS_RE = re.compile("[​‌‍⁠⁦-⁩‪-‮﻿]")
 
 _TYPELESS_OK = ("enum", "const", "anyOf", "oneOf", "allOf", "$ref", "not")
 
+# Tool annotations from the MCP spec. Clients use them to decide which calls need the
+# user's confirmation; when a hint is missing they assume the worst (not read-only,
+# destructive, not idempotent, open world).
+_BOOL_HINTS = ("readOnlyHint", "destructiveHint", "idempotentHint", "openWorldHint")
+# First word of a tool name that says the tool changes something.
+_WRITE_VERBS = frozenset(
+    "delete remove drop destroy purge truncate erase wipe clear reset kill terminate "
+    "create insert update upsert write set put post patch send upload move rename "
+    "edit modify replace overwrite execute exec deploy publish revoke grant".split()
+)
+# First word of a tool name that suggests it only reads.
+_READ_VERBS = frozenset(
+    "get list read search find fetch query describe show count lookup view inspect "
+    "check status".split()
+)
+
 
 @dataclass(frozen=True)
 class Finding:
@@ -71,6 +87,10 @@ RULES: Dict[str, str] = {
     "MCP013": "Description contains invisible or bidirectional control characters",
     "MCP014": "outputSchema is not a JSON Schema of type object",
     "MCP015": "Parameter description is identical to its name",
+    "MCP016": "Tool annotations do not say whether the tool is read-only or destructive",
+    "MCP017": "annotations is not an object, or a hint is not true/false",
+    "MCP018": "Tool is marked both read-only and destructive",
+    "MCP019": "Tool is marked read-only but its name says it changes something",
 }
 
 _SEVERITY = {
@@ -89,6 +109,10 @@ _SEVERITY = {
     "MCP013": "error",
     "MCP014": "error",
     "MCP015": "info",
+    "MCP016": "info",
+    "MCP017": "error",
+    "MCP018": "warning",
+    "MCP019": "warning",
 }
 
 
@@ -126,6 +150,7 @@ def lint_tools(
 
         _check_description(tool, name, add)
         _check_input_schema(tool, name, add)
+        _check_annotations(tool, name, add)
 
         output_schema = tool.get("outputSchema")
         if output_schema is not None and (
@@ -197,6 +222,53 @@ def _check_input_schema(tool: Dict[str, Any], name: str, add) -> None:
             _check_text_safety(pdesc, name, f"parameter {pname!r} description", add)
         if "type" not in pschema and not any(k in pschema for k in _TYPELESS_OK):
             add("MCP009", name, f"parameter {pname!r} has no type")
+
+
+def _first_word(name: str) -> str:
+    """The verb of a tool name: ``deleteFile``, ``delete_file``, ``files.delete_one`` -> ``delete``."""
+    name = name.rsplit(".", 1)[-1]  # drop a namespace prefix such as "github."
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", name)
+    words = re.split(r"[\s_.\-]+", spaced.strip(" _.-"))
+    return words[0].lower() if words else ""
+
+
+def _check_annotations(tool: Dict[str, Any], name: str, add) -> None:
+    ann = tool.get("annotations")
+    if ann is None:
+        ann = {}
+    elif not isinstance(ann, dict):
+        add("MCP017", name, f"annotations must be an object, got {type(ann).__name__}")
+        return
+    bad = [h for h in _BOOL_HINTS if h in ann and not isinstance(ann[h], bool)]
+    if "title" in ann and not isinstance(ann["title"], str):
+        bad.append("title")
+    if bad:
+        shown = ", ".join(f"{h}={ann[h]!r}" for h in bad)
+        add("MCP017", name, f"annotation values have the wrong type: {shown} "
+            "(hints must be true or false, title a string); clients ignore them")
+        return
+
+    read_only = ann.get("readOnlyHint")
+    destructive = ann.get("destructiveHint")
+    verb = _first_word(name)
+    if read_only is None:
+        if verb in _READ_VERBS:
+            hint = ("looks read-only but does not set readOnlyHint, so clients treat it as "
+                    "destructive and may ask the user to confirm every call")
+        else:
+            hint = ("sets neither readOnlyHint nor destructiveHint; clients assume it can "
+                    "destroy data")
+        if destructive is None:
+            add("MCP016", name, hint)
+    elif read_only is False and destructive is None:
+        add("MCP016", name, "readOnlyHint is false but destructiveHint is not set, so clients "
+            "assume it can destroy data; set destructiveHint: false for additive tools")
+    if read_only is True and destructive is True:
+        add("MCP018", name, "readOnlyHint and destructiveHint are both true; a read-only tool "
+            "cannot destroy anything, so one of them is wrong")
+    if read_only is True and verb in _WRITE_VERBS:
+        add("MCP019", name, f"readOnlyHint is true but the name starts with {verb!r}; clients may "
+            "run it without asking the user")
 
 
 def count_by_severity(findings: Iterable[Finding]) -> Dict[str, int]:

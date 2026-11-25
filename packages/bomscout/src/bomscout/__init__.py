@@ -5,7 +5,7 @@ remediation got, the riskiest projects, findings by severity, licenses, policy v
 and where a package is used.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .client import DependencyTrack  # noqa: E402
 from .errors import DTError  # noqa: E402

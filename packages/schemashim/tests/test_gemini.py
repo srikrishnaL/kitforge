@@ -271,3 +271,17 @@ def test_bad_arguments():
         adapt("not a schema", "gemini")
     with pytest.raises(ValueError):
         adapt({}, "gemini", max_depth=0)
+
+
+def test_allof_patterns_kept_in_description():
+    # Gemini takes one pattern per field; the others stay visible to the model.
+    shim = adapt({"type": "object", "properties": {"s": {"type": "string", "allOf": [
+        {"pattern": "^[a-z]+$"}, {"pattern": "^x"}]}}}, "gemini")
+    s = shim.schema["properties"]["s"]
+    assert s["pattern"] == "^[a-z]+$" and "must match the regex ^x" in s["description"].lower()
+
+
+def test_surrogate_pattern_left_alone_for_gemini():
+    schema = {"type": "object", "properties": {"s": {"type": "string",
+                                                     "pattern": "^[^\\uD800-\\uDFFF]*$"}}}
+    assert adapt(schema, "gemini").ok

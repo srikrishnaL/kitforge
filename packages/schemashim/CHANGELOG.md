@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.1 (2026-11-20)
+
+- `openai-strict`: a `pattern` with a `\uXXXX` or `\u{...}` escape moves into the description,
+  because OpenAI-compatible validators (OpenAI, DeepSeek) reject the whole request with
+  `"..." is not a "regex"`. The common `^[^\uD800-\uDFFF]*$` pattern, which only rejects lone
+  surrogates that JSON text can't contain anyway, is dropped (morluto/rea#12387,
+  CherryHQ/cherry-studio#24524).
+- `allOf` merging no longer loses constraints: when parts have different `pattern`s, the first
+  one the target accepts is kept and the rest go into the description, and conflicting
+  `minLength`/`maxLength`/`minimum`/`maximum`/`minItems`/... keep the tightest value. Before,
+  only the first part's value survived, silently.
+
 ## 0.2.0 (2026-11-13)
 
 - `schemashim proxy --target gemini|openai-strict -- <server command>`: runs any stdio MCP

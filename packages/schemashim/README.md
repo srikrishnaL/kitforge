@@ -117,6 +117,8 @@ the name back.
 | `required` naming undefined properties, `"required": true` on a property | fixed | fixed |
 | Root not an object, root `anyOf` of objects | made an object / merged | same |
 | `format`, `exclusiveMinimum`, `multipleOf`, `minLength`, `default`, regex lookarounds... that the target rejects | written into the description so the model still sees them | same |
+| `pattern` with `\uXXXX` escapes (error: `is not a "regex"`) | kept | written into the description; `^[^\uD800-\uDFFF]*$`, which only rejects lone surrogates, is dropped |
+| Several `pattern`s or bounds under `allOf` | the first pattern is kept, the others go into the description; the tightest bounds win | same |
 | `$schema`, `$id`, `not`, `if`/`then`, `patternProperties`... | removed | removed |
 
 `restore` also turns `5.0` back into `5` for integer fields (Gemini sends numbers as floats).
@@ -165,6 +167,7 @@ writes its own partial sanitizer. A few of the reports:
 - [langchain-ai/langchain-google#535](https://github.com/langchain-ai/langchain-google/issues/535): "should be non-empty for OBJECT type"
 - [BerriAI/litellm#18442](https://github.com/BerriAI/litellm/issues/18442): "functionDeclaration parameters schema should be of type OBJECT"
 - [Kilo-Org/kilocode#15512](https://github.com/Kilo-Org/kilocode/issues/15512), [cline/cline#11162](https://github.com/cline/cline/issues/11162), [CherryHQ/cherry-studio#18890](https://github.com/CherryHQ/cherry-studio/issues/18890), [anomalyco/opencode#48073](https://github.com/anomalyco/opencode/issues/48073): empty enums, undefined required properties, arrays without items, nullable arrays
+- [morluto/rea#12387](https://github.com/morluto/rea/issues/12387), [CherryHQ/cherry-studio#24524](https://github.com/CherryHQ/cherry-studio/issues/24524), [yetone/magpie#6827](https://github.com/yetone/magpie/issues/6827): a `\u` escape in one tool's `pattern` makes OpenAI-compatible APIs (OpenAI, DeepSeek) answer `is not a "regex"` on every request
 - [openclaw/openclaw#166877](https://github.com/openclaw/openclaw/issues/166877), [NousResearch/hermes-agent#104796](https://github.com/NousResearch/hermes-agent/issues/104796), [cloudflare/mcp-server-cloudflare#378](https://github.com/cloudflare/mcp-server-cloudflare/issues/378): one MCP tool breaks every strict-mode request
 
 GitHub search finds over 300 issues titled "tool schema" + Gemini alone. The demand evidence

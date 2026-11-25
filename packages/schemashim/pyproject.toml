@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "schemashim"
-version = "0.2.0"
+version = "0.2.1"
 description = "Fix MCP and agent tool JSON Schemas that Gemini and OpenAI strict mode reject (400 INVALID_ARGUMENT, Invalid schema for function): as a library, a CI check, or a proxy for any MCP server"
 readme = "README.md"
 license = "MIT"

@@ -48,8 +48,15 @@ became pages under 20,000 tokens.
 | --- | --- |
 | `--max-tokens N` | budget for one result (default `TOOLCAP_MAX_TOKENS`, else 20,000) |
 | `--trim` | cut long results with a note instead of paging them; adds no parameter |
+| `--tool NAME=N` | budget for one tool, overriding `--max-tokens`; repeat for more tools |
+| `--tool NAME=off` | leave one tool exactly as the server sends it (no `cursor`, nothing cut) |
 | `--cursor-param NAME` | name of the added parameter (default `cursor`) |
 | `--quiet` | don't log cut results to stderr |
+
+Per-tool settings help when one tool needs different treatment: `--tool browser_snapshot=8000`
+keeps page snapshots small so they don't crowd out the rest of the context, and
+`--tool read_media_file=off` passes a tool through when its client has its own handling, or
+when its result must arrive whole. Later pages of a tool use that tool's budget.
 
 Tools that already have a `cursor` parameter are left alone and their results are trimmed
 instead. `outputSchema` is removed from the tool list, because a page can't match it. Images

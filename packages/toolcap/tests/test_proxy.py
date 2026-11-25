@@ -150,3 +150,39 @@ def test_proxy_needs_a_command(capsys):
     with pytest.raises(SystemExit):
         main(["proxy"])
     assert "needs the server command" in capsys.readouterr().err
+
+
+def test_per_tool_budget_and_off():
+    s = Session("--max-tokens", "1000", "--tool", "log=300", "--tool", "rows=off")
+    tools = {t["name"]: t for t in s.send("tools/list")["tools"]}
+    # rows=off: the tool is exactly as the server listed it.
+    assert tools["rows"]["inputSchema"] == {"type": "object", "properties": {"n": {"type": "integer"}}}
+    assert tools["rows"]["outputSchema"] == {"type": "object"} and tools["rows"]["description"] == "List rows"
+    big = s.call("rows", n=100)
+    assert "structuredContent" in big and len(json.loads(text(big))) == 100
+    # log=300: smaller pages than the 1,000-token default, and later pages use the same budget.
+    first = s.call("log")
+    assert Cap(max_tokens=300).fits(text(first)) and not Cap(max_tokens=200).fits(text(first) * 2)
+    cursor = text(first).split('cursor="')[1].split('"')[0]
+    second = s.call("log", cursor=cursor)
+    assert Cap(max_tokens=300).fits(text(second))
+    assert json.loads(text(s.call("calls")))["calls"] == 3  # second page came from memory
+    log = s.close()
+    assert "log: result of about" in log and "to fit 300" in log and "rows:" not in log
+
+
+def test_off_tool_cursor_is_forwarded_untouched():
+    proxy = CapProxy(Cap(max_tokens=200), quiet=True, tools={"t": None})
+    call = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+            "params": {"name": "t", "arguments": {"cursor": "server-own"}}}
+    assert proxy.to_server(call) == (call, [])
+    reply = {"jsonrpc": "2.0", "id": 1, "result": {"content": [{"type": "text", "text": "x" * 5000}]}}
+    assert proxy.to_client(reply) == (reply, [])
+
+
+@pytest.mark.parametrize("spec", ["rows", "=500", "rows=lots", "rows=10"])
+def test_bad_tool_spec(spec, capsys):
+    with pytest.raises(SystemExit):
+        main(["proxy", "--tool", spec, "--", "true"])
+    err = capsys.readouterr().err
+    assert "--tool" in err or "max_tokens must be at least" in err

@@ -37,3 +37,14 @@ def test_readme_fix_command(tmp_path):
     assert res.returncode == 2
     assert res.stderr == "repaired pages: string -> array\n"
     assert json.loads(res.stdout) == {"pages": [{"title": "A"}]}
+
+
+def test_readme_mentions_every_http_option():
+    from pathlib import Path
+
+    readme = (Path(__file__).parent.parent / "README.md").read_text()
+    res = subprocess.run([sys.executable, "-m", "unstring", "http", "--help"],
+                         capture_output=True, text=True)
+    for flag in ("--host", "--port", "--timeout", "--wrap", "--quiet", "--log"):
+        assert flag in res.stdout
+        assert f"`{flag}`" in readme

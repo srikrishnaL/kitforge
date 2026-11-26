@@ -8,10 +8,12 @@ agent retries, gives up, or writes nothing.
 unstring repairs those arguments before the server sees them, guided by the tool's own
 `inputSchema`. A value is decoded only where the schema does not allow a string, and only when
 the decoded value has a type the schema does allow, so real strings are never touched. Use it
-as a stdio proxy around any MCP server (no code changes, any language) or as one function.
+as a stdio proxy around any MCP server, as a local HTTP proxy in front of a remote server (no
+code changes, any language), as ASGI middleware, or as one function.
 
 ```bash
-pip install unstring
+pip install unstring            # stdio proxy, ASGI middleware, repair()
+pip install "unstring[http]"    # plus `unstring http` for remote servers (httpx, uvicorn)
 ```
 
 ## Quick start: any stdio server
@@ -49,6 +51,50 @@ The proxy learns each tool's schema from the `tools/list` results the client ask
 call names a tool it has not seen (the client cached the list), it asks the server for the
 tool list itself, holds the call until the answer is in, and then sends it on, repaired. All
 other messages pass through byte for byte.
+
+## Remote (Streamable HTTP) servers: `unstring http`
+
+For a server you reach by URL, run a local proxy and point the client at it:
+
+```console
+$ unstring http https://mcp.example.com/mcp --port 8080
+unstring: forwarding to https://mcp.example.com/mcp; point your client at http://127.0.0.1:8080/mcp
+```
+
+```json
+{
+  "mcpServers": {
+    "example": {
+      "type": "http",
+      "url": "http://127.0.0.1:8080/mcp",
+      "headers": {"Authorization": "Bearer ..."}
+    }
+  }
+}
+```
+
+Every request, header and path is forwarded as it is (sessions, `Authorization`, API keys,
+SSE streams), except that tool-call arguments are repaired on the way. When a call names a tool
+the proxy has not seen in a `tools/list`, it asks the server for the list itself with that
+call's own headers, so it works even when the client cached the tool list. Options: `--host`
+(default 127.0.0.1), `--port` (default 8080), `--timeout`, and `--wrap`, `--quiet`, `--log` as
+for the stdio proxy.
+
+## In your own Python server: ASGI middleware
+
+```python
+from unstring.asgi import Unstring
+
+app = Unstring(my_asgi_app)   # Starlette, FastAPI, or any ASGI MCP app; run with uvicorn
+```
+
+It repairs `tools/call` arguments in POST bodies before your app validates them, learns
+schemas from the `tools/list` responses that pass through (JSON or SSE), and fetches the list
+from your app itself when it meets a tool it hasn't seen. `Unstring(app, tools=...)` takes the
+schemas up front (a `tools/list` result, a list of tools, or `{name: inputSchema}`), and
+`fetch=False` turns off its own requests. `path="/mcp"` limits it to one endpoint. The
+official MCP Python SDK's FastMCP already decodes JSON strings for `list` and `dict`
+parameters, so this is for servers built some other way, or with stricter validation.
 
 ## In your own server or client: one function
 
@@ -109,8 +155,14 @@ when something was repaired, 0 when nothing needed it.
 - Where the schema allows a string (`"type": ["string", "array"]`, an untyped field, `{}`),
   the string is left alone, because there is no safe way to tell. Give the field a type if
   you want it repaired.
-- `unstring proxy` works with stdio servers. For a remote (Streamable HTTP) server, call
-  `repair` in the server where the arguments arrive.
+- `unstring http` runs on your machine, so it helps clients that run there too (Claude Code,
+  Cursor, VS Code, a self-hosted n8n). A hosted client such as a claude.ai connector can't
+  reach `127.0.0.1`; there, run it somewhere public behind TLS, or fix the server.
+- Servers that sign in with OAuth tell the client their own URL as the protected resource.
+  Strict clients then refuse to send a token to the proxy's URL. Servers that take an API key
+  or a bearer token in a header work.
+- The proxy and middleware read uncompressed bodies: `unstring http` asks the server for
+  `identity` encoding, and a compressed response passes through without being learned from.
 - It fixes types, not values: a wrong enum, a missing required field or a bad date still
   reaches the server and fails there, as it should.
 - Strings like `"007"` or `"1,2"` are not valid JSON and are not guessed at.

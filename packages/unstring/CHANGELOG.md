@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 (2026-11-26)
+
+- `unstring http URL [--host] [--port] [--timeout] [--wrap] [--quiet] [--log FILE]`: a local
+  reverse proxy for remote (Streamable HTTP) MCP servers. Forwards every request, header and
+  SSE stream, and repairs tool-call arguments on the way. Needs the `http` extra
+  (`pip install "unstring[http]"`: httpx, uvicorn).
+- `unstring.asgi.Unstring(app)`: the same repair as ASGI middleware for Python servers. Learns
+  schemas from `tools/list` responses (JSON or SSE, batches too); when a call names an unknown
+  tool, fetches the list from the app itself with the caller's headers (session id,
+  authorization, the 2026-07-28 protocol version in `_meta`), following every page and a
+  `/mcp` -> `/mcp/` redirect, and asks again for a still-unknown tool only after 30 seconds.
+  `tools=` preloads schemas, `fetch=False` turns the fetching off, `path=` limits it to one
+  endpoint.
+
 ## 0.1.0 (2026-11-24)
 
 First release.

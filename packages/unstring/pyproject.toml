@@ -4,15 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "unstring"
-version = "0.1.0"
-description = "Fix MCP tool calls that fail with \"expected array, received string\": repairs tool-call arguments that clients and models send as JSON strings (arrays, objects, numbers, booleans), guided by the tool's inputSchema, as a stdio proxy for any MCP server or one function"
+version = "0.2.0"
+description = "Fix MCP tool calls that fail with \"expected array, received string\": repairs tool-call arguments that clients and models send as JSON strings (arrays, objects, numbers, booleans), guided by the tool's inputSchema, as a stdio proxy for any MCP server, an HTTP proxy for remote servers, ASGI middleware, or one function"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.9"
 authors = [{ name = "Sri Krishna Lingamaneni" }]
 keywords = [
-  "mcp", "model context protocol", "mcp server", "mcp proxy", "tool calling",
+  "mcp", "model context protocol", "mcp server", "mcp proxy", "streamable http", "asgi", "tool calling",
   "function calling", "tool arguments", "stringified", "json string", "expected array",
   "received string", "invalid arguments", "json schema", "coerce", "zod", "pydantic",
   "claude code", "claude desktop", "opencode", "n8n", "llm", "agents",
@@ -29,7 +29,8 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-test = ["pytest>=7"]
+http = ["httpx>=0.24", "uvicorn>=0.20"]
+test = ["pytest>=7", "httpx>=0.24", "uvicorn>=0.20", "mcp>=1.10; python_version >= '3.10'"]
 
 [project.scripts]
 unstring = "unstring.cli:main"

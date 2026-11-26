@@ -20,7 +20,7 @@ gap where the only existing project is unmaintained. The demand evidence for eac
 | [cleanpipe](packages/cleanpipe/) | Fix MCP stdio servers that print logs or banners to stdout: wraps any server so only JSON-RPC reaches the client (no more handshake timeouts or `Unexpected token` errors), plus `cleanpipe check` for CI | `pip install cleanpipe` | 0.1.0 |
 | [briefed](packages/briefed/) | Deliver MCP server instructions to clients that drop or cut them (claude.ai connectors, Kiro, Google ADK, agno...): folds `initialize` instructions into the tool list, as a stdio proxy, ASGI middleware for remote servers, or one function, plus `briefed show` | `pip install briefed` | 0.1.0 |
 | [reattach](packages/reattach/) | Fix MCP `404 Session not found` after a Streamable HTTP server restarts, redeploys, scales out or times out a session: replays `initialize` for clients that never do, as ASGI middleware or a reverse proxy for servers in any language | `pip install reattach` | 0.1.0 |
-| [unstring](packages/unstring/) | Fix MCP tool calls that fail with `expected array, received string`: repairs arguments clients and models send as JSON strings (arrays, objects, numbers, booleans, even the whole object), guided by the tool's `inputSchema`, as a stdio proxy for any server or one function | `pip install unstring` | 0.1.0 |
+| [unstring](packages/unstring/) | Fix MCP tool calls that fail with `expected array, received string`: repairs arguments clients and models send as JSON strings (arrays, objects, numbers, booleans, even the whole object), guided by the tool's `inputSchema`, as a stdio proxy for any server, an HTTP proxy for remote servers, ASGI middleware or one function | `pip install unstring` | 0.2.0 |
 
 ## How packages are chosen
 

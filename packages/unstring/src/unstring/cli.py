@@ -6,7 +6,7 @@ import argparse
 import json
 import os
 import sys
-from typing import Any, List, Optional
+from typing import Any, List, Optional, TextIO
 
 from . import __version__
 from .core import repair
@@ -36,6 +36,22 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--quiet", action="store_true", help="don't report repairs on stderr")
     p.add_argument("--log", metavar="FILE", help="append repair reports to FILE, not stderr")
 
+    h = sub.add_parser(
+        "http", help="run a local HTTP proxy in front of a remote (Streamable HTTP) MCP server",
+        description="Forward every request to the MCP server at URL and repair the arguments "
+                    "of every tool call on the way. Point the client at the printed local URL. "
+                    "Needs: pip install \"unstring[http]\". "
+                    "Example: unstring http https://mcp.example.com/mcp --port 8080")
+    h.add_argument("url", help="the server's MCP endpoint, e.g. https://mcp.example.com/mcp")
+    h.add_argument("--host", default="127.0.0.1", help="address to listen on (default 127.0.0.1)")
+    h.add_argument("--port", type=int, default=8080, help="port to listen on (default 8080)")
+    h.add_argument("--timeout", type=float, default=None,
+                   help="upstream read timeout in seconds (default: none, for SSE streams)")
+    h.add_argument("--wrap", action="store_true",
+                   help="also wrap a single value in a list where the schema wants an array")
+    h.add_argument("--quiet", action="store_true", help="don't report repairs on stderr")
+    h.add_argument("--log", metavar="FILE", help="append repair reports to FILE, not stderr")
+
     f = sub.add_parser(
         "fix", help="repair one set of arguments against a schema and print the result",
         description="Read tool arguments (JSON) from ARGS or stdin, repair them against the "
@@ -52,22 +68,69 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     if args.command == "fix":
         return _fix(args, parser)
+    if args.command == "http":
+        return _http(args, parser)
     if not command:
         parser.error("proxy needs the server command after --, e.g. "
                      "unstring proxy -- npx -y @acme/server")
     from .proxy import run
 
-    log = None
-    if args.log:
-        try:
-            log = open(os.path.expanduser(args.log), "a", encoding="utf-8", buffering=1)
-        except OSError as exc:
-            parser.error(f"can't open {args.log}: {exc.strerror}")
+    log = _open_log(args, parser)
     try:
         return run(command, wrap=args.wrap, quiet=args.quiet, log=log)
     finally:
         if log is not None:
             log.close()
+
+
+def _open_log(args: argparse.Namespace, parser: argparse.ArgumentParser) -> Optional[TextIO]:
+    if not args.log:
+        return None
+    try:
+        return open(os.path.expanduser(args.log), "a", encoding="utf-8", buffering=1)
+    except OSError as exc:
+        parser.error(f"can't open {args.log}: {exc.strerror}")
+    return None  # pragma: no cover (parser.error exits)
+
+
+def build_app(url: str, *, wrap: bool = False, quiet: bool = False,
+              log: Optional[TextIO] = None, timeout: Optional[float] = None,
+              client: Any = None) -> Any:
+    """The ``unstring http`` app: :class:`Unstring` around a :class:`Forward` to ``url``."""
+    from .asgi import Unstring
+    from .forward import Forward, split_url
+
+    origin, path = split_url(url)
+    return Unstring(Forward(origin, client=client, timeout=timeout), wrap=wrap, quiet=quiet,
+                    log=log, path=path)
+
+
+def _http(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
+    from .forward import split_url
+
+    try:
+        _, path = split_url(args.url)
+    except ValueError as exc:
+        parser.error(str(exc))
+    try:
+        import httpx  # noqa: F401
+        import uvicorn
+    except ImportError:
+        print('unstring http needs extra packages: pip install "unstring[http]"',
+              file=sys.stderr)
+        return 2
+    log = _open_log(args, parser)
+    host = f"[{args.host}]" if ":" in args.host else args.host
+    print(f"unstring: forwarding to {args.url}; point your client at "
+          f"http://{host}:{args.port}{path}", file=sys.stderr, flush=True)
+    try:
+        app = build_app(args.url, wrap=args.wrap, quiet=args.quiet, log=log,
+                        timeout=args.timeout)
+        uvicorn.run(app, host=args.host, port=args.port, log_level="warning")
+    finally:
+        if log is not None:
+            log.close()
+    return 0
 
 
 def _load(text: str, what: str, parser: argparse.ArgumentParser) -> Any:

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T07:48:36Z",
+  "generated": "2026-11-27T07:42:07Z",
   "method": "score = 55% demand (open requests, top upvotes) + 45% gap (best existing project's stars, staleness)",
   "ideas": [
     {
@@ -593,6 +593,48 @@
       }
     },
     {
+      "id": "mcp-tool-name-limits",
+      "title": "Shorten and sanitize MCP tool names over 64 characters or with dots/spaces for strict model APIs",
+      "status": "skipped",
+      "score": 69,
+      "demand": 0.434,
+      "gap": 1.0,
+      "open_requests": 31,
+      "top_requests": [
+        {
+          "title": "[BUG] API Error 400: MCP tool names exceeding 64 character limit",
+          "url": "https://github.com/anthropics/claude-code/issues/21136",
+          "reactions": 16
+        },
+        {
+          "title": "core-mcp-server: billing_cost_management prefix causes tool names to exceed 64-char API limit",
+          "url": "https://github.com/awslabs/mcp/issues/2214",
+          "reactions": 7
+        },
+        {
+          "title": "MCP tool names can exceed 64-character API limit causing session-breaking errors",
+          "url": "https://github.com/anthropics/claude-code/issues/20643",
+          "reactions": 3
+        },
+        {
+          "title": "[BUG]  Tool search fails when MCP tool names exceed 64 chars",
+          "url": "https://github.com/anthropics/claude-code/issues/19882",
+          "reactions": 2
+        },
+        {
+          "title": "AI Toolkit for VS Code: MCP tool/function names exceed 64-character OpenAI schema limit",
+          "url": "https://github.com/microsoft/foundry-dev-tools/issues/723",
+          "reactions": 1
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "mcp tool names exceed 64 in:title is:issue",
+        "existing": "mcp tool name shorten 64"
+      }
+    },
+    {
       "id": "cimd",
       "title": "Resolve and validate OAuth Client ID Metadata Documents (CIMD) in authorization servers",
       "status": "shipped",
@@ -783,11 +825,11 @@
     {
       "id": "connector-preflight",
       "title": "Check a remote MCP server the way claude.ai and ChatGPT custom connectors do",
-      "status": "idea",
+      "status": "skipped",
       "score": 65,
-      "demand": 0.369,
+      "demand": 0.37,
       "gap": 1.0,
-      "open_requests": 50,
+      "open_requests": 51,
       "top_requests": [
         {
           "title": "Custom connector fails with \"Couldn't reach the MCP server\" \u2014 zero inbound traffic at edge (ofid_c58995a431270861)",
@@ -819,12 +861,54 @@
         "repo": "Maelmaelr/mcp-auth-preflight",
         "url": "https://github.com/Maelmaelr/mcp-auth-preflight",
         "stars": 0,
-        "months_since_push": 3.4
+        "months_since_push": 3.5
       },
       "existing_projects": 1,
       "queries": {
         "requests": "\"custom connector\" couldn't in:title is:issue",
         "existing": "mcp oauth discovery checker"
+      }
+    },
+    {
+      "id": "mcp-result-flatten",
+      "title": "Make MCP tool results readable by clients that only show text blocks",
+      "status": "shipped",
+      "score": 64,
+      "demand": 0.339,
+      "gap": 1.0,
+      "open_requests": 38,
+      "top_requests": [
+        {
+          "title": "Figma MCP Integration Fails with resource_link Response Type in Kiro",
+          "url": "https://github.com/kirodotdev/Kiro/issues/9439",
+          "reactions": 4
+        },
+        {
+          "title": "[Bug] MCP resource_link-only tool results are discarded",
+          "url": "https://github.com/langgenius/dify/issues/43451",
+          "reactions": 1
+        },
+        {
+          "title": "Codex App rejects valid MCP resource_link tool results with \"Unexpected response type\"",
+          "url": "https://github.com/openai/codex/issues/33404",
+          "reactions": 1
+        },
+        {
+          "title": "convertContentBlocks coerces MCP resource_link/resource/audio blocks into malformed image blocks -> Anthropic 400 -> poisoned session history",
+          "url": "https://github.com/openclaw/openclaw/issues/90710",
+          "reactions": 1
+        },
+        {
+          "title": "MCP resource_link tool results lose their URI during content conversion",
+          "url": "https://github.com/agentscope-ai/agentscope-java/issues/4419",
+          "reactions": 0
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "mcp \"resource_link\" in:title is:issue",
+        "existing": "mcp tool result content compatibility proxy"
       }
     },
     {
@@ -1029,7 +1113,7 @@
         "repo": "helv-io/skgate",
         "url": "https://github.com/helv-io/skgate",
         "stars": 13,
-        "months_since_push": 0.4
+        "months_since_push": 0.1
       },
       "existing_projects": 9,
       "queries": {
@@ -1057,6 +1141,48 @@
       "queries": {
         "requests": "repo:keephq/keep \"MCP\" in:title is:issue",
         "existing": "keephq keep mcp server"
+      }
+    },
+    {
+      "id": "mcp-list-changed-ignored",
+      "title": "Make clients see tools added after discovery when they ignore notifications/tools/list_changed",
+      "status": "skipped",
+      "score": 55,
+      "demand": 0.179,
+      "gap": 1.0,
+      "open_requests": 8,
+      "top_requests": [
+        {
+          "title": "bug: MCP notifications/tools/list_changed is ignored, tools added after discovery never become available",
+          "url": "https://github.com/mistralai/mistral-vibe/issues/1240",
+          "reactions": 1
+        },
+        {
+          "title": "CLI: MCP notifications/tools/list_changed is ignored \u2014 tools added mid-session never appear (extension fixed in #12619)",
+          "url": "https://github.com/cline/cline/issues/14924",
+          "reactions": 0
+        },
+        {
+          "title": "Lazily reconnected stdio MCP server: no `tools/list` is sent and `notifications/tools/list_changed` is ignored, so tools added later stay invisible",
+          "url": "https://github.com/anthropics/claude-code/issues/108287",
+          "reactions": 0
+        },
+        {
+          "title": "MCP notifications/tools/list_changed ignored over Streamable HTTP in 2.1.211 (regression from 2.1.210)",
+          "url": "https://github.com/anthropics/claude-code/issues/78208",
+          "reactions": 0
+        },
+        {
+          "title": "A runtime-added MCP server's tools/list_changed is ignored for the life of the session",
+          "url": "https://github.com/FerroxLabs/wayland/issues/1175",
+          "reactions": 0
+        }
+      ],
+      "best_existing": null,
+      "existing_projects": 0,
+      "queries": {
+        "requests": "\"list_changed\" mcp ignored in:title is:issue",
+        "existing": "mcp list_changed proxy"
       }
     },
     {

@@ -427,13 +427,14 @@
     "problem": "Custom connectors fail with a generic \"Couldn't reach the MCP server\" or \"Connector couldn't be added\", and owners cannot tell which step (TLS, transport, 401 challenge, RFC 9728/8414 discovery, registration, PKCE) is wrong.",
     "request_query": "\"custom connector\" couldn't in:title is:issue",
     "repo_query": "mcp oauth discovery checker",
-    "status": "idea",
+    "status": "skipped",
     "evidence": [
       "https://github.com/anthropics/claude-ai-mcp/issues/1244",
       "https://github.com/anthropics/claude-ai-mcp/issues/1023",
       "https://github.com/anthropics/claude-ai-mcp/issues/1296",
       "https://github.com/anthropics/claude-ai-mcp/issues/748"
-    ]
+    ],
+    "reason": "2026-11-27: score 65, but most recent claude-ai-mcp reports (#227, #1226, #1308, #1355) show zero inbound requests at the server, i.e. failures on claude.ai's side that an outside checker would pass; the rest (#1104, #1246) depend on what claude.ai's egress sees. Revisit if server-side misconfig reports grow."
   },
   {
     "id": "mcp-instructions-fold",
@@ -528,5 +529,58 @@
       "https://github.com/cognizant-ai-lab/neuro-san/issues/1655"
     ],
     "reason": "2026-11-24: score 75 but the top requests (LibreChat#8221, Kiro#10134, claude-code#51713, opencode#2101) ask clients to show progress; a server-side heartbeat does not help until clients reset timeouts on progress."
+  },
+  {
+    "id": "mcp-result-flatten",
+    "title": "Make MCP tool results readable by clients that only show text blocks",
+    "kind": "python",
+    "problem": "Many MCP clients (LibreChat, goose, Cherry Studio, Dify, agentscope, Crush, claude.ai connectors, copilot-sdk) drop or garble tool results whose data is in structuredContent with empty content, in resource_link blocks, or in embedded resources, so the model sees nothing or a raw struct dump.",
+    "request_query": "mcp \"resource_link\" in:title is:issue",
+    "repo_query": "mcp tool result content compatibility proxy",
+    "status": "shipped",
+    "evidence": [
+      "https://github.com/langgenius/dify/issues/43451",
+      "https://github.com/microsoft/copilot-sdk/issues/2816",
+      "https://github.com/anthropics/claude-ai-mcp/issues/1086",
+      "https://github.com/charmbracelet/crush/issues/3846",
+      "https://github.com/microsoft/work-iq/issues/240",
+      "https://github.com/LibreChat-AI/LibreChat/issues/15198",
+      "https://github.com/aaif-goose/goose/issues/13182",
+      "https://github.com/agentscope-ai/agentscope/issues/2798",
+      "https://github.com/tobi/qmd/issues/959"
+    ],
+    "reason": "2026-11-27: score 64; reports in 15+ clients (Kiro#9439 4 upvotes, dify#43451, work-iq#240, claude-ai-mcp#1086, crush#3846) and no existing proxy or library found. Shipped as flatresult."
+  },
+  {
+    "id": "mcp-tool-name-limits",
+    "title": "Shorten and sanitize MCP tool names over 64 characters or with dots/spaces for strict model APIs",
+    "kind": "python",
+    "problem": "OpenAI, Meta and other model APIs reject tool names over 64 characters or outside [a-zA-Z0-9_-], so prefixed MCP tool names break every request.",
+    "request_query": "mcp tool names exceed 64 in:title is:issue",
+    "repo_query": "mcp tool name shorten 64",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/openai/codex/issues/46358",
+      "https://github.com/pingdotgg/t3code/issues/43429",
+      "https://github.com/assistant-ui/assistant-ui/issues/9817",
+      "https://github.com/decolua/9router/issues/5761",
+      "https://github.com/getkimchi/kimchi/issues/1168"
+    ],
+    "reason": "2026-11-27: top score (69) but our own schemashim already shortens and sanitizes names (schemashim.names, restore() maps back) for agent frameworks; the top requests (claude-code#21136, codex#46358, t3code#43429) are clients adding their own prefixes, which a server-side proxy can't see. Next step is schemashim upkeep: a proxy --max-name-length option for servers like awslabs/mcp#2214."
+  },
+  {
+    "id": "mcp-list-changed-ignored",
+    "title": "Make clients see tools added after discovery when they ignore notifications/tools/list_changed",
+    "kind": "python",
+    "problem": "Claude Desktop, Mistral Vibe and others keep a stale tool list and ignore tools/list_changed.",
+    "request_query": "\"list_changed\" mcp ignored in:title is:issue",
+    "repo_query": "mcp list_changed proxy",
+    "status": "skipped",
+    "evidence": [
+      "https://github.com/anthropics/claude-ai-mcp/issues/1182",
+      "https://github.com/mistralai/mistral-vibe/issues/1240",
+      "https://github.com/nightly-labs/openbot/issues/13801"
+    ],
+    "reason": "2026-11-27: client bugs (claude-ai-mcp#1182, mistral-vibe#1240): a proxy can't make a client re-list tools it has cached."
   }
 ]

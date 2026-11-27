@@ -21,6 +21,7 @@ gap where the only existing project is unmaintained. The demand evidence for eac
 | [briefed](packages/briefed/) | Deliver MCP server instructions to clients that drop or cut them (claude.ai connectors, Kiro, Google ADK, agno...): folds `initialize` instructions into the tool list, as a stdio proxy, ASGI middleware for remote servers, or one function, plus `briefed show` | `pip install briefed` | 0.1.0 |
 | [reattach](packages/reattach/) | Fix MCP `404 Session not found` after a Streamable HTTP server restarts, redeploys, scales out or times out a session: replays `initialize` for clients that never do, as ASGI middleware or a reverse proxy for servers in any language | `pip install reattach` | 0.1.0 |
 | [unstring](packages/unstring/) | Fix MCP tool calls that fail with `expected array, received string`: repairs arguments clients and models send as JSON strings (arrays, objects, numbers, booleans, even the whole object), guided by the tool's `inputSchema`, as a stdio proxy for any server or one function | `pip install unstring` | 0.1.0 |
+| [flatresult](packages/flatresult/) | Fix MCP tool results that clients show as empty or reject (`Unsupported response item type: resource_link`): turns `structuredContent`-only results, resource links, embedded resources and audio into text and image blocks, reading linked resources from the server, as a stdio proxy for any server or one function | `pip install flatresult` | 0.1.0 |
 
 ## How packages are chosen
 

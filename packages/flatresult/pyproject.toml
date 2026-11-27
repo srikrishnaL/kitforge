@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flatresult"
+version = "0.1.0"
+description = "Fix MCP tool results that clients show as empty or reject (\"Unsupported response item type: resource_link\"): turns structuredContent-only results, resource_link blocks, embedded resources and audio into text and image blocks every client reads, as a stdio proxy for any MCP server or one function"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Sri Krishna Lingamaneni" }]
+keywords = [
+  "mcp", "model context protocol", "mcp server", "mcp proxy", "tool results",
+  "structuredContent", "resource_link", "embedded resource", "content blocks",
+  "unsupported response item type", "empty result", "no response", "figma mcp",
+  "kiro", "cursor", "librechat", "goose", "dify", "claude", "llm", "agents",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7", "mcp>=1.10; python_version >= '3.10'"]
+
+[project.scripts]
+flatresult = "flatresult.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/srikrishnaL/kitforge/tree/main/packages/flatresult"
+Source = "https://github.com/srikrishnaL/kitforge"
+Issues = "https://github.com/srikrishnaL/kitforge/issues"
+Changelog = "https://github.com/srikrishnaL/kitforge/blob/main/packages/flatresult/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/flatresult"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

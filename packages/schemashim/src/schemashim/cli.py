@@ -60,22 +60,33 @@ def main(argv: Optional[List[str]] = None) -> int:
     f.add_argument("file")
     f.add_argument("--target", choices=TARGETS, required=True)
     p = sub.add_parser(
-        "proxy", help="run an MCP server with its tool schemas fixed for a target",
+        "proxy", help="run an MCP server with its tool schemas (and names) fixed",
         description="Start the MCP server given after -- and sit between it and the client: "
                     "tool schemas in tools/list are rewritten for the target, and tools/call "
-                    "arguments are mapped back. Example: schemashim proxy --target gemini -- "
-                    "npx -y @modelcontextprotocol/server-everything")
-    p.add_argument("--target", choices=TARGETS, required=True)
+                    "arguments are mapped back. --max-name-length shortens long tool names "
+                    "and maps calls back to the real name. Example: schemashim proxy --target "
+                    "gemini -- npx -y @modelcontextprotocol/server-everything")
+    p.add_argument("--target", choices=TARGETS,
+                   help="rewrite tool schemas (and names) for this provider")
+    p.add_argument("--max-name-length", type=int, metavar="N",
+                   help="shorten tool names longer than N characters (12-64) and replace "
+                        "characters model APIs reject; leave room for the prefix your client "
+                        "adds, e.g. 64 minus len('mcp__<server>__')")
     p.add_argument("--quiet", action="store_true",
                    help="don't log the changes to stderr")
     args = parser.parse_args(argv)
 
     if args.command == "proxy":
+        if args.target is None and args.max_name_length is None:
+            parser.error("proxy needs --target, --max-name-length, or both")
+        if args.max_name_length is not None and not 12 <= args.max_name_length <= 64:
+            parser.error("--max-name-length must be from 12 to 64")
         if not command:
             parser.error("proxy needs the server command after --, e.g. "
                          "schemashim proxy --target gemini -- npx -y @acme/server")
         from .proxy import run
-        return run(command, args.target, quiet=args.quiet)
+        return run(command, args.target, quiet=args.quiet,
+                   max_name_length=args.max_name_length)
     if command:
         parser.error("unexpected arguments after --")
 

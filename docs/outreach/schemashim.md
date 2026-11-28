@@ -61,3 +61,29 @@ https://github.com/CherryHQ/cherry-studio/issues/24524 (post only after schemash
 > `pip install schemashim`, Python, no dependencies) names each tool and field an
 > OpenAI-compatible validator would reject, including `\u`-escaped patterns, and exits 1. The
 > README's rule table lists the rewrites, in case they help for a fix inside Cherry Studio.
+
+## awslabs/mcp#2395 (aws-iac-mcp-server tool name + LibreChat suffix goes over Bedrock's 64)
+
+https://github.com/awslabs/mcp/issues/2395 (open, last activity 2026-03-01; post only after
+schemashim 0.3.0 is on PyPI)
+
+> Until the tool is renamed, a client-side workaround that needs no change to the server:
+> run it behind [schemashim](https://github.com/srikrishnaL/kitforge/tree/main/packages/schemashim)'s
+> proxy with a name limit that leaves room for LibreChat's `_mcp_<server>` suffix
+> (64 - 23 = 41 for `_mcp_aws-iac-mcp-server`):
+>
+> ```yaml
+> mcpServers:
+>   aws-iac-mcp-server:
+>     command: uvx
+>     args: ["schemashim", "proxy", "--max-name-length", "40", "--",
+>            "uvx", "awslabs.aws-iac-mcp-server@latest"]
+> ```
+>
+> The tool then shows up as `get_cloudformation_pre_deploy_v_63c496f4` (start of the name
+> plus a hash of the full name, the same on every start), names that already fit are left
+> alone, and each `tools/call` is mapped back to the real name before it reaches the server.
+
+Checked and not drafted (2026-11-28): microsoft/powerplatform-build-tools#1483 also has
+property keys over 64 characters, which schemashim doesn't rename yet, so the proxy alone
+would not fix that session. decolua/9router#5761 asks for the feature inside the gateway.

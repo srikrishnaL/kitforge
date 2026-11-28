@@ -43,6 +43,36 @@ It logs what it changed to stderr (your client's MCP log); `--quiet` turns that 
 `pip install schemashim` and use `"command": "schemashim"`. For a remote (HTTP) server, wrap
 a stdio bridge such as `npx -y mcp-remote https://example.com/mcp`.
 
+### Tool names that are too long
+
+Bedrock, OpenAI and most other model APIs reject a tool name longer than 64 characters (or
+with characters outside `A-Z a-z 0-9 _ -`), and one such tool fails **every** request with
+errors like `Member must have length less than or equal to 64` or
+`function name must match [A-Za-z0-9_-]{1,64}`. Clients often make it worse by adding their
+own prefix or suffix (`mcp__<server>__`, `_mcp_<server>`), so a 53-character tool can break
+the session. `--max-name-length N` shortens every tool name longer than N and maps each call
+back to the real name, so pick 64 minus the length of what your client adds:
+
+```json
+{
+  "mcpServers": {
+    "aws-iac": {
+      "command": "uvx",
+      "args": ["schemashim", "proxy", "--max-name-length", "40", "--",
+               "uvx", "awslabs.aws-iac-mcp-server@latest"]
+    }
+  }
+}
+```
+
+`get_cloudformation_pre_deploy_validation_instructions` then reaches the client as
+`get_cloudformation_pre_deploy_v_63c496f4`: the start of the name, so the model still
+knows what it does, plus a short hash of the full name, so two long names never collide and a
+tool keeps the same short name every time the server starts. Names that already fit are left
+alone. `--max-name-length` works with or without `--target`; with `--target`, names that
+provider rejects are fixed too. In the library, pass `max_name_length=` to `adapt_tools()` or
+`max_length=` to `tool_name()`.
+
 ## Fix one schema
 
 ```python

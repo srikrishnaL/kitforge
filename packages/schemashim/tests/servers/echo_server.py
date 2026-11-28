@@ -23,6 +23,15 @@ TOOLS = [
      "inputSchema": {"type": "object", "properties": {}}},
 ]
 
+if "--long-names" in sys.argv:  # tool names like the ones in awslabs/mcp#2395
+    TOOLS = TOOLS + [
+        {"name": "get_cloudformation_pre_deploy_validation_instructions",
+         "description": "Long name", "inputSchema": {"type": "object", "properties": {}}},
+        {"name": "billing.cost_management.get_cost_and_usage_with_resources",
+         "description": "Long name with dots",
+         "inputSchema": {"type": "object", "properties": {"days": {"type": "integer"}}}},
+    ]
+
 for line in sys.stdin:
     msg = json.loads(line)
     if "id" not in msg:

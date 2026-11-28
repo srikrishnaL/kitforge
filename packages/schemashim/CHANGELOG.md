@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.0 (2026-11-28)
+
+- `schemashim proxy --max-name-length N`: shortens tool names longer than N characters (12 to
+  64) and maps each `tools/call` back to the server's real name. For servers whose tool names
+  plus the client's own prefix or suffix go over the 64-character limit of Bedrock, OpenAI and
+  other model APIs, which fails every request (awslabs/mcp#2395, awslabs/mcp#3181). A short
+  name is the start of the original plus an 8-character hash of it, so it is the same every
+  time and never collides with another tool's name. Works with or without `--target`, which is
+  now optional when `--max-name-length` is given.
+- `schemashim proxy --target ...` now also renames tools whose names the target rejects (for
+  example dots for `openai-strict`), and maps calls back. Before, only schemas were changed.
+- Library: `tool_name(name, target, max_length=64)`, `adapt_tools(..., max_name_length=64)`
+  and `adapt_tool(..., max_name_length=64)`; `tool_name(name, None)` keeps to the characters
+  every model API accepts. A shortened name no longer has a double `_` before the hash.
+
 ## 0.2.1 (2026-11-20)
 
 - `openai-strict`: a `pattern` with a `\uXXXX` or `\u{...}` escape moves into the description,
